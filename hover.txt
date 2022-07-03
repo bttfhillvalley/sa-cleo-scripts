@@ -1,0 +1,72 @@
+{$CLEO .s}
+{$INCLUDE Common/CleoConstants.txt}
+0000:
+int vehicle
+int vehicle_flags
+float vehicle_speed
+int var1
+int var2
+
+while true
+    wait 10
+    if
+        Car.Wrecked(vehicle)
+    then
+        terminate_this_custom_script
+    end
+    if
+        00DB:   actor $PLAYER_ACTOR in_car vehicle
+    then
+        0AB4: var2 = var CONVERSION
+        if and
+            var2 == 0  // Not animating
+            00E1: key_pressed 0 19
+        then
+            0AB3: var CONVERSION = 1
+            0B12: vehicle_flags = vehicle_flags XOR FLYING_BIT  // Flip flying bit
+            stream_custom_script "Delorean/HoverAnimate.s" vehicle vehicle_flags
+        end
+    end
+    0B10: var1 = vehicle_flags AND FLYING_BIT   // Is car flying?
+    0AB4: var2 = var LANDING
+    if or
+        not var1 == 0
+        not var2 == 0
+    then
+        3F05: set_car vehicle hover 1
+        if
+            00DB:   actor $PLAYER_ACTOR in_car vehicle
+        then
+            0B10: var1 = vehicle_flags AND WHEELS_BIT   // Wheels bit
+            if and
+                not var1 == 0
+            then
+                3F10: set_car vehicle component "fxthrusterbttf2rbon" visible 1
+                3F10: set_car vehicle component "fxthrusterbttf2rfon" visible 1
+                3F10: set_car vehicle component "fxthrusterbttf2lbon" visible 1
+                3F10: set_car vehicle component "fxthrusterbttf2lfon" visible 1
+            end
+            if
+                00E1: key_pressed 0 4
+            then
+                02E3: vehicle_speed = car vehicle speed
+
+                vehicle_speed *= -0.1
+                vehicle_speed += 11.0
+                3F25: car vehicle apply_forward_force vehicle_speed
+            end
+            if
+                00E1: key_pressed 0 16
+            then
+
+                3F26: car vehicle apply_upward_force 10.0
+            end
+            if
+                00E1: key_pressed 0 14
+            then
+
+                3F26: car vehicle apply_upward_force -10.0
+            end
+        end
+    end
+end

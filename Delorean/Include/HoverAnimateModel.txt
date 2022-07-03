@@ -1,0 +1,68 @@
+:HoverAnimateModel
+// Move struts
+// Shocks are at a 45 degree angle so they have a weird movement,  They need to be adjusted in both the X and Z axis.
+02F7: extension_angle = sinus 45.0 // cosine swapped with sinus
+extension_angle *= extension
+
+// will adjust Z. It is always negative.
+shock_pos = extension_angle // Shock
+shock_pos *= -1.0
+
+// is for the piston extension
+piston_pos = shock_pos // Piston
+
+// controls how far the piston extends based on wheel rotation.
+piston_ext = pivot // Piston
+piston_ext *= 0.001
+
+// Extend/retract piston
+piston_pos -= piston_ext
+
+// Extend
+// Backwards from VC for some reason
+3F14: car vehicle move_part "strutrb"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "brakerb"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "holderrb"          pos 0.0 0.0 extension
+3F14: car vehicle move_part "shockrb"           pos shock_pos 0.0 extension_angle
+3F14: car vehicle move_part "shockpistonrb"     pos piston_pos 0.0 extension_angle
+3F14: car vehicle move_part "fxwheelrbdummy"    pos 0.0 0.0 extension
+
+3F14: car vehicle move_part "strutrf"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "brakerf"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "holderrf"          pos 0.0 0.0 extension
+3F14: car vehicle move_part "shockrf"           pos shock_pos 0.0 extension_angle
+3F14: car vehicle move_part "shockpistonrf"     pos piston_pos 0.0 extension_angle
+3F14: car vehicle move_part "fxwheelrfdummy"    pos 0.0 0.0 extension
+extension *= -1.0
+extension_angle *= -1.0
+3F14: car vehicle move_part "strutlb"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "brakelb"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "holderlb"          pos 0.0 0.0 extension
+3F14: car vehicle move_part "shocklb"           pos shock_pos 0.0 extension_angle
+3F14: car vehicle move_part "shockpistonlb"     pos piston_pos 0.0 extension_angle
+3F14: car vehicle move_part "fxwheellbdummy"    pos 0.0 0.0 extension
+
+3F14: car vehicle move_part "strutlf"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "brakelf"           pos 0.0 0.0 extension
+3F14: car vehicle move_part "holderlf"          pos 0.0 0.0 extension
+3F14: car vehicle move_part "shocklf"           pos shock_pos 0.0 extension_angle
+3F14: car vehicle move_part "shockpistonlf"     pos piston_pos 0.0 extension_angle
+3F14: car vehicle move_part "fxwheellfdummy"    pos 0.0 0.0 extension
+extension *= -1.0
+
+// Rotate wheels
+3F16: car vehicle rotate_part "holderrf"        angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "holderrb"        angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "brakerf"         angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "brakerb"         angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "fxwheelrfdummy"  angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "fxwheelrbdummy"  angle 0.0 pivot 0.0
+pivot *= -1.0
+3F16: car vehicle rotate_part "holderlf"        angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "holderlb"        angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "brakelf"         angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "brakelb"         angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "fxwheellfdummy"  angle 0.0 pivot 0.0
+3F16: car vehicle rotate_part "fxwheellbdummy"  angle 0.0 pivot 0.0
+pivot *= -1.0
+return

@@ -1,0 +1,105 @@
+{$CLEO .cs}
+{$INCLUDE Common/CleoConstants.txt}
+thread 'SPDMTR'
+int vehicle
+float vehicle_speed
+float virtual_speed
+int handbrake
+int tens
+int ones
+int decimal
+int texture_offset
+float x_offset
+float x
+int hud_var
+int travel_var
+int cutscene_var
+
+0390: load_txd_dictionary 'bttf'
+038F: load_texture '0' as 1 //RED SPEEDOMETER NUMBER 0
+038F: load_texture '1' as 2 //RED SPEEDOMETER NUMBER 1
+038F: load_texture '2' as 3 //RED SPEEDOMETER NUMBER 2
+038F: load_texture '3' as 4 //RED SPEEDOMETER NUMBER 3
+038F: load_texture '4' as 5 //RED SPEEDOMETER NUMBER 4
+038F: load_texture '5' as 6 //RED SPEEDOMETER NUMBER 5
+038F: load_texture '6' as 7 //RED SPEEDOMETER NUMBER 6
+038F: load_texture '7' as 8 //RED SPEEDOMETER NUMBER 7
+038F: load_texture '8' as 9 //RED SPEEDOMETER NUMBER 8
+038F: load_texture '9' as 10 //RED SPEEDOMETER NUMBER 9
+038F: load_texture 'dot' as 11  //RED SPEEDOMETER DOT
+038F: load_texture 'digbk' as 12  //RED SPEEDOMETER NUMBER BACKGROUND
+while true
+    wait 10
+    if
+        not Player.Defined($PLAYER_CHAR)
+    then
+        continue
+    end
+    if //or
+        80DF:   not actor $PLAYER_ACTOR driving
+
+        //80E0:   not player $PLAYER_CHAR driving
+        //is_camera_in_widescreen_mode
+    then
+        continue
+    end
+    03C0: vehicle = actor $PLAYER_ACTOR car
+    02E3: vehicle_speed = car vehicle speed
+
+    // Parse speed into separate digits for rendering
+    vehicle_speed *= 18.35
+    if
+        vehicle_speed > 880.0
+    then
+        vehicle_speed = 880.0
+    end
+    008C: decimal = float_to_integer vehicle_speed
+    tens = decimal
+    tens /= 100
+    tens *= 100
+    decimal -= tens
+    tens /= 100
+
+    ones = decimal
+    ones /= 10
+    ones *= 10
+    decimal -= ones
+    ones /= 10
+
+    texture_offset = 1
+    x_offset = 760.0
+
+
+    texture_offset += 10
+    // Dot
+    x = x_offset
+    x += 65.0
+    cleo_call @DrawTexture params_count 9 texture_offset x 470.0 10.0 10.0 255 255 255 255
+
+    // Background
+    texture_offset += 1
+    x = x_offset
+    cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
+    x += 45.0
+    cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
+
+    // Reset offset
+    texture_offset -= 11
+    x = x_offset
+
+    // tens digit
+    if
+        tens > 0
+    then
+        tens += texture_offset
+        cleo_call @DrawTexture params_count 9 tens x 440.0 40.0 60.0 255 255 255 255
+    end
+
+    // ones digit
+    ones += texture_offset
+    x += 45.0
+    cleo_call @DrawTexture params_count 9 ones x 440.0 40.0 60.0 255 255 255 255
+
+end
+
+{$INCLUDE Common/DrawTexture.txt}
