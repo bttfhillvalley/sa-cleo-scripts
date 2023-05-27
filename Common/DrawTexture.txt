@@ -6,7 +6,7 @@
 0093: 10@ = integer 10@ to_float
 0093: 11@ = integer 11@ to_float*/
 //0015: 10@ /= 848.0 //  currentResX/640.0
-10@ = 0.7
+10@ = 0.75
 11@ = 0.9
 006B: 1@ *= 10@ // floating-point values
 //0015: 11@ /= 480.0 //  currentResY/448.0

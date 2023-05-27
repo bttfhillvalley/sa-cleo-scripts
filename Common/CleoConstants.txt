@@ -41,6 +41,10 @@ const
     PLUT_MARK       = 28
     TM_FLAGS        = 29
 
+    // Extra
+    ASOUND          = 30
+    DSOUND          = 31
+
     // Camera stuff
     CAMERA_CONTROL  = 100
     CUTSCENE        = 101

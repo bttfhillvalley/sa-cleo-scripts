@@ -223,17 +223,17 @@ end
 terminate_this_custom_script
 
 :ThrusterLightsOff
-3F10: set_car vehicle component "fxthrusterbttf2rbon" visible 0
+//3F10: set_car vehicle component "fxthrusterbttf2rbon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2rbth" visible 0
-3F10: set_car vehicle component "fxthrusterbttf2rfon" visible 0
+//3F10: set_car vehicle component "fxthrusterbttf2rfon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2rfth" visible 0
-3F10: set_car vehicle component "fxthrusterbttf2lbon" visible 0
+//3F10: set_car vehicle component "fxthrusterbttf2lbon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2lbth" visible 0
-3F10: set_car vehicle component "fxthrusterbttf2lfon" visible 0
+//3F10: set_car vehicle component "fxthrusterbttf2lfon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2lfth" visible 0
 
-3F10: set_car vehicle component "inner_vents" visible 0
-3F10: set_car vehicle component "inner_ventsglow" visible 0
+//3F10: set_car vehicle component "inner_vents" visible 0
+//3F10: set_car vehicle component "inner_ventsglow" visible 0
 return
 
 :ShowBrakes
@@ -465,16 +465,19 @@ visibility = 0
 :DisplayDeloreanWheels
 3F10: set_car vehicle component "wheelbttf1rb" visible visibility
 3F10: set_car vehicle component "tirebttf1rb" visible visibility
-
+3F10: set_car vehicle component "wheelrb" visible visibility
 
 3F10: set_car vehicle component "wheelbttf1lb" visible visibility
 3F10: set_car vehicle component "tirebttf1lb" visible visibility
+3F10: set_car vehicle component "wheellb" visible visibility
 
 3F10: set_car vehicle component "wheelbttf1rf" visible visibility
 3F10: set_car vehicle component "tirebttf1rf" visible visibility
+3F10: set_car vehicle component "wheelrf" visible visibility
 
 3F10: set_car vehicle component "wheelbttf1lf" visible visibility
 3F10: set_car vehicle component "tirebttf1lf" visible visibility
+3F10: set_car vehicle component "wheellf" visible visibility
 return
 
 :Show50sWheels

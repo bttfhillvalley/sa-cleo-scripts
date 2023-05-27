@@ -1,0 +1,36 @@
+{$CLEO .s}
+{$INCLUDE ../Common/CleoConstants.txt}
+0000:
+int vehicle
+int chaser
+int visibility
+int is_landing
+int wheel_state
+int engine
+int 32@
+while true
+    wait 0
+    if
+        Car.Wrecked(vehicle)
+    then
+        terminate_this_custom_script
+    end
+    // Reset lights
+    3F10: set_car vehicle component "bottomlights" visible 0
+    for chaser = 1 to 5
+        3F11: set_car vehicle component "chaserlights" index chaser visible 0
+    end
+
+    3F10: set_car vehicle component "bottomlights" visible 1
+    if
+        timera >= 1250
+    then
+        timera = 0
+    end
+
+    chaser = timera
+    chaser /= 250
+    chaser += 1
+
+    3F11: set_car vehicle component "chaserlights" index chaser visible 1
+end

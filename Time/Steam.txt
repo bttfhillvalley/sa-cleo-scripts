@@ -1,0 +1,31 @@
+{$CLEO .s}
+{$INCLUDE ../Common/CleoConstants.txt}
+0000:
+int vehicle
+int vehicle_flags
+int rear_deck
+int left
+int right
+
+int ignore
+0B10: rear_deck = vehicle_flags AND REAR_BIT  // Get car variation
+if
+    not rear_deck == 0 // Not plutonium version
+then
+    terminate_this_custom_script
+end
+wait 10000
+if
+    Car.Wrecked(vehicle)
+then
+    terminate_this_custom_script
+end
+3F96: ignore = attach_sound "vent.wav" to_car vehicle offset 0 0 0 loop 0 min 10.0
+066C: left = attach_particle "VENTSTEAM" to_car vehicle with_offset -0.4 -2.3 0.5  rotation 0.0 -0.8 0.2 flag 1
+064C: make_particle left visible
+066C: right = attach_particle "VENTSTEAM" to_car vehicle with_offset 0.4 -2.3 0.5  rotation 0.0 -0.8 0.2 flag 1
+064C: make_particle right visible
+wait 5000
+0650: destroy_particle left
+0650: destroy_particle right
+terminate_this_custom_script

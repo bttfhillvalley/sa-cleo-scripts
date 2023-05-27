@@ -1,0 +1,35 @@
+:ParkingBrake
+{$INCLUDE Variables.txt}
+if
+    Car.wrecked(vehicle)
+then
+    return
+end
+3F27: get_car vehicle wheel_status_to var1
+if and
+    00DC:   player $PLAYER_CHAR in_car vehicle
+    00E1:   player 0 pressed_button 6
+    not var1 == 2 // Not hovering
+then
+    if
+        parkingbrake_angle < 20.0
+    then
+        parkingbrake_angle += 4.0
+    end
+else
+    if
+        parkingbrake_angle > 0.0
+    then
+        parkingbrake_angle -= 4.0
+    end
+end
+
+if
+    parkingbrake_angle > 0.0
+then
+    3F10: set_car vehicle component "brakelight" visible 1
+else
+    3F10: set_car vehicle component "brakelight" visible 0
+end
+3F16: set_car vehicle component "ebrake" angle parkingbrake_angle 0.0 0.0
+return

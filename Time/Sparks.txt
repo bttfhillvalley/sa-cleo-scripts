@@ -1,0 +1,302 @@
+{$CLEO .s}
+{$INCLUDE ../Common/CleoConstants.txt}
+
+{$CLEO .s}
+
+//-------------MAIN---------------
+thread 'Sparks'
+31@ = 0.0
+// pick random point
+0209: 30@ = random_int_in_ranges 0 10
+// Wormhole emmiter
+if or
+    1@ == 1
+    30@ == 0
+then
+    1@ = 0.0
+    2@ = -0.75
+    3@ = 0.71
+// Front Coil
+else if
+    30@ == 1
+then
+    0208: 1@ = random_float_in_ranges 0.0 0.9
+    2@ = 2.45
+    3@ = -0.2
+// Top Coil
+else if or
+    30@ == 2
+    30@ == 3
+then
+    0208: 1@ = random_float_in_ranges 0.3 0.6
+    2@ = -0.875
+    3@ = 0.615
+    if
+        30@ == 2
+    then
+        1@ *= -1.0
+    end
+// Coil Door
+else if or
+    30@ == 4
+    30@ == 5
+then
+    0208: 3@ = random_float_in_ranges 0.255 0.575
+    0087: 1@ = 3@
+    1@ *= -1.09375
+    1@ += 1.32891
+    0087: 2@ = 3@
+    2@ *= 0.21875
+    2@ += -1.00578
+    if
+        30@ == 4
+    then
+        1@ *= -1.0
+    end
+// Side Coil
+else if or
+    30@ == 6
+    30@ == 7
+then
+    0208: 2@ = random_float_in_ranges -1.75 -1.05
+    0087: 1@ = 2@
+    1@ *= 0.05
+    1@ += 1.1225
+    3@ = 0.19
+    if
+        30@ == 6
+    then
+        1@ *= -1.0
+    end
+// Rear Coil
+else if or
+    30@ == 8
+    30@ == 9
+then
+    0208: 2@ = random_float_in_ranges -1.8 -1.95
+    0087: 1@ = 2@
+    1@ *= -0.2
+    1@ += 0.67
+    0087: 3@ = 2@
+    3@ += 1.99
+    if
+        30@ == 8
+    then
+        1@ *= -1.0
+    end
+end
+end
+end
+end
+end
+end
+// generate equation
+// Denominator
+29@ = 22.5
+006B: 29@ *= 2@ // (float)
+02F7: 28@ = sine 29@ // (float)
+25@ = 40
+while true
+    wait 10
+    if
+        Car.Wrecked(0@)
+    then
+        0A93: end_custom_thread
+    end
+    //  Checks to see if time travelled yet
+    0AB4: 7@ = var TRAVEL
+    if
+        7@ == 1
+    then
+        0AB4: 7@ = var MODE
+        if
+            7@ == 1
+        then
+            0A93: end_custom_thread
+        end
+    end
+    gosub @SparkEquation
+    if
+        5@ < 4.0
+    jf break
+    if
+        31@ < 50.0
+    then
+        066B: 29@ = attach_particle "WHITEFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+        064C: make_particle 29@ visible
+        064F: remove_references_to_particle 29@
+    end
+    066B: 29@ = attach_particle "BLUESPARKCORE" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+    064C: make_particle 29@ visible
+    064F: remove_references_to_particle 29@
+    0087: 30@ = 31@
+    gosub @SparkEquationCreateTrail
+    0087: 31@ = 30@
+    31@ += 30.0
+end
+// Form bounce back equation
+31@ -= 30.0
+0087: 30@ = 31@
+gosub @SparkEquation
+if
+    Car.Wrecked(0@)
+then
+    0A93: end_custom_thread
+end
+02E3: 10@ = car 0@ speed
+10@ /= 30.0
+10@ += 4.0
+0407: store_coords_to 8@ 9@ 10@ from_car 0@ with_offset 0.0 10@ 0.0
+0407: store_coords_to 11@ 12@ 13@ from_car 0@ with_offset 0.0 4.0 0.0
+0063: 8@ -= 11@ // (float)
+0063: 9@ -= 12@ // (float)
+0063: 10@ -= 13@ // (float)
+0208: 14@ = random_float_in_ranges -30.0 210.0
+02F6: 16@ = cosine 14@ // (float)
+02F7: 14@ = sine 14@ // (float)
+0208: 15@ = random_float_in_ranges 2.0 3.0
+006B: 14@ *= 15@ // (float)
+006B: 16@ *= 15@ // (float)
+0407: store_coords_to 14@ 15@ 16@ from_car 0@ with_offset 14@ 0.0 16@
+0063: 14@ -= 11@ // (float)
+0063: 15@ -= 12@ // (float)
+0063: 16@ -= 13@ // (float)
+0087: 20@ = 14@ // (float)
+0087: 21@ = 15@ // (float)
+0087: 22@ = 16@ // (float)
+006B: 20@ *= 20@ // (float)
+006B: 21@ *= 21@ // (float)
+006B: 22@ *= 22@ // (float)
+005B: 20@ += 21@ // (float)
+005B: 20@ += 22@ // (float)
+01FB: 20@ = square_root 20@
+0073: 14@ /= 20@ // (float)
+0073: 16@ /= 20@ // (float)
+0073: 15@ /= 20@ // (float)
+14@ /= 20.0
+15@ /= 20.0
+16@ /= 20.0
+17@ = 0.0
+
+// loop until out of range
+while true
+    wait 10
+    //  Checks to see if time travelled yet
+    0AB4: 7@ = var TRAVEL
+    if
+        7@ == 1
+    then
+        0AB4: 7@ = var MODE
+        if
+            7@ == 1
+        then
+            0A93: end_custom_thread
+        end
+    end
+    // draw old trail if it still exists
+    if
+        25@ > 0
+    then
+        if
+            not Car.Wrecked(0@)
+        then
+            gosub @SparkEquationCreateTrail
+        end
+        25@ -= 15
+        0087: 31@ = 30@
+    end
+    005B: 11@ += 8@ // (float)
+    005B: 12@ += 9@ // (float)
+    005B: 13@ += 10@ // (float)
+    gosub @SparkBounceEquation
+    // break out of loop when out of range
+    if
+        17@ < 500.0
+    jf break
+    064B: 29@ = create_particle "BLUESPARKCORE" at 21@ 22@ 23@  type 1
+    064C: make_particle 29@ visible
+    064F: remove_references_to_particle 29@
+    0087: 18@ = 17@
+    gosub @SparkBounceCreateTrail
+    0087: 17@ = 18@
+    17@ += 30.0
+end
+0A93: end_custom_thread
+
+//----------------Functions----------------
+
+:SparkEquation
+// Numerator
+29@ = 22.5
+006B: 29@ *= 2@ // (float)
+005B: 29@ += 31@ // (float)
+02F7: 27@ = sine 29@ // (float)
+
+// X
+0087: 4@ = 1@ // (float)
+006B: 4@ *= 27@ // (float)
+0073: 4@ /= 28@ // (float)
+
+// Y
+0087: 5@ = 31@ // (float)
+5@ /= 22.5
+005B: 5@ += 2@ // (float)
+
+// Z
+0087: 6@ = 3@ // (float)
+006B: 6@ *= 27@ // (float)
+0073: 6@ /= 28@ // (float)
+return
+
+:SparkBounceEquation
+// X
+0087: 21@ = 14@
+006B: 21@ *= 17@ // (float)
+005B: 21@ += 11@ // (float)
+
+// Y
+0087: 22@ = 15@
+006B: 22@ *= 17@ // (float)
+005B: 22@ += 12@ // (float)
+
+// Z
+0087: 23@ = 16@
+006B: 23@ *= 17@ // (float)
+005B: 23@ += 13@ // (float)
+return
+
+:SparkEquationCreateTrail
+for 26@ = 0 to 25@
+  31@ -= 0.75
+  if
+    31@ > 0.0
+  then
+    gosub @SparkEquation
+    gosub @SparkTrail
+  end
+end
+return
+
+:SparkBounceCreateTrail
+for 26@ = 0 to 40
+  17@ -= 0.5
+  if
+    17@ > 0.0
+  then
+    gosub @SparkBounceEquation
+    gosub @SparkBounceTrail
+  end
+end
+return
+
+:SparkTrail
+066B: 29@ = attach_particle "BLUESPARK" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+064C: make_particle 29@ visible
+064F: remove_references_to_particle 29@
+return
+
+:SparkBounceTrail
+064B: 29@ = create_particle "BLUESPARK" at 21@ 22@ 23@  type 1
+064C: make_particle 29@ visible
+064F: remove_references_to_particle 29@
+return

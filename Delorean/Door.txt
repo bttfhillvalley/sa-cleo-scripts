@@ -1,0 +1,49 @@
+{$CLEO .s}
+{$INCLUDE ../Common/CleoConstants.txt}
+0000:
+int vehicle
+int left_door = 1
+int right_door = 1
+int left
+int right
+float left_angle
+float right_angle
+int ignore
+while true
+    wait 0
+    if
+        Car.Wrecked(vehicle)
+    then
+        terminate_this_custom_script
+    end
+    095F: get_car vehicle door 2 rotation_to left_angle
+    095F: get_car vehicle door 3 rotation_to right_angle
+    if
+        left_angle == 0.0
+    then
+        left = 1
+    else
+        left = 0
+    end
+    if
+        right_angle == 0.0
+    then
+        right = 1
+    else
+        right = 0
+    end
+    if and
+        left_door == 1
+        left == 0
+    then
+        3F96: ignore = attach_sound "delorean_door.wav" to_car vehicle offset -1.0 0 0 loop 0 min 10.0
+    end
+    if and
+        right_door == 1
+        right == 0
+    then
+        3F96: ignore = attach_sound "delorean_door.wav" to_car vehicle offset 1.0 0 0 loop 0 min 10.0
+    end
+    left_door = left
+    right_door = right
+end

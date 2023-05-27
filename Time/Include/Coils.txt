@@ -1,0 +1,163 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE Variables.txt}
+
+:TimeCoil
+3F18: set_car vehicle component "fluxcoilson" glow 1
+3F10: set_car vehicle component "fluxcoilson" visible 1
+
+// Hoodbox effects
+0B10: var1 = vehicle_flags AND HOOD_BIT // Hoodbox variation
+/*if
+   not var1 == 0  // Has Hoodbox
+then
+    0087: var2 = vehicle_speed
+    var2 /= 30.0 // floating-point values (never used in VC or GTA 3)
+    0208: y = random_float 1.425 1.825
+    0208: x = random_float -0.2 0.2
+    005D: y += var2 // floating-point values (never used in VC or GTA 3)
+    0407: create_coordinate x y z from_car vehicle offset x y 0.35
+    0437: scatter_particle 2 0.1 at x y z 0 0 0
+    0208: y = random_float 1.425 1.825
+    0208: x = random_float -0.2 0.2
+    005D: y += var2 // floating-point values (never used in VC or GTA 3)
+    0407: create_coordinate x y z from_car vehicle offset x y 0.35
+    0437: scatter_particle 11 0.1 at x y z 0 0 0
+end */
+0209: var4 = random_int 0 3
+
+:TimeCoilDelorean
+if or
+    var1 == 0 // Non-hoodbox version
+    vehicle_speed > 47.0 // floating-point values
+then
+    gosub @CalculateSpeedOffset
+    gosub @ShowCoils1
+    gosub @ShowCoils2
+else if
+    var4 == 0
+then
+    gosub @CalculateSpeedOffset
+    gosub @ShowCoils1
+    gosub @ShowCoils2
+else if
+    var4 == 1
+then
+    gosub @CalculateSpeedOffset
+    gosub @ShowCoils1
+end
+end
+end
+return
+
+:ShowCoils1
+// Front Coils
+cleo_call @CoilParticle 4 vehicle offset -0.96 2.1 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.955 2.2 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.95 2.3 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.89 2.32 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.8 2.34 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.7 2.345 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.6 2.35 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.5 2.3525 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.4 2.355 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.3 2.3575 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.2 2.36 -0.12
+cleo_call @CoilParticle 4 vehicle offset -0.1 2.3625 -0.12
+
+// Left Coils
+cleo_call @CoilParticle 4 vehicle offset -0.4 -0.8 0.65
+cleo_call @CoilParticle 4 vehicle offset -0.5 -0.8025 0.64
+cleo_call @CoilParticle 4 vehicle offset -0.6 -0.805 0.63
+cleo_call @CoilParticle 4 vehicle offset -0.65 -0.8075 0.61
+cleo_call @CoilParticle 4 vehicle offset -0.7 -0.81 0.59
+cleo_call @CoilParticle 4 vehicle offset -0.75 -0.8125 0.54
+cleo_call @CoilParticle 4 vehicle offset -0.8 -0.815 0.49
+cleo_call @CoilParticle 4 vehicle offset -0.85 -0.8175 0.43
+cleo_call @CoilParticle 4 vehicle offset -0.9 -0.82 0.37
+cleo_call @CoilParticle 4 vehicle offset -0.95 -0.865 0.30
+cleo_call @CoilParticle 4 vehicle offset -1.0 -0.91 0.23
+
+// Right coil
+cleo_call @CoilParticle 4 vehicle offset 0.4 -0.8 0.65
+cleo_call @CoilParticle 4 vehicle offset 0.5 -0.8025 0.64
+cleo_call @CoilParticle 4 vehicle offset 0.6 -0.805 0.63
+cleo_call @CoilParticle 4 vehicle offset 0.65 -0.8075 0.61
+cleo_call @CoilParticle 4 vehicle offset 0.7 -0.81 0.59
+cleo_call @CoilParticle 4 vehicle offset 0.75 -0.8125 0.54
+cleo_call @CoilParticle 4 vehicle offset 0.8 -0.815 0.49
+cleo_call @CoilParticle 4 vehicle offset 0.85 -0.8175 0.43
+cleo_call @CoilParticle 4 vehicle offset 0.9 -0.82 0.37
+cleo_call @CoilParticle 4 vehicle offset 0.95 -0.865 0.30
+cleo_call @CoilParticle 4 vehicle offset 1.0 -0.91 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.9925 -1.01 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.985 -1.11 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.9725 -1.21 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.96 -1.31 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.945 -1.41 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.93 -1.51 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.9225 -1.61 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.915 -1.71 0.23
+cleo_call @CoilParticle 4 vehicle offset 0.9275 -1.755 0.21
+return
+
+:ShowCoils2
+// Front Coil
+cleo_call @CoilParticle 4 vehicle offset 0.0 2.365 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.1 2.3625 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.2 2.36 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.3 2.3575 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.4 2.355 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.5 2.3525 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.6 2.35 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.7 2.345 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.8 2.34 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.9 2.32 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.95 2.3 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.955 2.2 -0.12
+cleo_call @CoilParticle 4 vehicle offset 0.96 2.1 -0.12
+
+// Left Coil
+cleo_call @CoilParticle 4 vehicle offset -0.9925 -1.01 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.985 -1.11 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.9725 -1.21 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.96 -1.31 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.945 -1.41 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.93 -1.51 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.9225 -1.61 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.915 -1.71 0.23
+cleo_call @CoilParticle 4 vehicle offset -0.9275 -1.755 0.21
+cleo_call @CoilParticle 4 vehicle offset -0.94 -1.8 0.19
+cleo_call @CoilParticle 4 vehicle offset -0.965 -1.8325 0.145
+cleo_call @CoilParticle 4 vehicle offset -0.97 -1.865 0.1
+cleo_call @CoilParticle 4 vehicle offset -0.9775 -1.8925 0.05
+cleo_call @CoilParticle 4 vehicle offset -0.985 -1.92 0.0
+cleo_call @CoilParticle 4 vehicle offset -0.9775 -1.945 -0.05
+cleo_call @CoilParticle 4 vehicle offset -0.97 -1.97 -0.1
+cleo_call @CoilParticle 4 vehicle offset -0.955 -1.995 -0.15
+cleo_call @CoilParticle 4 vehicle offset -0.94 -2.02 -0.2
+cleo_call @CoilParticle 4 vehicle offset -0.915 -2.045 -0.25
+cleo_call @CoilParticle 4 vehicle offset -0.89 -2.07 -0.3
+cleo_call @CoilParticle 4 vehicle offset -0.84 -2.085 -0.3375
+cleo_call @CoilParticle 4 vehicle offset -0.79 -2.1 -0.375
+
+// Right Coil
+cleo_call @CoilParticle 4 vehicle offset 0.94 -1.8 0.19
+cleo_call @CoilParticle 4 vehicle offset 0.965 -1.8325 0.145
+cleo_call @CoilParticle 4 vehicle offset 0.97 -1.865 0.1
+cleo_call @CoilParticle 4 vehicle offset 0.9775 -1.8925 0.05
+cleo_call @CoilParticle 4 vehicle offset 0.985 -1.92 0.0
+cleo_call @CoilParticle 4 vehicle offset 0.9775 -1.945 -0.05
+cleo_call @CoilParticle 4 vehicle offset 0.97 -1.97 -0.1
+cleo_call @CoilParticle 4 vehicle offset 0.955 -1.995 -0.15
+cleo_call @CoilParticle 4 vehicle offset 0.94 -2.02 -0.2
+cleo_call @CoilParticle 4 vehicle offset 0.915 -2.045 -0.25
+cleo_call @CoilParticle 4 vehicle offset 0.89 -2.07 -0.3
+cleo_call @CoilParticle 4 vehicle offset 0.84 -2.085 -0.3375
+cleo_call @CoilParticle 4 vehicle offset 0.79 -2.1 -0.375
+return
+
+:CoilParticle
+066B: 4@ = attach_particle "BLUECOIL" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+064C: make_particle 4@ visible
+064F: remove_references_to_particle 4@
+cleo_return 0

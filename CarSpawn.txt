@@ -1,0 +1,42 @@
+{$CLEO .cs}
+{$INCLUDE Common/CleoConstants.txt}
+const
+    KEY_SPAWN = 190 // "."
+end
+0000:
+thread 'CARSPWN'
+int model = #BULLET
+int vehicle
+int interior
+float x
+float y
+float z
+float angle
+
+while true
+    wait 0
+    // Checks to see if player is outside, on foot, and is controllable by player
+    077E: get_active_interior_to interior
+    if and
+        interior == 0
+        044B:   actor $PLAYER_ACTOR on_foot
+        03EE:   player $PLAYER_CHAR controllable
+        0AB0:   is_key_pressed KEY_SPAWN
+    then
+        Model.Load(model)
+        038B: load_requested_models
+        while not  Model.Available(model)
+            wait 0
+        end
+        wait 500
+        04C4: create_coordinate x y z from_actor $PLAYER_ACTOR offset 2.0 0.0 0.0
+        0172: angle = actor $PLAYER_ACTOR z_angle
+        vehicle = Car.Create(model, x, y, z)
+        0175: set_car vehicle z_angle_to angle
+        wait 0
+        stream_custom_script "TimeTravel.s" vehicle 0x4b0108 0 0 0 0 0 0 0 0 0 0 19851025 1000 19551112 2204
+        0AB3: var TIME_MACHINE = vehicle
+        Model.Destroy(model)
+        wait 1000
+    end
+end

@@ -1,0 +1,57 @@
+{$CLEO .s}
+int vehicle
+int weapon
+int operator
+int operator1
+int operator2
+float x
+float y
+float z
+
+Model.Load(#FAM1)
+Model.Load(#ROCKETLA)
+Model.Load(#MINIGUN)
+038B: load_requested_models
+
+:LoadWeapons
+wait 0
+if and
+    Model.Available(#FAM1)
+    Model.Available(#ROCKETLA)
+    Model.Available(#MINIGUN)
+jf @LoadWeapons
+
+Actor.Create(operator, PedType.CivMale, #FAM1, 0.0, 0.0, 0.0)
+Actor.Create(operator1, PedType.CivMale, #FAM1, 0.0, 0.0, 0.0)
+Actor.Create(operator2, PedType.CivMale, #FAM1, 0.0, 0.0, 0.0)
+Actor.SetImmunities(operator, True, True, True, True, True)
+Actor.SetImmunities(operator1, True, True, True, True, True)
+Actor.SetImmunities(operator2, True, True, True, True, True)
+0464: put_actor operator1 into_turret_on_car vehicle at_car_offset -0.9 0.5 0.3 position 0 shooting_angle_limit 0.0 with_weapon 38
+0464: put_actor operator2 into_turret_on_car vehicle at_car_offset 0.9 0.5 0.3 position 0 shooting_angle_limit 0.0 with_weapon 38
+0464: put_actor operator into_turret_on_car vehicle at_car_offset 0.0 0.0 0.3 position 0 shooting_angle_limit 0.0 with_weapon 35
+0619: enable_actor operator collision_detection 0
+0619: enable_actor operator1 collision_detection 0
+0619: enable_actor operator2 collision_detection 0
+0337: set_actor operator visibility 0
+0337: set_actor operator1 visibility 0
+0337: set_actor operator2 visibility 0
+
+:Rocket
+while true
+    wait 0
+    if
+        Car.Wrecked(vehicle)
+    then
+        terminate_this_custom_script
+    end
+    if and
+        Actor.InCar($PLAYER_ACTOR, vehicle)
+        00E1:   player 0 pressed_key 17
+    then
+        04C4: store_coords_to x y z from_actor operator1 with_offset 0.0 50.0 -0.1
+        0668: AS_actor operator1 rotate_and_shoot_at x y z 500 ms
+        04C4: store_coords_to x y z from_actor operator2 with_offset 0.0 50.0 -0.1
+        0668: AS_actor operator2 rotate_and_shoot_at x y z 500 ms
+    end
+end

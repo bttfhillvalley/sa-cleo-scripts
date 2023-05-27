@@ -18,51 +18,93 @@ piston_ext *= 0.001
 // Extend/retract piston
 piston_pos -= piston_ext
 
-// Extend
-// Backwards from VC for some reason
-3F14: car vehicle move_part "strutrb"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "brakerb"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "holderrb"          pos 0.0 0.0 extension
-3F14: car vehicle move_part "shockrb"           pos shock_pos 0.0 extension_angle
-3F14: car vehicle move_part "shockpistonrb"     pos piston_pos 0.0 extension_angle
-3F14: car vehicle move_part "fxwheelrbdummy"    pos 0.0 0.0 extension
+// TEMP
+3F14: set_car vehicle component "fxthrusterbttf2lfon" pos 0.04 0.0 0.0
+3F14: set_car vehicle component "fxthrusterbttf2lbon" pos 0.05 0.0 0.0
+3F14: set_car vehicle component "fxthrusterbttf2rfon" pos -0.04 0.0 0.0
+3F14: set_car vehicle component "fxthrusterbttf2rbon" pos -0.05 0.0 0.0
 
-3F14: car vehicle move_part "strutrf"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "brakerf"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "holderrf"          pos 0.0 0.0 extension
-3F14: car vehicle move_part "shockrf"           pos shock_pos 0.0 extension_angle
-3F14: car vehicle move_part "shockpistonrf"     pos piston_pos 0.0 extension_angle
-3F14: car vehicle move_part "fxwheelrfdummy"    pos 0.0 0.0 extension
+// Extend
+3F14: set_car vehicle component "strutrb"       pos extension 0.0 0.0
+3F14: set_car vehicle component "brakerb"       pos extension 0.0 0.0
+3F14: set_car vehicle component "holderrb"      pos extension 0.0 0.0
+3F14: set_car vehicle component "shockrb"       pos extension_angle 0.0 shock_pos
+3F14: set_car vehicle component "shockpistonrb" pos extension_angle 0.0 piston_pos
+3F14: set_car vehicle component "fxwheelrb_"    pos extension 0.0 0.0
+
+3F14: set_car vehicle component "strutrf"       pos extension 0.0 0.0
+3F14: set_car vehicle component "brakerf"       pos extension 0.0 0.0
+3F14: set_car vehicle component "holderrf"      pos extension 0.0 0.0
+3F14: set_car vehicle component "shockrf"       pos extension_angle 0.0 shock_pos
+3F14: set_car vehicle component "shockpistonrf" pos extension_angle 0.0 piston_pos
+3F14: set_car vehicle component "fxwheelrf_"    pos extension 0.0 0.0
 extension *= -1.0
 extension_angle *= -1.0
-3F14: car vehicle move_part "strutlb"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "brakelb"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "holderlb"          pos 0.0 0.0 extension
-3F14: car vehicle move_part "shocklb"           pos shock_pos 0.0 extension_angle
-3F14: car vehicle move_part "shockpistonlb"     pos piston_pos 0.0 extension_angle
-3F14: car vehicle move_part "fxwheellbdummy"    pos 0.0 0.0 extension
+3F14: set_car vehicle component "strutlb"       pos extension 0.0 0.0
+3F14: set_car vehicle component "brakelb"       pos extension 0.0 0.0
+3F14: set_car vehicle component "holderlb"      pos extension 0.0 0.0
+3F14: set_car vehicle component "shocklb"       pos extension_angle 0.0 shock_pos
+3F14: set_car vehicle component "shockpistonlb" pos extension_angle 0.0 piston_pos
+3F14: set_car vehicle component "fxwheellb_"    pos extension 0.0 0.0
 
-3F14: car vehicle move_part "strutlf"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "brakelf"           pos 0.0 0.0 extension
-3F14: car vehicle move_part "holderlf"          pos 0.0 0.0 extension
-3F14: car vehicle move_part "shocklf"           pos shock_pos 0.0 extension_angle
-3F14: car vehicle move_part "shockpistonlf"     pos piston_pos 0.0 extension_angle
-3F14: car vehicle move_part "fxwheellfdummy"    pos 0.0 0.0 extension
+3F14: set_car vehicle component "strutlf"       pos extension 0.0 0.0
+3F14: set_car vehicle component "brakelf"       pos extension 0.0 0.0
+3F14: set_car vehicle component "holderlf"      pos extension 0.0 0.0
+3F14: set_car vehicle component "shocklf"       pos extension_angle 0.0 shock_pos
+3F14: set_car vehicle component "shockpistonlf" pos extension_angle 0.0 piston_pos
+3F14: set_car vehicle component "fxwheellf_"    pos extension 0.0 0.0
 extension *= -1.0
 
 // Rotate wheels
-3F16: car vehicle rotate_part "holderrf"        angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "holderrb"        angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "brakerf"         angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "brakerb"         angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "fxwheelrfdummy"  angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "fxwheelrbdummy"  angle 0.0 pivot 0.0
+3F16: set_car vehicle component "holderrf"      angle 0.0 pivot 0.0
+3F16: set_car vehicle component "holderrb"      angle 0.0 pivot 0.0
+3F16: set_car vehicle component "brakerf"       angle 0.0 pivot 0.0
+3F16: set_car vehicle component "brakerb"       angle 0.0 pivot 0.0
+3F16: set_car vehicle component "fxwheelrf_"    angle 0.0 pivot 0.0
+3F16: set_car vehicle component "fxwheelrb_"    angle 0.0 pivot 0.0
 pivot *= -1.0
-3F16: car vehicle rotate_part "holderlf"        angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "holderlb"        angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "brakelf"         angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "brakelb"         angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "fxwheellfdummy"  angle 0.0 pivot 0.0
-3F16: car vehicle rotate_part "fxwheellbdummy"  angle 0.0 pivot 0.0
+3F16: set_car vehicle component "holderlf"      angle 0.0 pivot 0.0
+3F16: set_car vehicle component "holderlb"      angle 0.0 pivot 0.0
+3F16: set_car vehicle component "brakelf"       angle 0.0 pivot 0.0
+3F16: set_car vehicle component "brakelb"       angle 0.0 pivot 0.0
+3F16: set_car vehicle component "fxwheellf_"    angle 0.0 pivot 0.0
+3F16: set_car vehicle component "fxwheellb_"    angle 0.0 pivot 0.0
 pivot *= -1.0
 return
+
+:RotateWheels
+3F0E: store_set_car vehicle wheel_rotation 11@ 12@ 13@ 14@
+1@ /= -0.3
+1@ += 1.0
+3F36: get_set_car vehicle steering_angle 15@
+if
+    15@ > 0.0
+then
+    15@ *= 0.6
+end
+006B: 15@ *= 1@
+3F16: set_car vehicle component "fxwheellf"            angle 11@ 0.0 15@
+3F16: set_car vehicle component "fxwheellfrimbttf1_"   angle 11@ 0.0 15@
+3F16: set_car vehicle component "fxwheellfrimbttf3_"   angle 11@ 0.0 15@
+3F16: set_car vehicle component "fxwheellfrimbttf3rr_" angle 11@ 0.0 15@
+3F16: set_car vehicle component "fxwheellb"            angle 12@ 0.0 0.0
+3F16: set_car vehicle component "fxwheellbrimbttf1_"   angle 12@ 0.0 0.0
+3F16: set_car vehicle component "fxwheellbrimbttf3_"   angle 12@ 0.0 0.0
+3F16: set_car vehicle component "fxwheellbrimbttf3rr_" angle 12@ 0.0 0.0
+
+3F36: get_set_car vehicle steering_angle 15@
+006B: 15@ *= 1@
+if
+    15@ > 0.0
+then
+    15@ *= 0.6
+end
+3F16: set_car vehicle component "fxwheelrf"            angle 13@ 0.0 15@
+3F16: set_car vehicle component "fxwheelrfrimbttf1_"   angle 13@ 0.0 15@
+3F16: set_car vehicle component "fxwheelrfrimbttf3_"   angle 13@ 0.0 15@
+3F16: set_car vehicle component "fxwheelrfrimbttf3rr_" angle 13@ 0.0 15@
+3F16: set_car vehicle component "fxwheelrb"            angle 14@ 0.0 0.0
+3F16: set_car vehicle component "fxwheelrbrimbttf1_"   angle 14@ 0.0 0.0
+3F16: set_car vehicle component "fxwheelrbrimbttf3_"   angle 14@ 0.0 0.0
+3F16: set_car vehicle component "fxwheelrbrimbttf3rr_" angle 14@ 0.0 0.0
+cleo_return 0

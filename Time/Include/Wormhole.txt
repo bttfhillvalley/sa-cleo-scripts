@@ -1,0 +1,88 @@
+{$INCLUDE Variables.txt}
+{$INCLUDE ../../Common/CleoConstants.txt}
+:TimeWormhole
+// Delorean Wormhole
+0407: create_coordinate x y z from_car vehicle offset 0.0 7.0 0.15
+/*0B10: var2 = vehicle_flags AND HOOD_BIT // Hoodbox variation
+if
+   var2 == 0 // No hoodbox
+then
+    // Blue wormhole
+    04D5: create_corona_at x y z radius var1 type 1 flare 0 RGB 64 128 255
+    3F29: create_light type 0 at x y z dir 0.0 0.0 -1.0 range 10.0 rgb var1 var1 var1 fog 0
+else
+    // Red wormhole for hoodbox
+    04D5: create_corona_at x y z radius var1 type 1 flare 0 RGB 255 100 75
+    3F29: create_light type 0 at x y z dir 0.0 0.0 -1.0 range 10.0 rgb var1 var1 var1 fog 0
+end*/
+if
+    vehicle_speed > 46.6
+then
+066C: var1 = attach_particle "BLUEWORMHOLE10" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 46.4
+then
+066C: var1 = attach_particle "BLUEWORMHOLE9" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 46.2
+then
+066C: var1 = attach_particle "BLUEWORMHOLE8" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 46.0
+then
+066C: var1 = attach_particle "BLUEWORMHOLE7" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 45.8
+then
+066C: var1 = attach_particle "BLUEWORMHOLE6" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 45.6
+then
+066C: var1 = attach_particle "BLUEWORMHOLE5" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 45.4
+then
+066C: var1 = attach_particle "BLUEWORMHOLE4" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 45.2
+then
+066C: var1 = attach_particle "BLUEWORMHOLE3" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 45.0
+then
+066C: var1 = attach_particle "BLUEWORMHOLE2" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+else if
+    vehicle_speed > 44.8
+then
+066C: var1 = attach_particle "BLUEWORMHOLE1" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
+064C: make_particle var1 visible
+064F: remove_references_to_particle var1
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+return

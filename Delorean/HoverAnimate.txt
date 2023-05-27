@@ -25,16 +25,19 @@ then
     extension = 0.3 // Wheel retracting
     pivot = 90.0 // Wheel rotating back
     0AB3: var LANDING = 1
+    3F86: attach_sound "delorean/landspeeder_decelerate_lower_pitch.wav" to_car vehicle pos 0.0 0.0 0.0 loop 0 size 10.0
+    3F98: set_sound "delorean/landspeeder_decelerate_lower_pitch.wav" index vehicle volume 0.5
+    3F86: attach_sound "delorean/landspeeder_decelerate_2_lower_pitch.wav" to_car vehicle pos 0.0 0.0 0.0 loop 0 size 10.0
     3F86:  attach_sound "hover_retract.wav" to_car vehicle offset 0 0 0 loop 0 size 10.0
-    //3F84:  attach_sound "hover_retract.wav" loop 0
+    stream_custom_script "Delorean/HoverStop.s" vehicle
 else
     stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
     extension = 0.0 // Wheel extending
     pivot = 0.0 // Wheel rotating out
     3F86:  attach_sound "hover_extend.wav" to_car vehicle offset 0 0 0 loop 0 size 10.0
-    //3F84:  attach_sound "hover_extend.wav" loop 0
     3F28: set_car vehicle wheel_status 2 // Remove tires
-    //3F26: apply_upward_force 50.0 car vehicle
+    //3F26: car vehicle apply_upward_force 50.0
+    stream_custom_script "Delorean/HoverStart.s" vehicle
 end
 
 :HoverAnimateStart
@@ -46,9 +49,6 @@ else_jump @HoverAnimateStart
 if
 8119:   not car vehicle wrecked
 else_jump @HoverAnimateEnd
-Car.StorePos(vehicle, x y z)
-02CE: floor = ground_z x y z
-0063: z -= floor // floating-point values (never used in VC or GTA 3)
 
 // Animate
 if
@@ -70,18 +70,9 @@ then
         3F28: set_car vehicle wheel_status 0  // Add tires back.  TODO: Keep track of tire status
     else
         extension = 0.0
-        if //or
-            00DB:   actor $PLAYER_ACTOR in_car vehicle
-            //3F2A:   is_player_in_remote_mode_with_car vehicle
+        if
+            3F3E: car vehicle wheels_on_ground
         then
-            if or
-                z > 5.0  // If we're really high up, just disable hovering
-                81F3:   not car vehicle airborne
-            then
-                stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
-                jump @HoverAnimateEnd
-            end
-        else
             stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
             jump @HoverAnimateEnd
         end
@@ -97,13 +88,14 @@ else  // Flying
     then
         pivot += 5.0
     else
-        stream_custom_script "Delorean/WheelThrust.s" vehicle
+        //stream_custom_script "Delorean/WheelThrust.s" vehicle
         jump @HoverAnimateEnd
     end
     end
 end
 gosub @HoverAnimateModel
 //gosub @HoverSmoke
+cleo_call @RotateWheels 2 vehicle extension
 jump @HoverAnimateStart
 
 :HoverAnimateEnd

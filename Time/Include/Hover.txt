@@ -1,0 +1,312 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE Variables.txt}
+:HoverConversion
+0B10: var1 = vehicle_flags AND FLYING_BIT   // Is car flying?
+0B10: var2 = vehicle_flags AND FC_FRIED_BIT   // Is car flying?
+0AB4: var3 = var LANDING
+
+// Driving
+if or
+    var1 == 0
+    not var2 == 0
+then
+    if
+        var3 == 0
+    then
+        cleo_call @FadeWheels 3 vehicle 0 15
+        cleo_call @FadeVents 3 vehicle 0 15
+        cleo_call @FadeBoost 3 vehicle 0 15
+        jump @HoverConversionReturn
+    end
+end
+
+if //and
+    var3 == 0
+    //not var4 == 0
+then
+    cleo_call @FadeWheels 3 vehicle 255 5
+else
+    3F1C: get_car vehicle component "fxwheellf_" rotation var1 var2 var3
+    if
+        var2 == 0.0
+    then
+        cleo_call @FadeWheels 3 vehicle 0 15
+    end
+end
+
+02E3: vehicle_speed = car vehicle speed
+vehicle_speed /= 50.0
+vehicle_speed += 1.0
+3F97: set_sound "delorean/landspeeder_loop_lower_pitch.wav" index vehicle frequency vehicle_speed
+
+// Hovering
+3F05: set_car vehicle hover 1
+
+// Thrust
+var3 = 0
+var4 = 15
+if //or
+    Actor.InCar($PLAYER_ACTOR, vehicle)
+    //3F2A:   is_player_in_remote_mode_with_car vehicle
+then
+    Car.StorePos(vehicle, x, y, z)
+    //3F02: var1 = car vehicle engine_state
+else
+    gosub @VentGlow
+    jump @HoverConversionReturn
+end
+if //and
+    z < HEIGHT_LIMIT
+    //not var1 == 0
+else_jump @HoverConversionReset
+
+// Configure Two stage boost or not.  For testing.
+0AB4: var1 = var LANDING
+
+if and
+    00E1:   key_pressed 0 6
+    80E1:   not key_pressed 0 4
+then
+    02E3: vehicle_speed = car vehicle speed
+    vehicle_speed *= -0.1
+    vehicle_speed += 11.0
+    3F25: set_car vehicle forward_force vehicle_speed
+    02E3: vehicle_speed = car vehicle speed
+    gosub @HoverAccelerateSound
+    0AB3: var DSOUND = 0
+else if and
+    80E1:   not key_pressed 0 6
+    00E1:   key_pressed 0 4
+then
+    vehicle_speed = -5.0
+    3F25: set_car vehicle forward_force vehicle_speed
+else if and
+    00E1:   key_pressed 0 6
+    00E1:   key_pressed 0 4
+    var1 == 0
+then
+    02E3: vehicle_speed = car vehicle speed
+    vehicle_speed *= -0.16
+    vehicle_speed += 20.0
+    3F25: set_car vehicle forward_force vehicle_speed
+
+    // Booster
+    var3 = 255
+    var4 = 50
+
+    vehicle_speed = 88.0
+    gosub @HoverAccelerateSound
+    gosub @HoverBoostSound
+    0AB3: var DSOUND = 0
+else
+end
+end
+end
+gosub @VentGlow
+0AB4: var1 = var ASOUND
+02E3: vehicle_speed = car vehicle speed
+if and
+    80E1:   not key_pressed 0 6
+    not var1 == 0
+then
+    gosub @HoverDecelerateSound
+    if
+        3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
+    then
+        0AB3: var ASOUND = 0
+    end
+end
+
+if or
+    80E1:   not key_pressed 0 6
+    80E1:   not key_pressed 0 4
+then
+    jump @HoverConversionReset
+end
+jump @HoverConversionReturn
+
+:HoverConversionReset
+0AB3: var VSOUND = 0
+
+:HoverConversionReturn
+return
+
+:VentGlow
+0AB4: var1 = var CTIME
+0607: var2 = get_current_weather
+if or
+    var1 >= 2020 // integer values
+    var1 < 650 // integer values
+    var2 == 2 // integer values
+    var2 == 3 // integer values
+    var2 == 5 // integer values
+    var2 == 9 // integer values
+    var2 == 10 // integer values
+else_jump @VentGlowSet
+0AB4: var2 = var LANDING
+if
+    var2 == 0
+else_jump @VentGlowSet
+cleo_call @FadeVents 3 vehicle 255 15
+jump @VentThrustGlow
+
+:VentGlowSet
+cleo_call @FadeVents 3 vehicle var3 var4
+
+:VentThrustGlow
+cleo_call @FadeBoost 3 vehicle var3 50
+return
+
+:HoverAccelerateSound
+/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+if
+    var1 == false
+then
+    return
+end    */
+0AB4: var1 = var ASOUND
+0AB4: var2 = var TRAVEL
+if and
+    var1 == 0
+    var2 == 0
+    vehicle_speed > 30.0
+    3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
+    3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
+then
+    3F86: attach_sound "delorean/landspeeder_accelerate_2_lower_pitch.wav" to_car vehicle offset 0 0 0 loop 0 size 10.0
+    0AB3: var ASOUND = vehicle
+end
+return
+
+:HoverDecelerateSound
+/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+if
+    var1 == false
+then
+    return
+end  */
+0AB4: var1 = var DSOUND
+0AB4: var2 = var TRAVEL
+if and
+    var1 == 0
+    var2 == 0
+then
+    if and
+        vehicle_speed > 30.0
+        3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
+        3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
+    then
+        3F86: attach_sound "delorean/landspeeder_decelerate_2_lower_pitch.wav" to_car vehicle pos 0 0 0 loop 0 size 10.0
+    end
+    0AB3: var DSOUND = vehicle
+end
+return
+
+:HoverBoostSound
+/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+if
+    var1 == false
+then
+    return
+end  */
+0AB4: var1 = var VSOUND
+0AB4: var2 = var TRAVEL
+if and
+    var1 == 0 // not loaded
+    var2 == 0
+then
+    3F96: var1 = attach_sound "boost.wav" to_car vehicle offset 0 -2.0 0 loop 0 size 10.0
+    0AB3: var VSOUND = var1
+end
+return
+
+:FadeWheels
+gosub @FadeLimit
+10@ = Car.Model(0@)
+if or
+    Actor.InCar($PLAYER_ACTOR, 0@)
+    //3F2A:   is_player_in_remote_mode_with_car 0@
+    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
+then
+    3F47: 15@ = get_car 0@ component "fxthrusterbttf2lfon" alpha
+    gosub @Fade
+    3F12: set_car 0@ component "fxthrusterbttf2lfon" alpha 15@
+    3F12: set_car 0@ component "fxthrusterbttf2lbon" alpha 15@
+    3F12: set_car 0@ component "fxthrusterbttf2rfon" alpha 15@
+    3F12: set_car 0@ component "fxthrusterbttf2rbon" alpha 15@
+else
+    3F10: set_car 0@ component "fxthrusterbttf2lfon" visibility 1@
+    3F10: set_car 0@ component "fxthrusterbttf2lbon" visibility 1@
+    3F10: set_car 0@ component "fxthrusterbttf2rfon" visibility 1@
+    3F10: set_car 0@ component "fxthrusterbttf2rbon" visibility 1@
+end
+cleo_return 0
+
+:FadeVents
+gosub @FadeLimit
+10@ = Car.Model(0@)
+if or
+    Actor.InCar($PLAYER_ACTOR, 0@)
+    //3F2A:   is_player_in_remote_mode_with_car 0@
+    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
+then
+    3F47: 15@ = get_car 0@ component "inner_vents" alpha
+    gosub @Fade
+    3F12: set_car 0@ component "inner_vents" alpha 15@
+else
+    3F10: set_car 0@ component "inner_vents" visibility 1@
+end
+cleo_return 0
+
+:FadeBoost
+gosub @FadeLimit
+10@ = Car.Model(0@)
+if or
+    Actor.InCar($PLAYER_ACTOR, 0@)
+    //3F2A:   is_player_in_remote_mode_with_car 0@
+    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
+then
+    3F47: 15@ = get_car 0@ component "inner_ventsglow" alpha
+    gosub @Fade
+    3F12: set_car 0@ component "inner_ventsglow" alpha 15@
+else
+    3F10: set_car 0@ component "inner_ventsglow" visibility 1@
+end
+cleo_return 0
+
+:FadeLimit
+if
+    1@ < 0
+then
+    1@ = 0
+end
+if
+    1@ > 255
+then
+    1@ = 255
+end
+return
+
+:Fade
+if
+    001D: 15@ > 1@
+then
+    0062: 15@ -= 2@
+    if
+        001D: 1@ > 15@
+    then
+        0085: 15@ = 1@
+    end
+else if
+    001D: 1@ > 15@
+then
+
+    005A: 15@ += 2@
+    if
+        001D: 15@ > 1@
+    then
+        0085: 15@ = 1@
+    end
+end
+end
+return

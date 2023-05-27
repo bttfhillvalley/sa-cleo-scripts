@@ -1,0 +1,24 @@
+int vehicle
+int vehicle_flags
+int x
+int y
+int z
+int var1
+int var2
+int var3
+int var4
+int vehicle_model
+int vehicle_health
+float vehicle_speed
+int dest_date
+int dest_time
+int past_date
+int past_time
+// SA Only variables
+float rx
+float ry
+float rz
+float rw
+float vx
+float vy
+float vz
