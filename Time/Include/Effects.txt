@@ -160,7 +160,46 @@ return
 3F18: set_car vehicle component "fluxcoilson" glow 0
 3F12: set car vehicle component "fluxcoilson" alpha 0
 3F10: set_car vehicle component "fluxcoilson" visible 0
-3F12: set car vehicle component "wormhole" alpha 0
+
+3F18: set_car vehicle component "fluxemitteron" glow 0
+3F12: set car vehicle component "fluxemitteron" alpha 0
+3F10: set_car vehicle component "fluxemitteron" visible 0
+3F18: set_car vehicle component "fluxcoilsonlb1" glow 0
+3F12: set car vehicle component "fluxcoilsonlb1" alpha 0
+3F10: set_car vehicle component "fluxcoilsonlb1" visible 0
+3F18: set_car vehicle component "fluxcoilsonlb2" glow 0
+3F12: set car vehicle component "fluxcoilsonlb2" alpha 0
+3F10: set_car vehicle component "fluxcoilsonlb2" visible 0
+3F18: set_car vehicle component "fluxcoilsonlb3" glow 0
+3F12: set car vehicle component "fluxcoilsonlb3" alpha 0
+3F10: set_car vehicle component "fluxcoilsonlb3" visible 0
+3F18: set_car vehicle component "fluxcoilsonlb4" glow 0
+3F12: set car vehicle component "fluxcoilsonlb4" alpha 0
+3F10: set_car vehicle component "fluxcoilsonlb4" visible 0
+3F18: set_car vehicle component "fluxcoilsonrb1" glow 0
+3F12: set car vehicle component "fluxcoilsonrb1" alpha 0
+3F10: set_car vehicle component "fluxcoilsonrb1" visible 0
+3F18: set_car vehicle component "fluxcoilsonrb2" glow 0
+3F12: set car vehicle component "fluxcoilsonrb2" alpha 0
+3F10: set_car vehicle component "fluxcoilsonrb2" visible 0
+3F18: set_car vehicle component "fluxcoilsonrb3" glow 0
+3F12: set car vehicle component "fluxcoilsonrb3" alpha 0
+3F10: set_car vehicle component "fluxcoilsonrb3" visible 0
+3F18: set_car vehicle component "fluxcoilsonrb4" glow 0
+3F12: set car vehicle component "fluxcoilsonrb4" alpha 0
+3F10: set_car vehicle component "fluxcoilsonrb4" visible 0
+3F18: set_car vehicle component "fluxcoilsonf1" glow 0
+3F12: set car vehicle component "fluxcoilsonf1" alpha 0
+3F10: set_car vehicle component "fluxcoilsonf1" visible 0
+3F18: set_car vehicle component "fluxcoilsonf2" glow 0
+3F12: set car vehicle component "fluxcoilsonf2" alpha 0
+3F10: set_car vehicle component "fluxcoilsonf2" visible 0
+3F18: set_car vehicle component "fluxcoilsonf3" glow 0
+3F12: set car vehicle component "fluxcoilsonf3" alpha 0
+3F10: set_car vehicle component "fluxcoilsonf3" visible 0
+3F18: set_car vehicle component "fluxcoilsonf4" glow 0
+3F12: set car vehicle component "fluxcoilsonf4" alpha 0
+3F10: set_car vehicle component "fluxcoilsonf4" visible 0
 return
 
 //:WheelSparks
