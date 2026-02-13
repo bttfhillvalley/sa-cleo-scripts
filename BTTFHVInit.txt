@@ -28,9 +28,18 @@
 0A8C: write_memory 0x52543C size 1 value 0x90 virtual_protect 1  // Disable up/down camera
 
 0A8C: write_memory 0x00B7015C size 4 value 60000 virtual_protect 0 // Realtime
-0A8C: write_memory 0x004c92da size 5 value 0x90 virtual_protect 1 // Disable wheel collapse
-0A8C: write_memory 0x004c92e4 size 5 value 0x90 virtual_protect 1 // Disable wheel collapse
-0A8C: write_memory 0x008a64c4 size 4 value 0xD050 virtual_protect 1 // Right Front Door
-0A8C: write_memory 0x008a64dc size 4 value 0xD030 virtual_protect 1 // Left Front Door
-0A8C: write_memory 0x008a6524 size 4 value 0x0000 virtual_protect 1 // Bonnet
+//0A8C: write_memory 0x004c92da size 5 value 0x90 virtual_protect 1 // Disable wheel collapse
+//0A8C: write_memory 0x004c92e4 size 5 value 0x90 virtual_protect 1 // Disable wheel collapse
+//0A8C: write_memory 0x008a64c4 size 4 value 0xD050 virtual_protect 1 // Right Front Door
+//0A8C: write_memory 0x008a64dc size 4 value 0xD030 virtual_protect 1 // Left Front Door
+//0A8C: write_memory 0x008a6524 size 4 value 0x0000 virtual_protect 1 // Bonnet
+//0A8C: write_memory 0x008A64DC size 4 value 0xB150 virtual_protect 1 // Right Rear Door
+//0A8C: write_memory 0x008A64DC size 4 value 0xB130 virtual_protect 1 // Left Rear Door
+//0A8C: write_memory 0x008A64F4 size 4 value 0xD030 virtual_protect 1 // Front Bumper (?)
+//0A8C: write_memory 0x008A6500 size 4 value 0x0100 virtual_protect 1 // Rear Bumper (?)
+//0A8C: write_memory 0x008A650C size 4 value 0x0000 virtual_protect 1 // Right Wing (?)
+//0A8C: write_memory 0x008A6518 size 4 value 0x0000 virtual_protect 1 // Left Wing (?)
+//0A8C: write_memory 0x008A6530 size 4 value 0x8100 virtual_protect 1 // Boot (?)
+//0A8C: write_memory 0x008A653C size 4 value 0x0C80 virtual_protect 1 // Windscreen (?)
+//0A8C: write_memory 0x008A6548 size 4 value 0x0100 virtual_protect 1 // Rear Windscreen (???)
 terminate_this_custom_script
