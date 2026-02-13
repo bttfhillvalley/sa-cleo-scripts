@@ -9,15 +9,20 @@ int flying
 int flying_circuits
 float extension
 float pivot
-float extension_angle
 float shock_pos
 float piston_pos
 float piston_ext
+float piston_angle
+float damper
+gosub @HideStock
 gosub @ThrusterLightsOff
 gosub @HideFuel
 gosub @LightsOff
 gosub @TimeEffectsModelReset
 //3F01: car vehicle raise_front_suspension 0
+//053F: set_car vehicle tires_vulnerable 1
+3F10: set_car vehicle component "frontsusp" visible 0
+3F10: set_car vehicle component "platestock" visible 0
 
 // Wheel
 0B10: bit_check = vehicle_flags AND WHEELS_BIT
@@ -28,13 +33,6 @@ gosub @TimeEffectsModelReset
 if
     flying == 0
 then
-    // Driving
-    gosub @ShowBrakes
-    gosub @HideHoverBrakes
-    gosub @HideHoverThrusters
-    gosub @HideDeloreanHoverWheels
-    gosub @Hide50sHoverWheels
-    gosub @HideTrainHoverWheels
     if or
         flying_circuits == 0
         bit_check == WHEELS_TRAIN_BIT
@@ -47,47 +45,39 @@ then
         bit_check == WHEELS_50S_BIT
     then
         //3F01: car vehicle raise_front_suspension 1
-        gosub @HideDeloreanWheels
-        gosub @Show50sWheels
-        gosub @HideTrainWheels
-    else if
-        bit_check == WHEELS_TRAIN_BIT
-    then
-        gosub @HideDeloreanWheels
-        gosub @Hide50sWheels
-        gosub @ShowTrainWheels
-    else
-        gosub @ShowDeloreanWheels
-        gosub @Hide50sWheels
-        gosub @HideTrainWheels
-    end
-    end
-else
-    // Flying
-    gosub @HideBrakes
-    gosub @ShowHoverBrakes
-    gosub @HideThrusters
-    gosub @HideDeloreanWheels
-    gosub @Hide50sWheels
-    gosub @HideTrainWheels
-
-    if
-        bit_check == WHEELS_50S_BIT
-    then
-        //3F01: car vehicle raise_front_suspension 1
-        gosub @ShowHoverThrusters
         gosub @HideDeloreanHoverWheels
         gosub @Show50sHoverWheels
         gosub @HideTrainHoverWheels
     else if
-        bit_check == WHEELS_TRAIN_BIT
+        bit_check >= WHEELS_TRAIN_BIT
     then
-        gosub @HideHoverThrusters
+        gosub @HideDeloreanHoverWheels
+        gosub @Hide50sHoverWheels
+        gosub @ShowTrainHoverWheels
+        //053F: set_car vehicle tires_vulnerable 0
+        //3F28: set_car vehicle wheel_status 0
+    else
+        gosub @ShowDeloreanHoverWheels
+        gosub @Hide50sHoverWheels
+        gosub @HideTrainHoverWheels
+    end
+    end
+else
+    // Flying
+    if
+        bit_check == WHEELS_50S_BIT
+    then
+        //3F01: car vehicle raise_front_suspension 1
+        gosub @HideDeloreanHoverWheels
+        gosub @Show50sHoverWheels
+        gosub @HideTrainHoverWheels
+    else if
+        bit_check >= WHEELS_TRAIN_BIT
+    then
         gosub @HideDeloreanHoverWheels
         gosub @Hide50sHoverWheels
         gosub @ShowTrainHoverWheels
     else
-        gosub @ShowHoverThrusters
         gosub @ShowDeloreanHoverWheels
         gosub @Hide50sHoverWheels
         gosub @HideTrainHoverWheels
@@ -110,11 +100,22 @@ end
 if
     bit_check == 0
 then
+    gosub @HideStock
+    gosub @ShowGrillHitch
+    gosub @ShowTimeMachine
     gosub @ShowPlutoniumChamber
     gosub @HideMrFusion
-else
+    gosub @ShowGrillBracketLand
+    gosub @HideGrillBracketHover
+else 
+    gosub @HideStock
+    gosub @ShowGrillHitch
+    gosub @ShowTimeMachine
     gosub @HidePlutoniumChamber
     gosub @ShowMrFusion
+    gosub @HideGrillBracketLand
+    gosub @ShowGrillBracketHover
+end
 end
 
 // Plate
@@ -157,32 +158,29 @@ end
 
 
 // Hook
+3F10: set_car vehicle component "hookcablesoffbttf1" visible 0
+3F10: set_car vehicle component "hookcablesonbttf1" visible 0
 0B10: bit_check = vehicle_flags AND HOOK_BIT
 if
     bit_check == HOOK_NONE_BIT
 then
+    gosub @HideHookHolder
     3F10: set_car vehicle component "hookbttf1" visible 0
-    3F10: set_car vehicle component "hookandholderbttf1" visible 0
-    3F10: set_car vehicle component "holderbttf1" visible 0
+    3F10: set_car vehicle component "hookcablesoffbttf1" visible 0
+    3F10: set_car vehicle component "hookcableplugbttf1" visible 0
 else
+    gosub @ShowHookHolder
     3F10: set_car vehicle component "nohookbttf1" visible 0
-    if
+    3F10: set_car vehicle component "hookcablesoffbttf1" visible 1
+    if or
         bit_check == HOOK_SIDE_BIT
-    then
-        3F10: set_car vehicle component "hookbttf1" visible 1
-        3F10: set_car vehicle component "hookandholderbttf1" visible 0
-        3F10: set_car vehicle component "holderbttf1" visible 1
-    else if
         bit_check == HOOK_UP_BIT
     then
-        3F10: set_car vehicle component "hookbttf1" visible 0
-        3F10: set_car vehicle component "hookandholderbttf1" visible 1
-        3F10: set_car vehicle component "holderbttf1" visible 0
+        3F10: set_car vehicle component "hookbttf1" visible 1
+        3F10: set_car vehicle component "hookcableplugbttf1" visible 1
     else
         3F10: set_car vehicle component "hookbttf1" visible 0
-        3F10: set_car vehicle component "hookandholderbttf1" visible 0
-        3F10: set_car vehicle component "holderbttf1" visible 1
-    end
+        3F10: set_car vehicle component "hookcableplugbttf1" visible 0
     end
 end
 
@@ -223,17 +221,22 @@ end
 terminate_this_custom_script
 
 :ThrusterLightsOff
-//3F10: set_car vehicle component "fxthrusterbttf2rbon" visible 0
+3F10: set_car vehicle component "fxthrusterbttf2rbon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2rbth" visible 0
-//3F10: set_car vehicle component "fxthrusterbttf2rfon" visible 0
+3F10: set_car vehicle component "fxthrusterbttf2rfon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2rfth" visible 0
-//3F10: set_car vehicle component "fxthrusterbttf2lbon" visible 0
+3F10: set_car vehicle component "fxthrusterbttf2lbon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2lbth" visible 0
-//3F10: set_car vehicle component "fxthrusterbttf2lfon" visible 0
+3F10: set_car vehicle component "fxthrusterbttf2lfon" visible 0
 3F10: set_car vehicle component "fxthrusterbttf2lfth" visible 0
 
-//3F10: set_car vehicle component "inner_vents" visible 0
-//3F10: set_car vehicle component "inner_ventsglow" visible 0
+3F10: set_car vehicle component "fxwheelbttf2rbon" visible 0
+3F10: set_car vehicle component "fxwheelbttf2rfon" visible 0
+3F10: set_car vehicle component "fxwheelbttf2lbon" visible 0
+3F10: set_car vehicle component "fxwheelbttf2lfon" visible 0
+
+3F10: set_car vehicle component "inner_vents" visible 0
+3F10: set_car vehicle component "inner_ventsglow" visible 0
 return
 
 :ShowBrakes
@@ -244,10 +247,10 @@ jump @DisplayBrakes
 visibility = 0
 
 :DisplayBrakes
-3F10: set_car vehicle component "wheel_rb" visible visibility
-3F10: set_car vehicle component "wheel_lb" visible visibility
-3F10: set_car vehicle component "wheel_rf" visible visibility
-3F10: set_car vehicle component "wheel_lf" visible visibility
+3F10: set_car vehicle component "rotor_rb" visible visibility
+3F10: set_car vehicle component "rotor_lb" visible visibility
+3F10: set_car vehicle component "rotor_rf" visible visibility
+3F10: set_car vehicle component "rotor_lf" visible visibility
 return
 
 :ShowHoverBrakes
@@ -258,10 +261,10 @@ jump @DisplayHoverBrakes
 visibility = 0
 
 :DisplayHoverBrakes
-3F10: set_car vehicle component "fxwheelrb" visible visibility
-3F10: set_car vehicle component "fxwheellb" visible visibility
-3F10: set_car vehicle component "fxwheelrf" visible visibility
-3F10: set_car vehicle component "fxwheellf" visible visibility
+3F10: set_car vehicle component "fxrotorrb" visible visibility
+3F10: set_car vehicle component "fxrotorlb" visible visibility
+3F10: set_car vehicle component "fxrotorrf" visible visibility
+3F10: set_car vehicle component "fxrotorlf" visible visibility
 return
 
 :ShowThrusters
@@ -352,6 +355,111 @@ visibility = 0
 3F10: set_car vehicle component "fxwheelbttf3rrlf" visible visibility
 return
 
+:ShowStock
+visibility = 1
+jump @DisplayStock
+
+:HideStock
+visibility = 0
+
+:DisplayStock
+3F10: set_car vehicle component "gloveboxclosed" visible visibility
+3F10: set_car vehicle component "cargonet" visible visibility
+3F10: set_car vehicle component "consoletop" visible visibility
+3F10: set_car vehicle component "consoletopcontrols" visible visibility
+3F10: set_car vehicle component "passengerseatbelt" visible visibility
+3F10: set_car vehicle component "consoleacgrills" visible visibility
+3F10: set_car vehicle component "enginecover" visible visibility
+3F10: set_car vehicle component "boot_ok" visible visibility
+3F10: set_car vehicle component "windscreen_rearview" visible visibility
+3F10: set_car vehicle component "wing_lr_ok_glass" visible visibility
+3F10: set_car vehicle component "wing_rr_ok_glass" visible visibility
+3F10: set_car vehicle component "back_glass" visible visibility
+3F10: set_car vehicle component "plate_back" visible visibility
+3F10: set_car vehicle component "exhaustmodel" visible visibility
+3F10: set_car vehicle component "bonnetanchorl" visible visibility
+3F10: set_car vehicle component "bonnetanchorr" visible visibility
+3F10: set_car vehicle component "floormats" visible visibility
+3F10: set_car vehicle component "wcontrollf" visible visibility
+3F10: set_car vehicle component "wcontrolrf" visible visibility
+return
+
+:Exhaust
+3F5A: 15@ = car vehicle flags
+0B11: 15@ = 15@ OR 0x80
+0B12: 15@ = 15@ XOR 1
+3F5B: set_car vehicle flags 15@
+
+:ShowTimeMachine
+visibility = 1
+jump @DisplayTimeMachine
+
+:HideTimeMachine
+visibility = 0
+3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
+for 15@ = 1 to 6 step 1
+    3F11: set_car vehicle component "flux" index 15@ visible 0
+end
+//cleo_call @TimeCircuitsReset 1 vehicle
+
+:DisplayTimeMachine
+3F10: set_car vehicle component "bttfparts" visible visibility
+3F10: set_car vehicle component "wing_lf_ok_sh" visible visibility
+3F10: set_car vehicle component "wing_rf_ok_sh" visible visibility
+3F10: set_car vehicle component "wing_lr_ok_sh" visible visibility
+3F10: set_car vehicle component "wing_rr_ok_sh" visible visibility
+3F10: set_car vehicle component "roof_coils_shadows" visible visibility
+3F10: set_car vehicle component "interiorbttf" visible visibility
+3F10: set_car vehicle component "wiresexterior" visible visibility
+3F10: set_car vehicle component "wiresinterior" visible visibility
+3F10: set_car vehicle component "fluxcoils" visible visibility
+3F10: set_car vehicle component "fluxcoilsholders" visible visibility
+3F10: set_car vehicle component "keychain" visible visibility
+3F10: set_car vehicle component "consoletoptm" visible visibility
+3F10: set_car vehicle component "wcontrollftm" visible visibility
+3F10: set_car vehicle component "wcontrolrftm" visible visibility
+3F10: set_car vehicle component "gloveboxgauges" visible visibility
+3F10: set_car vehicle component "gloveboxgaugeslights" visible visibility
+3F10: set_car vehicle component "pchamberemptylight" visible visibility
+3F10: set_car vehicle component "gloveboxopen" visible visibility
+3F10: set_car vehicle component "tcddisplay" visible visibility
+3F10: set_car vehicle component "compass" visible visibility
+3F10: set_car vehicle component "digitalspeedo" visible visibility
+3F10: set_car vehicle component "tcdhandle" visible visibility
+3F10: set_car vehicle component "tcdswitch" visible visibility
+3F10: set_car vehicle component "stwheelbuttons" visible visibility
+3F10: set_car vehicle component "stwheelbuttonslights" visible visibility
+3F10: set_car vehicle component "fluxcapacitor" visible visibility
+3F10: set_car vehicle component "fluxcapacitorglass" visible visibility
+3F10: set_car vehicle component "fluxcapacitortubes" visible visibility
+3F10: set_car vehicle component "bulkhead" visible visibility
+3F10: set_car vehicle component "sid" visible visibility
+3F10: set_car vehicle component "pchamberneedle" visible visibility
+3F10: set_car vehicle component "pchamberrefneedle" visible visibility
+3F10: set_car vehicle component "ppowerneedle" visible visibility
+3F10: set_car vehicle component "primaryneedle" visible visibility
+3F10: set_car vehicle component "overheadconsole" visible visibility
+3F10: set_car vehicle component "overheadconsolelights" visible visibility
+3F10: set_car vehicle component "overheadconsoleelighth" visible visibility
+for 15@ = 0 to 9 step 1
+    3F11: set_car vehicle component "tcdkeypadbutton" index 15@ visible visibility
+end
+3F10: set_car vehicle component "tcdkeypadbuttonenter" visible visibility
+3F10: set_car vehicle component "exhaustmodeltm" visible visibility
+return
+
+:ShowHookHolder
+visibility = 1
+jump @DisplayHookHolder
+
+:HideHookHolder
+visibility = 0
+
+:DisplayHookHolder
+3F10: set_car vehicle component "hookguidebttf1" visible visibility
+3F10: set_car vehicle component "holderbttf1" visible visibility
+return
+
 :ShowPlutoniumChamber
 visibility = 1
 jump @DisplayPlutoniumChamber
@@ -361,8 +469,10 @@ visibility = 0
 
 :DisplayPlutoniumChamber
 3F10: set_car vehicle component "bttf1" visible visibility
+3F10: set_car vehicle component "reactorshield" visible visibility
 3F10: set_car vehicle component "nohookbttf1" visible visibility
 3F10: set_car vehicle component "reactorlidbttf1" visible visibility
+3F10: set_car vehicle component "ventsweather" visible visibility
 return
 
 :ShowMrFusion
@@ -415,40 +525,56 @@ visibility = 0
 
 :DisplayBTTF1
 // BTTF1 parts
+3F10: set_car vehicle component "frontsuspbttf1" visible visibility
 3F10: set_car vehicle component "xchassis" visible visibility
 3F10: set_car vehicle component "underbody" visible visibility
-3F10: set_car vehicle component "engine" visible visibility
+3F10: set_car vehicle component "bonnetanchorl" visible visibility
+3F10: set_car vehicle component "bonnetanchorr" visible visibility
+
 return
 
 :ShowBTTF2
 visibility = 1
+3F10: set_car vehicle component "transmissionmodel" visible 0
 jump @DisplayBTTF2
 
 :HideBTTF2
+3F10: set_car vehicle component "transmissionmodel" visible 1
 visibility = 0
 
 :DisplayBTTF2
 // BTTF2 parts
 3F10: set_car vehicle component "xchassisbttf2" visible visibility
+3F10: set_car vehicle component "xchassiscoverbttf2" visible visibility
 3F10: set_car vehicle component "underbodybttf2" visible visibility
+3F10: set_car vehicle component "bonnetanchorlbttf2" visible visibility
+3F10: set_car vehicle component "bonnetanchorrbttf2" visible visibility
 
 // Suspension
 3F10: set_car vehicle component "strutrb" visible visibility
+3F10: set_car vehicle component "strutshockrb" visible visibility
+3F10: set_car vehicle component "hoverjointrb" visible visibility
 3F10: set_car vehicle component "holderrb" visible visibility
 3F10: set_car vehicle component "shockpistonrb" visible visibility
 3F10: set_car vehicle component "shocklb" visible visibility
 
 3F10: set_car vehicle component "strutlb" visible visibility
+3F10: set_car vehicle component "strutshocklb" visible visibility
+3F10: set_car vehicle component "hoverjointlb" visible visibility
 3F10: set_car vehicle component "holderlb" visible visibility
 3F10: set_car vehicle component "shockpistonlb" visible visibility
 3F10: set_car vehicle component "shocklb" visible visibility
 
 3F10: set_car vehicle component "strutrf" visible visibility
+3F10: set_car vehicle component "strutshockrf" visible visibility
+3F10: set_car vehicle component "hoverjointrf" visible visibility
 3F10: set_car vehicle component "holderrf" visible visibility
 3F10: set_car vehicle component "shockpistonrf" visible visibility
 3F10: set_car vehicle component "shockrf" visible visibility
 
 3F10: set_car vehicle component "strutlf" visible visibility
+3F10: set_car vehicle component "strutshocklf" visible visibility
+3F10: set_car vehicle component "hoverjointlf" visible visibility
 3F10: set_car vehicle component "holderlf" visible visibility
 3F10: set_car vehicle component "shockpistonlf" visible visibility
 3F10: set_car vehicle component "shocklf" visible visibility
@@ -465,19 +591,16 @@ visibility = 0
 :DisplayDeloreanWheels
 3F10: set_car vehicle component "wheelbttf1rb" visible visibility
 3F10: set_car vehicle component "tirebttf1rb" visible visibility
-3F10: set_car vehicle component "wheelrb" visible visibility
+
 
 3F10: set_car vehicle component "wheelbttf1lb" visible visibility
 3F10: set_car vehicle component "tirebttf1lb" visible visibility
-3F10: set_car vehicle component "wheellb" visible visibility
 
 3F10: set_car vehicle component "wheelbttf1rf" visible visibility
 3F10: set_car vehicle component "tirebttf1rf" visible visibility
-3F10: set_car vehicle component "wheelrf" visible visibility
 
 3F10: set_car vehicle component "wheelbttf1lf" visible visibility
 3F10: set_car vehicle component "tirebttf1lf" visible visibility
-3F10: set_car vehicle component "wheellf" visible visibility
 return
 
 :Show50sWheels
@@ -540,6 +663,41 @@ for 15@ = 1 to 12 step 1
 end
 return
 
+:ShowGrillHitch
+// Show the hitch behind the front grill
+3F10: set_car vehicle component "grillhitch" visible 1
+3F10: set_car vehicle component "bump_front_ok_grilltm" visible 1
+3F10: set_car vehicle component "bump_front_ok_grill" visible 0
+return
+
+:HideGrillHitch
+3F10: set_car vehicle component "grillhitch" visible 0
+3F10: set_car vehicle component "bump_front_ok_grilltm" visible 0
+3F10: set_car vehicle component "bump_front_ok_grill" visible 1
+return
+
+:ShowGrillBracketLand
+visibility = 1
+jump @DisplayGrillBracketLand
+
+:HideGrillBracketLand
+visibility = 0
+
+:DisplayGrillBracketLand
+3F10: set_car vehicle component "grillhitchbracketbttf1" visible visibility
+return
+
+:ShowGrillBracketHover
+visibility = 1
+jump @DisplayGrillBracketHover
+
+:HideGrillBracketHover
+visibility = 0
+
+:DisplayGrillBracketHover
+3F10: set_car vehicle component "grillhitchbracketbttf2" visible visibility
+return
+
 //{$INCLUDE Include/HoverAnimateModel.txt}
 :LightsOff
 3F10: set_car vehicle component "seatbeltlight" visible 0
@@ -567,6 +725,46 @@ return
 
 :TimeEffectsModelReset
 3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
-3F10: set_car vehicle component "fluxcoilson" visible 0
+3F10: set_car vehicle component "fluxemitteron" visible 0
+3F10: set_car vehicle component "fluxcoilsonlb1" visible 0
+3F10: set_car vehicle component "fluxcoilsonlb2" visible 0
+3F10: set_car vehicle component "fluxcoilsonlb3" visible 0
+3F10: set_car vehicle component "fluxcoilsonlb4" visible 0
+3F10: set_car vehicle component "fluxcoilsonrb1" visible 0
+3F10: set_car vehicle component "fluxcoilsonrb3" visible 0
+3F10: set_car vehicle component "fluxcoilsonrb2" visible 0
+3F10: set_car vehicle component "fluxcoilsonrb4" visible 0
+3F10: set_car vehicle component "fluxcoilsonf1" visible 0
+3F10: set_car vehicle component "fluxcoilsonf2" visible 0
+3F10: set_car vehicle component "fluxcoilsonf3" visible 0
+3F10: set_car vehicle component "fluxcoilsonf4" visible 0
+
+// TEMP
+3F10: set car vehicle component "roof_fr" visible 0
+3F10: set car vehicle component "door_lf_fr" visible 0
+3F10: set car vehicle component "door_lf_window_fr" visible 0
+3F10: set car vehicle component "door_rf_fr" visible 0
+3F10: set car vehicle component "door_rf_window_fr" visible 0
+3F10: set car vehicle component "wing_lr_fr" visible 0
+3F10: set car vehicle component "wing_rr_fr" visible 0
+3F10: set car vehicle component "wing_lf_fr" visible 0
+3F10: set car vehicle component "wing_rf_fr" visible 0
+3F10: set car vehicle component "chassis_fr" visible 0
+3F10: set car vehicle component "windscreen_fr" visible 0
+3F10: set car vehicle component "vents_fr" visible 0
+3F10: set car vehicle component "bonnet_fr" visible 0
+3F10: set car vehicle component "shifter1" visible 0
+3F10: set car vehicle component "shifter2" visible 0
+3F10: set car vehicle component "shifter3" visible 0
+3F10: set car vehicle component "shifter4" visible 0
+3F10: set car vehicle component "shifter5" visible 0
+3F10: set car vehicle component "shifterR" visible 0
+for 15@ = 1 to 71 step 1
+    3F19: set_car vehicle component "wormhole" index 15@ glow 1
+    3F11: set_car vehicle component "wormhole" index 15@ visible 0
+
+    3F19: set_car vehicle component "wormholer" index 15@ glow 1
+    3F11: set_car vehicle component "wormholer" index 15@ visible 0
+end
 return
 
