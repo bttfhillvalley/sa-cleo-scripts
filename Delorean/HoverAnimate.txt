@@ -12,10 +12,11 @@ float z
 float floor
 float extension
 float pivot
-float extension_angle
 float shock_pos
 float piston_pos
 float piston_ext
+float piston_angle
+float damper
 int ignore
 
 0B10: flying_flag = vehicle_flags AND FLYING_BIT   // Is car flying?
@@ -95,7 +96,6 @@ else  // Flying
 end
 gosub @HoverAnimateModel
 //gosub @HoverSmoke
-cleo_call @RotateWheels 2 vehicle extension
 jump @HoverAnimateStart
 
 :HoverAnimateEnd
