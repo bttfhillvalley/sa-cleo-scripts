@@ -127,31 +127,23 @@ return
 
 :LightStatus
 lights = 0
-3F02: engine = car vehicle engine_status
+3F02: engine = car vehicle engine_state
+/*
 0AB4: current_time = var CTIME
 0607: weather = get_current_weather
+*/
 
 if
     not engine == 0
 then
-    if or
-        current_time >= 2020 // integer values
-        current_time < 650 // integer values
-        weather == 2 // integer values
-        weather == 3 // integer values
-        weather == 5 // integer values
-        weather == 9 // integer values
-        weather == 10 // integer values
-    then
-        lights = 1 // On
-    end
+    3F9D: lights = get_car vehicle lights
 end
 return
 
 :HandleButton
 // Turn Indicators
 if
-    00DC:   player $PLAYER_CHAR in_car vehicle
+    00DB:   player $PLAYER_ACTOR in_car vehicle
 then
     // Left
     if and

@@ -35,8 +35,8 @@ end
 {$INCLUDE Include/Compass.txt}
 {$INCLUDE Include/DigitalSpeedo.txt}
 {$INCLUDE Include/DoorCheck.txt}
-{$INCLUDE Include/DrivingLights.txt}
-{$INCLUDE Include/Headlights.txt}
+//{$INCLUDE Include/DrivingLights.txt} // Unused: Migrated to plugin
+//{$INCLUDE Include/Headlights.txt} // Unused: Migrated to plugin
 {$INCLUDE Include/Horn.txt}
 {$INCLUDE Include/Ignition.txt}
 {$INCLUDE Include/ParkingBrake.txt}

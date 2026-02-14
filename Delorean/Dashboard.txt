@@ -17,9 +17,13 @@ int disp
 int turnover
 int current_time
 int weather
+int lights
 
 volt_needle = -20.0
 temperature = 75.0
+
+0390: load_txd_dictionary 'bttf'
+038F: load_texture 'batry' as 1  // Battery Light on
 
 :Dashboard
 wait 10
@@ -152,7 +156,7 @@ else
         // Lights!
 
         if
-            00DC:   player $PLAYER_CHAR driving vehicle
+            00DB:   player $PLAYER_ACTOR driving vehicle
         then
             cleo_call @Animate 4 volt_needle 15.0 1.0 1.0 result volt_needle
             cleo_call @Animate 4 ignition 0.0 15.0 15.0 result ignition
@@ -229,14 +233,10 @@ else
     3F10: set_car vehicle component "fuellight" visible 0
 end
 
-if or
-    current_time >= 2020 // integer values
-    current_time < 650 // integer values
-    weather == 2 // integer values
-    weather == 3 // integer values
-    weather == 5 // integer values
-    weather == 9 // integer values
-    weather == 10 // integer values
+3F9D: lights = get_car vehicle lights
+
+if
+    not lights == 0
 then
     3F10: set_car vehicle component "lowbeamslight" visible 1
 else
@@ -247,17 +247,17 @@ return
 
 :BatteryLight
 if and
-    00DC:   player $PLAYER_CHAR driving vehicle
-    not is_camera_in_widescreen_mode
+    00DB:   player $PLAYER_ACTOR driving vehicle
+//    not is_camera_in_widescreen_mode
     engine == 0
     disp == 1
 then
     if
         3F93: is_sound_stopped "engine_turnover.wav" index vehicle
     then
-        05F5: call_scm_func @DrawTexture params_count 9 3 782.0 155.0 45.0 23.0 255 255 255 255
+        cleo_call @DrawTexture params_count 9 1 782.0 155.0 45.0 23.0 255 255 255 255
     else
-        05F5: call_scm_func @DrawTexture params_count 9 3 782.0 155.0 45.0 23.0 64 64 64 255 // battery light off
+        cleo_call @DrawTexture params_count 9 1 782.0 155.0 45.0 23.0 64 64 64 255 // battery light off
     end
 end
 return

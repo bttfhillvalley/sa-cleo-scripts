@@ -7,7 +7,7 @@ const
     KEY_HAZARDS = 76 // L
 end
 var1 = 0
-3F02: var2 = car vehicle engine_status
+3F02: var2 = car vehicle engine_state
 0AB4: var3 = var CTIME
 0607: var4 = get_current_weather
 if
@@ -31,7 +31,7 @@ end
 
 // Turn Indicators
 if
-    00DC:   player $PLAYER_CHAR in_car vehicle
+    00DB:   player $PLAYER_ACTOR in_car vehicle
 then
     // Left
     if and

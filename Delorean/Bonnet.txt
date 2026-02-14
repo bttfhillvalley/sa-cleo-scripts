@@ -31,14 +31,14 @@ while true
 
     // Check to see if player is driving or not
     if
-        00E0:   player $PLAYER_CHAR in_any_car
+        00DB:   player $PLAYER_ACTOR driving vehicle
     then
         continue
     end
     0407: create_coordinate x y z from_car vehicle offset 0.0 3.25 0.0
     if or
         80E1:   not key_pressed 0 4
-        80F6:   not player $PLAYER_CHAR 0 x y z  radius 0.75 0.75 2.0
+        80FE:   not actor $PLAYER_ACTOR sphere 0 in_sphere x y z radius 0.75 0.75 2.0
     then
         continue
     end
@@ -57,18 +57,22 @@ while angle < 1.0
     wait 0
     bonnet_speed *= 0.915
     angle += bonnet_speed
-    3F1A: set_car vehicle bonnet angle
+    // TODO: Neither 3F1A nor 3F45 implemented yet
+    // 3F1A: set_car vehicle bonnet angle
 end
 angle = 1.0 // Needed because of floating point inprecision
-3F1A: set_car vehicle bonnet angle
+// TODO: Neither 3F1A nor 3F45 implemented yet
+// 3F1A: set_car vehicle bonnet angle
 return
 
 :CloseDoor
 while angle > 0.0
     wait 0
     angle -= 0.1
-    3F1A: set_car vehicle bonnet angle
+    // TODO: Neither 3F1A nor 3F45 implemented yet
+    // 3F1A: set_car vehicle bonnet angle
 end
 angle = 0.0  // Needed because of floating point inprecision
-3F1A: set_car vehicle bonnet angle
+// TODO: Neither 3F1A nor 3F45 implemented yet
+// 3F1A: set_car vehicle bonnet angle
 return
