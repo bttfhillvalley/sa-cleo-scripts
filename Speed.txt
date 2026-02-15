@@ -66,40 +66,49 @@ while true
     decimal -= ones
     ones /= 10
 
-    texture_offset = 1
-    x_offset = 760.0
+    0AB4: hud_var = var HUD_DISP
+    0AB4: travel_var = var TRAVEL
+    0AB4: cutscene_var = var CUTSCENE
 
-
-    texture_offset += 10
-    // Dot
-    x = x_offset
-    x += 65.0
-    cleo_call @DrawTexture params_count 9 texture_offset x 470.0 10.0 10.0 255 255 255 255
-
-    // Background
-    texture_offset += 1
-    x = x_offset
-    cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
-    x += 45.0
-    cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
-
-    // Reset offset
-    texture_offset -= 11
-    x = x_offset
-
-    // tens digit
-    if
-        tens > 0
+    if and
+        hud_var == 1
+        travel_var == 0
+        cutscene_var == 0
     then
-        tens += texture_offset
-        cleo_call @DrawTexture params_count 9 tens x 440.0 40.0 60.0 255 255 255 255
+        texture_offset = 1
+        x_offset = 760.0
+
+
+        texture_offset += 10
+        // Dot
+        x = x_offset
+        x += 65.0
+        cleo_call @DrawTexture params_count 9 texture_offset x 470.0 10.0 10.0 255 255 255 255
+
+        // Background
+        texture_offset += 1
+        x = x_offset
+        cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
+        x += 45.0
+        cleo_call @DrawTexture params_count 9 texture_offset x 440.0 40.0 60.0 255 255 255 255
+
+        // Reset offset
+        texture_offset -= 11
+        x = x_offset
+
+        // tens digit
+        if
+            tens > 0
+        then
+            tens += texture_offset
+            cleo_call @DrawTexture params_count 9 tens x 440.0 40.0 60.0 255 255 255 255
+        end
+
+        // ones digit
+        ones += texture_offset
+        x += 45.0
+        cleo_call @DrawTexture params_count 9 ones x 440.0 40.0 60.0 255 255 255 255
     end
-
-    // ones digit
-    ones += texture_offset
-    x += 45.0
-    cleo_call @DrawTexture params_count 9 ones x 440.0 40.0 60.0 255 255 255 255
-
 end
 
 {$INCLUDE Common/DrawTexture.txt}
