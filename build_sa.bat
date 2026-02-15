@@ -26,6 +26,7 @@ call :Compile BTTFHVInit .cs
 call :Compile CarSpawn .cs
 call :Compile DisplayToggle .cs
 :: call :Compile Hover .cs :: Not needed. Migrated.
+call :Compile HeatHaze .cs
 call :Compile Speed .cs
 call :Compile TimeMod .cs
 call :Compile TimeTravel .s

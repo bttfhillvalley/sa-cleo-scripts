@@ -1,0 +1,13 @@
+{$CLEO .cs}
+0000:
+// Disable Heat Haze, Motion Blur, Vertigo
+0A8C: write_memory 0x72C1B7 size 1 value 0xEB virtual_protect 1
+0A8C: write_memory 0x524B3E size 1 value 0xEB virtual_protect 1
+0A8C: write_memory 0x8D5104 size 1 value 0 virtual_protect 0
+0A8C: write_memory 0x006B4F69 size 1 value 0xe9 virtual_protect 1
+0A8C: write_memory 0x006B4F6A size 1 value 0x40 virtual_protect 1
+0A8C: write_memory 0x006B4F6B size 1 value 0x02 virtual_protect 1
+0A8C: write_memory 0x006B4F6C size 1 value 0x00 virtual_protect 1
+0A8C: write_memory 0x006B4F6D size 1 value 0x00 virtual_protect 1
+
+terminate_this_custom_script
