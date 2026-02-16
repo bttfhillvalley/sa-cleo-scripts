@@ -20,17 +20,25 @@ while true
     for chaser = 1 to 5
         3F11: set_car vehicle component "chaserlights" index chaser visible 0
     end
+    
+    3F27: get_car vehicle wheel_status_to wheel_state
+    0AB4: is_landing = var LANDING
 
-    3F10: set_car vehicle component "bottomlights" visible 1
-    if
-        timera >= 1250
+    if or
+        not wheel_state == 0
+        not is_landing == 0
     then
-        timera = 0
+        3F10: set_car vehicle component "bottomlights" visible 1
+        if
+            timera >= 1250
+        then
+            timera = 0
+        end
+
+        chaser = timera
+        chaser /= 250
+        chaser += 1
+
+        3F11: set_car vehicle component "chaserlights" index chaser visible 1
     end
-
-    chaser = timera
-    chaser /= 250
-    chaser += 1
-
-    3F11: set_car vehicle component "chaserlights" index chaser visible 1
 end
