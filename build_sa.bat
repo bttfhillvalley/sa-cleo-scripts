@@ -43,7 +43,7 @@ call :Compile Delorean\Interior .s
 call :Compile Delorean\Pedals .s
 call :Compile Delorean\PlutoniumGaugeOff .s
 call :Compile Delorean\PlutoniumGaugeOn .s
-call :Compile Delorean\Rocket .s
+:: call :Compile Delorean\Rocket .s :: Adds guns to the car
 call :Compile Delorean\TurnSignal .s
 call :Compile Delorean\UnderbodyLights .s
 call :Compile Delorean\Variation .s
