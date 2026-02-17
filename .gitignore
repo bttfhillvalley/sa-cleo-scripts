@@ -3,5 +3,6 @@ CLEO_PLUGINS
 *.cleo
 *.s
 *.cs
+*.log
 UniqueStuntJumps.txt
 ivpickups.txt
