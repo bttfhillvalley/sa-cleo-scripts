@@ -28,7 +28,7 @@ while true
         terminate_this_custom_script
     end
     if
-        00DC:   player $PLAYER_CHAR in_car vehicle
+        00DB:   player $PLAYER_ACTOR in_car vehicle
     then
         if
             timerb > 100
