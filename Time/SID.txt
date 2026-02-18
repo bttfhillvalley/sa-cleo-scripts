@@ -34,7 +34,7 @@ while true
     02E3: vehicle_speed = car vehicle speed
     // Set target
     if
-        00DC:   player $PLAYER_CHAR in_car vehicle
+        00DB:   player $PLAYER_ACTOR driving vehicle
     then
         0AB4: tcon_var = var TCON
         0AB4: fried_var = var FRIED
