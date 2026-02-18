@@ -137,7 +137,7 @@ return
 :HandleButton
 // Turn Indicators
 if
-    00DB:   player $PLAYER_ACTOR in_car vehicle
+    00DB:   player $PLAYER_ACTOR driving vehicle
 then
     // Left
     if and
