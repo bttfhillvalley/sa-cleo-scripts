@@ -13,6 +13,7 @@
 // 15@ Reserved for Parking Brake
 
 while true
+    wait 10
     if
         Car.Wrecked(vehicle)
     then
