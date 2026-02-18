@@ -124,7 +124,7 @@ stream_custom_script "Delorean/Interior.s" vehicle
 stream_custom_script "Delorean/TurnSignal.s" vehicle
 stream_custom_script "Delorean/UnderbodyLights.s" vehicle
 stream_custom_script "Delorean/Wheels.s" vehicle
-//stream_custom_script "Delorean/Wipers.s" vehicle
+stream_custom_script "Delorean/Wipers.s" vehicle
 stream_custom_script "TimeCircuits.s" vehicle vehicle_flags 2@ 3@ 4@ 5@
 //for var1 = 0 to 10 step 1
 //    stream_custom_script "Time/SID.s" vehicle var1
