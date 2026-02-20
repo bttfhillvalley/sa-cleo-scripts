@@ -101,10 +101,10 @@ wait 200
 3F14: set_car vehicle component "plutcanliquid" pos 0.0 0.0 0.2
 3F14: set_car vehicle component "plutcan" pos 0.0 0.0 0.2
 3F14: set_car vehicle component "plut" pos 0.0 0.0 0.2
-3F16: set_car vehicle component "plutcaninterior" angle 0.0 0.0 -90.0
-3F16: set_car vehicle component "plutcanliquid" angle 0.0 0.0 -90.0
-3F16: set_car vehicle component "plutcan" angle 0.0 0.0 -90.0
-3F16: set_car vehicle component "plut" angle 0.0 0.0 -90.0
+3F16: set_car vehicle component "plutcaninterior" angle 0.0 0.0 90.0
+3F16: set_car vehicle component "plutcanliquid" angle 0.0 0.0 90.0
+3F16: set_car vehicle component "plutcan" angle 0.0 0.0 90.0
+3F16: set_car vehicle component "plut" angle 0.0 0.0 90.0
 3F10: set_car vehicle component "plutcan" visible 1
 3F10: set_car vehicle component "plutcanliquid" visible 1
 3F10: set_car vehicle component "plutcaninterior" visible 1
@@ -123,7 +123,7 @@ for z = 0.2 downto -0.01 step 0.01
 end
 // Turn Plutonium
 3F96: var4 = attach_sound "nuke_2.wav" to_car vehicle offset 0 -2.0 0 loop 0 min 5.0
-for z = -90.0 to 0.0 step 1.0
+for z = 90.0 downto 0.0 step 1.0
     3F16: set_car vehicle component "plutcaninterior" angle 0.0 0.0 z
     3F16: set_car vehicle component "plutcanliquid" angle 0.0 0.0 z
     3F16: set_car vehicle component "plutcan" angle 0.0 0.0 z
