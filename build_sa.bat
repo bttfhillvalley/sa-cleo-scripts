@@ -37,6 +37,7 @@ call :Compile TimeTravelMode .cs
 call :Compile Delorean\Bonnet .s
 call :Compile Delorean\Dashboard .s
 call :Compile Delorean\Door .s
+call :Compile Delorean\Clock .s
 call :Compile Delorean\HoverAnimate .s
 call :Compile Delorean\HoverStart .s
 call :Compile Delorean\HoverStop .s
