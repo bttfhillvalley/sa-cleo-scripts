@@ -5,7 +5,7 @@ REM Sanny can only compile if its not already running
 tasklist /fi "IMAGENAME eq sanny.exe" /FO CSV 2>NUL | find /I /N "sanny.exe">NUL
 if %ERRORLEVEL% EQU 0 (
     echo Sanny is running.  Please close it before running this build script.
-    IF "%1"=="nopause" GOTO :EOF
+	IF "%1"=="nopause" GOTO :EOF
     pause
     exit /B 1
 )
@@ -35,9 +35,9 @@ call :Compile TimeTravelMode .cs
 
 :: Delorean scripts
 call :Compile Delorean\Bonnet .s
+call :Compile Delorean\Clock .s
 call :Compile Delorean\Dashboard .s
 call :Compile Delorean\Door .s
-call :Compile Delorean\Clock .s
 call :Compile Delorean\HoverAnimate .s
 call :Compile Delorean\HoverStart .s
 call :Compile Delorean\HoverStop .s
