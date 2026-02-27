@@ -44,6 +44,7 @@ then
     then
         0AB3: var ENGINE_TURNOVER = 1
         02D4: car vehicle turn_off_engine
+        067F: set_car vehicle lights 1 // Force lights off
     end
 end
 jump @FuelReturn

@@ -59,6 +59,7 @@ then
         00E1:   key_pressed 0 15  // Exit car key
     then
         02D4: car vehicle turn_off_engine
+        067F: set_car vehicle lights 1 // Force lights off
         var1 = 0
     end
 end
@@ -72,6 +73,7 @@ then
     then
         engine_state = 1 // Engine on
         0AB3: var ENGINE_TURNOVER = 0
+        067F: set_car vehicle lights 0 // Remove any forced light status
         3F86: attach_sound "engine_start.wav" to_car vehicle offset 0 0 0 loop 0 min 10.0
     end
 else
