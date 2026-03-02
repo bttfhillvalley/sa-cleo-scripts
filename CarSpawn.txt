@@ -5,7 +5,7 @@ const
 end
 0000:
 thread 'CARSPWN'
-int model = 612
+int model = DELOREAN_MODEL
 int vehicle
 int interior
 float x

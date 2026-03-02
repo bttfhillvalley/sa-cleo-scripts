@@ -87,7 +87,7 @@ const
     HOVER_GARAGE    = 4
 
     // Models
-    DELOREAN_MODEL  = 237
+    DELOREAN_MODEL  = 612
     ROGERS_MODEL    = 238
     JVT_MODEL       = 239
     TRUCK_MODEL     = 6000
