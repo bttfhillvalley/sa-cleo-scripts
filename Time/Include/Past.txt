@@ -42,11 +42,13 @@ while true
                 003C:   2@ == 0@ // Same Date
                 001E:   3@ > 1@  // Greater Time
             then
-                cleo_return 1 PRELOAD_REENTRY // flag to spawn time machine immediately
+                // cleo_return 1 PRELOAD_REENTRY // flag to spawn time machine immediately
+                cleo_return 1 NO_REENTRY // flag to spawn time machine immediately
             else if
                 001E:   2@ > 0@ // Greater Date
             then
-                cleo_return 1 PRELOAD_REENTRY // flag to spawn time machine immediately
+                // cleo_return 1 PRELOAD_REENTRY // flag to spawn time machine immediately
+                cleo_return 1 NO_REENTRY // flag to spawn time machine immediately
             end
             end
         end

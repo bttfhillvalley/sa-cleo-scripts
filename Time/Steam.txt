@@ -10,7 +10,7 @@ int right
 int ignore
 0B10: rear_deck = vehicle_flags AND REAR_BIT  // Get car variation
 if
-    not rear_deck == 0 // Not plutonium version
+    not rear_deck == REAR_REACTOR_BIT // Not plutonium version
 then
     terminate_this_custom_script
 end

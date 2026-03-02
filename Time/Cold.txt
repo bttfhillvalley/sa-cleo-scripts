@@ -57,7 +57,7 @@ then
 
     // Plutonium version gets extra effects
     if
-        rear_deck == 0
+        rear_deck == REAR_REACTOR_BIT
     then
         gosub @ColdSteamParticle
         gosub @ColdSteamParticle

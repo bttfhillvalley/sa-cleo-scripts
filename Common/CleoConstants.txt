@@ -45,11 +45,21 @@ const
     ASOUND          = 30
     DSOUND          = 31
 
+    // Garage
+    GARAGE_UPDATE   = 32
+    IN_GARAGE       = 33
+
     // Time Circuits
     TC_MODE         = 34
 
     // Wheel Thruster Sound
     TSOUND          = 35
+
+    // Action Key Lock
+    ACTION_LOCK     = 36
+
+    // Refueled
+    REFUELED        = 37
 
     // Camera stuff
     CAMERA_CONTROL  = 100
@@ -62,10 +72,101 @@ const
     CCY             = 107
     CCZ             = 108
 
+    PINE1           = 109
+    PINE2           = 110
+    MALL_SIGN       = 111
+
+    TRUCK           = 112
+    ROGERS          = 113
+
+    // Garage Options
+    NO_GARAGE       = 0
+    DOC_GARAGE      = 1
+    DMC_GARAGE      = 2
+    FUSION_GARAGE   = 3
+    HOVER_GARAGE    = 4
+
+    // Models
+    DELOREAN_MODEL  = 237
+    ROGERS_MODEL    = 238
+    JVT_MODEL       = 239
+    TRUCK_MODEL     = 6000
+    LIBYAN_MODEL    = 6001
+    BOARD_MODEL     = 6016
+    HANDLEBAR_MODEL = 6017
+
     // RC Delorean stuff
-    NORMAL_REENTRY  = 0
-    INST_REENTRY    = 1
-    PRELOAD_REENTRY = 2
+    NO_REENTRY      = 0
+    NORMAL_REENTRY  = 1
+    INST_REENTRY    = 2
+
+    // ENTITY STATUS
+    STATUS_PLAYER           = 0
+    STATUS_PLAYER_PLAYBACK  = 1
+    STATUS_SIMPLE           = 2
+    STATUS_PHYSICS          = 3
+    STATUS_ABANDONED        = 4
+    STATUS_WRECKED          = 5
+    STATUS_TRAIN_MOVING     = 6
+    STATUS_TRAIN_NOT_MOVING = 7
+    STATUS_HELI             = 8
+    STATUS_PLANE            = 9
+    STATUS_PLAYER_REMOTE    = 10
+    STATUS_PLAYER_DISABLED  = 11
+    STATUS_GHOST            = 12
+
+    // COMPONENT FLAGS
+    VEHICLE_FLAG_COLLAPSE   = 0x2
+    VEHICLE_FLAG_ADD_WHEEL  = 0x4
+    VEHICLE_FLAG_POS        = 0x8
+    VEHICLE_FLAG_DOOR       = 0x10
+    VEHICLE_FLAG_LEFT       = 0x20
+    VEHICLE_FLAG_RIGHT      = 0x40
+    VEHICLE_FLAG_FRONT      = 0x80
+    VEHICLE_FLAG_REAR       = 0x100
+    VEHICLE_FLAG_COMP       = 0x200
+    VEHICLE_FLAG_DRAWLAST   = 0x400
+    VEHICLE_FLAG_WINDSCREEN = 0x800
+    VEHICLE_FLAG_ANGLECULL  = 0x1000
+    VEHICLE_FLAG_REARDOOR   = 0x2000
+    VEHICLE_FLAG_FRONTDOOR  = 0x4000
+
+    CLUMP_FLAG_NO_HIERID    = 0x1
+
+    // HANDLING
+    HANDLING_1G_BOOST       = 1
+    HANDLING_2G_BOOST       = 2
+    HANDLING_NO_EXHAUST     = 0x100000
+    HANDLING_GOOD_INSAND    = 0x4000000
+
+    // Door Ids
+    DOOR_BONNET      = 0
+    DOOR_BOOT        = 1
+    DOOR_FRONT_LEFT  = 2
+    DOOR_FRONT_RIGHT = 3
+    DOOR_REAR_LEFT   = 4
+    DOOR_REAR_RIGHT  = 5
+
+    // Door statuses
+    DOOR_STATUS_OK       = 0
+    DOOR_STATUS_SMASHED  = 1
+    DOOR_STATUS_SWINGING = 2
+    DOOR_STATUS_MISSING  = 3
+
+    // Hover Wheel Status
+    TRAIN_WHEELS = 0x55
+    HOVER_WHEELS = 0xAA
+
+    // Wheel Ids
+    CARWHEEL_FRONT_RIGHT = 1
+    CARWHEEL_REAR_RIGHT  = 3
+    CARWHEEL_FRONT_LEFT  = 4
+    CARWHEEL_REAR_LEFT   = 6
+
+    // Hover states
+    HOVER_NONE  = 0x0
+    HOVER_UP    = 0x1
+    HOVER_BOOST = 0x2
 
     // DEBUG
     VARIATION       = 200
@@ -74,23 +175,48 @@ const
     HOVER_ACCEL_KEY = 4 // 4 - Radio, 19 - Submission
 
     // Time Travel bits
-    MEMORY_BIT              = 0x800000 // 1 bit
-    FUEL_BIT                = 0x400000 // 1 bit
-    FLYING_BIT              = 0x200000 // 1 bit
-    FC_FRIED_BIT            = 0x100000 // 1 bit
-    FC_BIT                  = 0x080000 // 1 bit
-    TC_FRIED_BIT            = 0x040000 // 1 bit
-    TC_BIT                  = 0x020000 // 1 bit
-    REAR_BIT                = 0x010000 // 1 bit
+    // MSB bits
+    MEMORY_BIT              = 0x20000000 // 1 bit
+    FUEL_BIT                = 0x10000000 // 1 bit
+    FUEL_BITMASK            = 0xEFFFFFFF
 
-    FUEL_BITMASK            = 0xFFBFFFFF
-    TC_BITMASK              = 0xFFFDFFFF
-    TC_FRIED_BITMASK        = 0xFFFBFFFF
+    WHEEL_STATUS_BIT        = 0x0FF00000 // 1 byte
+    WHEEL_STATUS_BITMASK    = 0xF00FFFFF
+    WHEEL_STATUS_SHIFT      = 20
 
-    FLASH_BIT               = 0x0800 // 1 bit (unused)
-    SPEEDO_BIT              = 0x0400 // 1 bit (unused)
+    COOLDOWN_BIT            = 0x080000 // 1 bit
+    LIGHTNING_BIT           = 0x040000 // 1 bit
+    FLYING_BIT              = 0x030000 // 2 bits
+
+    COOLDOWN_BITMASK        = 0xFFF7FFFF
+    LIGHTNING_BITMASK       = 0xFFFBFFFF
+
+    FLYING_BITMASK          = 0xFFFCFFFF
+    FLYING_TAKEOFF_BIT      = 0x010000
+    FLYING_LANDING_BIT      = 0x020000
+    FLYING_NOANIM_BIT       = 0x030000
+
+    FC_FRIED_BIT            = 0x8000 // 1 bit
+    FC_BIT                  = 0x4000 // 1 bit
+    TC_FRIED_BIT            = 0x2000 // 1 bit
+    TC_BIT                  = 0x1000 // 1 bit
+
+    FC_FRIED_BITMASK        = 0xFFFF7FFF
+    FC_BITMASK              = 0xFFFFBFFF
+    TC_FRIED_BITMASK        = 0xFFFFDFFF
+    TC_BITMASK              = 0xFFFFEFFF
+
+    REAR_BIT                = 0x0C00 // 1 bit
     BOILER_BIT              = 0x0200 // 1 bit
     CLOCK_BIT               = 0x0100 // 1 bit
+
+    REAR_BITMASK            = 0xFFFFF3FF
+    REAR_NONE_BIT           = 0x0000
+    REAR_REACTOR_BIT        = 0x0400
+    REAR_FUSION_BIT         = 0x0800
+
+    BOILER_BITMASK          = 0xFFFFFDFF
+    CLOCK_BITMASK           = 0xFFFFFEFF
 
     // LSB bits
     HOOD_BIT                = 0x80 // 1 bit
@@ -98,6 +224,9 @@ const
     WHEELS_BIT              = 0x30 // 2 bits
     PLATE_BIT               = 0x0C // 2 bits
     HOOK_BIT                = 0x03 // 2 bits
+
+    HOOD_BITMASK            = 0xFFFFFF7F
+    HITCH_BITMASK           = 0xFFFFFFBF
 
     WHEELS_BITMASK          = 0xFFFFFFCF
     WHEELS_DELOREAN_BIT     = 0x00
@@ -115,4 +244,7 @@ const
     HOOK_HOLDER_BIT         = 0x01
     HOOK_SIDE_BIT           = 0x02
     HOOK_UP_BIT             = 0x03
+
+    TENDER_Y = -2.48358
+    TENDER_Z = -0.449449
 end

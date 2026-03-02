@@ -36,7 +36,7 @@ end
 // Randomly turn off the Plutonium powered car if its empty
 0B10: var1 = vehicle_flags AND REAR_BIT  // Get fuel sorce
 if
-    var1 == 0  // Plutonium variation
+    var1 == REAR_REACTOR_BIT  // Plutonium variation
 then
     0209: var1 = random_int_in_ranges 1 10000
     if
@@ -62,7 +62,7 @@ jump @FuelReturn
 :FuelCheckBTTF1
 0B10: var1 = vehicle_flags AND REAR_BIT  // Get fuel sorce
 if
-   var1 == 0  // Plutonium variation
+   var1 == REAR_REACTOR_BIT  // Plutonium variation
 jf @FuelRefuel
 /*0AB4: var1 = var PLUTONIUM
 if
@@ -76,7 +76,7 @@ var2 = Car.Angle(0@)
 Player.CanMove($PLAYER_CHAR) = False
 0173: set_actor $PLAYER_ACTOR Z_angle_to var2
 if
-   var1 == 0
+   var1 == REAR_REACTOR_BIT
 jf @FuelRefuelOpenFusion
 
 // Plutonium refueling

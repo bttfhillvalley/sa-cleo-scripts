@@ -98,7 +98,7 @@ end
 // Rear deck
 0B10: bit_check = vehicle_flags AND REAR_BIT
 if
-    bit_check == 0
+    bit_check == REAR_REACTOR_BIT
 then
     gosub @HideStock
     gosub @ShowGrillHitch
