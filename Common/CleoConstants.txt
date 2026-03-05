@@ -247,4 +247,7 @@ const
 
     TENDER_Y = -2.48358
     TENDER_Z = -0.449449
+
+    // Helper constants
+    RAD_TO_DEG = 57.2958
 end

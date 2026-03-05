@@ -22,7 +22,6 @@ const
     BODY_PIVOT_SQR = 0.132557
     DOOR_PIVOT = 0.105361
     DOOR_PIVOT_SQR = 0.011100
-    RAD_TO_DEG = 57.2958
 end
 while true
     wait 0
@@ -31,13 +30,13 @@ while true
     then
         terminate_this_custom_script
     end
-    095F: get_car vehicle door 2 rotation_to left_angle
-    095F: get_car vehicle door 3 rotation_to right_angle
+    095F: get_car vehicle door DOOR_FRONT_LEFT angle_to left_angle // Returns Rads
+    095F: get_car vehicle door DOOR_FRONT_RIGHT angle_to right_angle // Returns Rads
 
     //Converting radians to degrees
     left_deg = left_angle 
     left_deg *= RAD_TO_DEG
-    3F16: set_car vehicle component "fxdoorlf_"  angle 0 0 left_deg 
+    3F16: set_car vehicle component "fxdoorlf_"  angle 0 0 left_deg // Works with degrees
     
     left_piston = left_deg
     0097: abs left_piston

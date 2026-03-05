@@ -1,3 +1,4 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
 :DoorCheck
 {$INCLUDE Variables.txt}
 // TODO: 3F06 not implemented
@@ -10,11 +11,11 @@ then
     return
 end
 // TODO: 3F06 not implemented 
-// 3F06: var1 = get_car vehicle door 2 status // Left Door
-// 3F06: var2 = get_car vehicle door 3 status // Right Door
+// 3F06: var1 = get_car vehicle door DOOR_FRONT_LEFT status // Left Door
+// 3F06: var2 = get_car vehicle door DOOR_FRONT_RIGHT status // Right Door
 // Workaround:
-095F: get_car vehicle door 2 rotation_to left_angle // Left Door
-095F: get_car vehicle door 3 rotation_to right_angle // Right Door
+095F: get_car vehicle door DOOR_FRONT_LEFT rotation_to left_angle // Left Door
+095F: get_car vehicle door DOOR_FRONT_RIGHT rotation_to right_angle // Right Door
 if or
     // TODO: 3F06 not implemented    
     // var1 == 0
