@@ -1,7 +1,10 @@
 {$CLEO .cs}
 {$INCLUDE Common/CleoConstants.txt}
 const
-    KEY_SPAWN = 190 // "."
+    KEY_SPAWN_DELOREAN = 190 // "."
+    KEY_SPAWN_JVT = 188 // ","
+    KEY_SPAWN_TRUCK = 191 // "?"
+    KEY_SPAWN_ROGERS = 222 // "'"
 end
 0000:
 thread 'CARSPWN'
@@ -21,7 +24,7 @@ while true
         interior == 0
         044B:   actor $PLAYER_ACTOR on_foot
         03EE:   player $PLAYER_CHAR controllable
-        0AB0:   is_key_pressed KEY_SPAWN
+        0AB0:   is_key_pressed KEY_SPAWN_DELOREAN
     then
         Model.Load(model)
         038B: load_requested_models
