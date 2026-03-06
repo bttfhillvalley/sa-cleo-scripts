@@ -2,15 +2,41 @@
 {$INCLUDE ../Common/CleoConstants.txt}
 0000:
 int vehicle
+int vehicle_flags
 float x
 float y
 float z
 float vehicle_speed
-float angle
+float angle // Angle ratio (0.0 - 1.0)
+float angle_rad
+float angle_deg
 float bonnet_speed
 int iangle
+int bit_check
+float strutl_x
+float strutr_x
+float strut_y
+float strut_z
 
-angle = 0.0
+const
+    BONNET_ANGLE_OFFSET = 0.096211 // 5.512478 in degrees
+    BONNET_ANGLE_TOP = 0.942478
+    BONNET_PIVOT_LENGTH = 0.197986
+    BONNET_PIVOT_X = 0.0
+    BONNET_PIVOT_Y = 2.10343
+    BONNET_PIVOT_Z = 0.11203
+    BONNET_STRUT_PIVOT_X = -0.643365
+    BONNET_STRUT_PIVOT_Y = 1.90636
+    BONNET_STRUT_PIVOT_Z = 0.131049
+    STRUT_LENGTH_OFFSET = 0.548622
+    STOCK_BONNET_STRUT_X = -0.715233
+    STOCK_BONNET_STRUT_Y = 1.36499
+    STOCK_BONNET_STRUT_Z = 0.078711
+    HOVER_BONNET_STRUT_X = -0.712656
+    HOVER_BONNET_STRUT_Y = 1.50014
+    HOVER_BONNET_STRUT_Z = 0.080155
+end
+
 while true
     wait 0
     if
@@ -18,6 +44,10 @@ while true
     then
         terminate_this_custom_script
     end
+
+    // Move bonnet with game's physics
+    gosub @GetBonnetAngle
+    gosub @RotateBonnetComponents
 
     // If the bonnet is open and the car is moving, close the bonnet
     02E3: vehicle_speed = car vehicle speed
@@ -33,6 +63,7 @@ while true
     if
         00DB:   player $PLAYER_ACTOR driving vehicle
     then
+        0AB4: vehicle_flags = var TM_FLAGS // Update this script's variable with the vehicle's flags
         continue
     end
     0407: create_coordinate x y z from_car vehicle offset 0.0 3.25 0.0
@@ -59,10 +90,14 @@ while angle < 1.0
     angle += bonnet_speed
     // TODO: Neither 3F1A nor 3F45 implemented yet
     // 3F1A: set_car vehicle bonnet angle
+    // Workaround:
+    gosub @RotateBonnetComponents
 end
 angle = 1.0 // Needed because of floating point inprecision
 // TODO: Neither 3F1A nor 3F45 implemented yet
 // 3F1A: set_car vehicle bonnet angle
+// Workaround:
+gosub @RotateBonnetComponents
 return
 
 :CloseDoor
@@ -71,8 +106,129 @@ while angle > 0.0
     angle -= 0.1
     // TODO: Neither 3F1A nor 3F45 implemented yet
     // 3F1A: set_car vehicle bonnet angle
+    // Workaround:
+    gosub @RotateBonnetComponents
 end
 angle = 0.0  // Needed because of floating point inprecision
 // TODO: Neither 3F1A nor 3F45 implemented yet
 // 3F1A: set_car vehicle bonnet angle
+// Workaround:
+gosub @RotateBonnetComponents
 return
+
+:GetBonnetAngle
+095F: get_car vehicle door DOOR_BONNET angle_to angle_rad // Returns Rads, already filtered by handling, relative to hinge (closed = 0.0)
+0097: abs angle_rad
+
+// Convert current angle to ratio
+angle = angle_rad
+angle /= BONNET_ANGLE_TOP
+return
+
+:RotateBonnetComponents
+08A6: set_car vehicle door DOOR_BONNET rotation_to angle // Works with ratio (0.0 to 1.0)
+095F: get_car vehicle door DOOR_BONNET angle_to angle_rad // Returns Rads, already filtered by handling, relative to hinge (closed = 0.0)
+angle_deg = angle_rad
+angle_deg *= RAD_TO_DEG
+3F16: set_car vehicle component "fxbonnet_"  bonnet_angle angle_deg 0 0 // Works with degrees
+
+0B10: bit_check = vehicle_flags AND FC_BIT
+
+if
+    bit_check == 0
+then
+    strutl_x = STOCK_BONNET_STRUT_X
+    strutr_x = STOCK_BONNET_STRUT_X
+    strut_y = STOCK_BONNET_STRUT_Y
+    strut_z = STOCK_BONNET_STRUT_Z
+else
+    strutl_x = HOVER_BONNET_STRUT_X
+    strutr_x = HOVER_BONNET_STRUT_X
+    strut_y = HOVER_BONNET_STRUT_Y
+    strut_z = HOVER_BONNET_STRUT_Z
+end
+
+// Change value for the right-side strut
+strutr_x *= -1.0
+
+// Move bonnet struts into position
+3F14: set_car vehicle component "bonnetlstrut_"   pos  strutl_x strut_y strut_z
+3F14: set_car vehicle component "bonnetrstrut_"   pos  strutr_x strut_y strut_z
+
+cleo_call @RotateBonnetStruts params_count 5 vehicle angle_rad strutl_x strut_y strut_z
+return
+
+
+:RotateBonnetStruts
+// hoodAngle
+0087: 5@ = 1@
+5@ *= -1.0  
+5@ += BONNET_ANGLE_OFFSET
+5@ *= RAD_TO_DEG
+
+// hoodStrutPivot.y
+6@ = 5@
+02F7: 6@ = cosine 6@
+6@ *= BONNET_PIVOT_LENGTH
+6@ *= -1.0
+6@ += BONNET_PIVOT_Y
+
+// hoodStrutPivot.z
+7@ = 5@
+02F6: 7@ = sine 7@
+7@ *= BONNET_PIVOT_LENGTH
+7@ += BONNET_PIVOT_Z
+
+// deltaAngle.x
+8@ = BONNET_STRUT_PIVOT_X
+0063: 8@ -= 2@
+
+// deltaAngle.y
+9@ = 6@
+0063: 9@ -= 3@
+
+// deltaAngle.z
+0087: 10@ = 7@
+0063: 10@ -= 4@
+
+// strutAngle.x
+0087: 11@ = 9@
+// arctan
+0AA5: call 0x4207C0 num_params 2 pop 2 _x 10@ _y 11@
+0AE9: pop_float 11@
+11@ *= -1.0
+11@ *= RAD_TO_DEG
+
+// strutAngle.z
+0087: 12@ = 8@
+//0073: 12@ /= 9@
+// arctan
+0AA5: call 0x4207C0 num_params 2 pop 2 _x 9@ _y 12@
+0AE9: pop_float 12@
+12@ *= -1.0
+12@ *= RAD_TO_DEG
+
+// Squaring for magnitude
+0AEE: 8@ = 8@ pow 2.0
+0AEE: 9@ = 9@ pow 2.0
+0AEE: 10@ = 10@ pow 2.0
+
+// Get magnitude
+0087: 13@ = 8@
+13@ += 9@
+005B: 13@ += 10@
+0097: abs 13@
+01FB: 13@ = square_root 13@
+
+// Get strutLength
+13@ -= STRUT_LENGTH_OFFSET
+
+// Rotate bonnet struts into position
+3F16: set_car 0@ component "bonnetlstrut_"  strut_angle 11@ 0.0 12@ // Works with degrees
+12@ *= -1.0
+3F16: set_car 0@ component "bonnetrstrut_"  strut_angle 11@ 0.0 12@ // Works with degrees
+
+// Move bonnet strut pistons into position
+3F14: set_car 0@ component "bonnetlstrutp_"   pos  0.0 0.0 13@
+3F14: set_car 0@ component "bonnetrstrutp_"   pos  0.0 0.0 13@
+cleo_return 0
