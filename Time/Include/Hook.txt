@@ -1,20 +1,44 @@
 {$INCLUDE ../../Common/CleoConstants.txt}
 {$INCLUDE Variables.txt}
+float right_angle
 :Hook
 if
-80DB:   not actor $PLAYER_ACTOR driving vehicle
+    not Actor.InCar($PLAYER_ACTOR, vehicle)
 else_jump @HookReturn
 
 0B10: var1 = vehicle_flags AND HOOK_BIT
+
 // Hook check
 if or
     var1 == HOOK_SIDE_BIT
     var1 == HOOK_UP_BIT
 else_jump @HookReturn
-0407: create_coordinate x y z from_car vehicle offset 1.5 0.0 0.0
+0407: create_coordinate x y z from_car vehicle offset 1.5 -0.5 0.0
+
 if and
+    var1 == HOOK_SIDE_BIT
+
+    // 00FF:   actor $PLAYER_ACTOR 0 x y z radius 0.6 0.6 2.0
+    00FE:   actor $PLAYER_ACTOR sphere 0 in_sphere x y z radius 0.6 0.6 2.0
+then
+    020A: set_car vehicle door_status_to 2
+else
+    020A: set_car vehicle door_status_to 0
+end
+
+// TODO: 3F06 not implemented 
+// 3F06: var2 = get_car vehicle door DOOR_FRONT_RIGHT status
+// Workaround
+095F: get_car vehicle door DOOR_FRONT_RIGHT rotation_to right_angle // Left Door
+if or
+    var1 == HOOK_SIDE_BIT
+    // var2 == 1  // Closed
+    // Workaround:
+    right_angle <= 0.0 // Closed
+else_jump @HookReturn
+
+if
     00E1:   key_pressed 0 4
-    00FE:   actor $PLAYER_ACTOR 0 x y z radius 1.0 1.0 2.0
 else_jump @HookReturn
 
 // Put hook up or down
@@ -26,8 +50,31 @@ then
 else
     0B11: vehicle_flags = vehicle_flags OR HOOK_SIDE_BIT
 end
-stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
-wait 250
+stream_custom_script "Delorean/HookAnimate.s" vehicle vehicle_flags
+wait 2000
 
 :HookReturn
-return
+cleo_return 1 vehicle_flags
+
+:HookRemove
+0B10: var1 = vehicle_flags AND HOOK_BIT  // Get car variation
+if or
+    var1 == HOOK_SIDE_BIT
+    var1 == HOOK_UP_BIT
+then
+    // Remove hook
+    0B10: vehicle_flags = vehicle_flags AND HOOK_BITMASK
+    0B11: vehicle_flags = vehicle_flags OR HOOK_HOLDER_BIT
+end
+cleo_return 1 vehicle_flags
+
+:HookDetach
+0B10: var1 = vehicle_flags AND HOOK_BIT  // Get car variation
+if or
+    var1 == HOOK_SIDE_BIT
+    var1 == HOOK_UP_BIT
+then
+    // TODO: Opcode 3F62 (create component from vehicle) is not implemented
+    // stream_custom_script "Delorean/HookDetach.s" vehicle
+end
+cleo_return 0
