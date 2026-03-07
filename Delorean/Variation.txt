@@ -162,6 +162,7 @@ end
 // Reset hook positions and rotations
 3F14: set_car vehicle component "hookbttf1_" position 0.922921 -1.46645 0.422211
 3F16: set_car vehicle component "hookbttf1_" rotation 178.7 -0.04 -1.72
+3F14: set_car vehicle component "hookbttf1" position 0.0 0.0 0.0
 3F16: set_car vehicle component "hookguidebttf1_" rotation 89.5 0.0 0.0
 
 3F10: set_car vehicle component "hookcablesoffbttf1" visible 0
