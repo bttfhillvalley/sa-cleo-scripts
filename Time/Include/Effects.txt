@@ -32,6 +32,8 @@ end
 3F18: set_car vehicle component "turnlightlb" glow 1
 3F18: set_car vehicle component "turnlightrf" glow 1
 3F18: set_car vehicle component "turnlightlf" glow 1
+3F18: set_car vehicle component "hazardswon" glow 1
+3F18: set_car vehicle component "headlightsswon" glow 1
 3F18: set_car vehicle component "door_lf_ok_lights" glow 1
 3F18: set_car vehicle component "door_rf_ok_lights" glow 1
 3F18: set_car vehicle component "doorlflights" glow 1
