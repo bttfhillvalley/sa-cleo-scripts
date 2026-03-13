@@ -17,6 +17,7 @@ float drb
 float dlf
 float dlb
 float steering
+float steering_whl
 float extension
 float damper
 const
@@ -103,6 +104,10 @@ while true
 
     // Set angles
     3F36: get_set_car vehicle steering_angle steering
+    
+    steering_whl = steering
+    steering_whl *= -2.0
+    
     steering *= 16.0
     steering /= 30.0
     006B: steering *= damper
@@ -112,6 +117,8 @@ while true
     3F16: set_car vehicle component "holderrf_"  angle 0 0 steering
     3F16: set_car vehicle component "fxwheelrf_" angle rf 0 0
     3F16: set_car vehicle component "fxwheelrb_" angle rb 0 0
+     
+    3F16: set_car vehicle component "steering_wheel" angle 0 steering_whl 0
 
     // cleo_call @DamagedWheels 2 vehicle vehicle_flags
 end
