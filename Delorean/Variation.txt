@@ -37,9 +37,9 @@ then
         flying_circuits == 0
         bit_check == WHEELS_TRAIN_BIT
     then
-        gosub @HideThrusters
+        gosub @HideHoverThrusters
     else
-        gosub @ShowThrusters
+        gosub @ShowHoverThrusters
     end
     if
         bit_check == WHEELS_50S_BIT
@@ -244,48 +244,6 @@ terminate_this_custom_script
 
 3F10: set_car vehicle component "inner_vents" visible 0
 3F10: set_car vehicle component "inner_ventsglow" visible 0
-return
-
-:ShowBrakes
-visibility = 1
-jump @DisplayBrakes
-
-:HideBrakes
-visibility = 0
-
-:DisplayBrakes
-3F10: set_car vehicle component "rotor_rb" visible visibility
-3F10: set_car vehicle component "rotor_lb" visible visibility
-3F10: set_car vehicle component "rotor_rf" visible visibility
-3F10: set_car vehicle component "rotor_lf" visible visibility
-return
-
-:ShowHoverBrakes
-visibility = 1
-jump @DisplayHoverBrakes
-
-:HideHoverBrakes
-visibility = 0
-
-:DisplayHoverBrakes
-3F10: set_car vehicle component "fxrotorrb" visible visibility
-3F10: set_car vehicle component "fxrotorlb" visible visibility
-3F10: set_car vehicle component "fxrotorrf" visible visibility
-3F10: set_car vehicle component "fxrotorlf" visible visibility
-return
-
-:ShowThrusters
-visibility = 1
-jump @DisplayThrusters
-
-:HideThrusters
-visibility = 0
-
-:DisplayThrusters
-3F10: set_car vehicle component "thrusterbttf2rb" visible visibility
-3F10: set_car vehicle component "thrusterbttf2lb" visible visibility
-3F10: set_car vehicle component "thrusterbttf2rf" visible visibility
-3F10: set_car vehicle component "thrusterbttf2lf" visible visibility
 return
 
 :ShowHoverThrusters
