@@ -801,7 +801,7 @@ then
     if
         var1 == 5 // BTTF3RR
     then
-        vehicle_flags = 0x10005ba8
+        vehicle_flags = 0x10005bb8
     end
     var1 += 1
     if
