@@ -158,12 +158,12 @@ cleo_call @FadeBoost 3 vehicle var3 50
 return
 
 :HoverAccelerateSound
-/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+cleo_call @CheckTimeMachine 1 vehicle ret var1
 if
     var1 == false
 then
     return
-end    */
+end
 0AB4: var1 = var ASOUND
 0AB4: var2 = var TRAVEL
 if and
@@ -179,12 +179,12 @@ end
 return
 
 :HoverDecelerateSound
-/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+cleo_call @CheckTimeMachine 1 vehicle ret var1
 if
     var1 == false
 then
     return
-end  */
+end
 0AB4: var1 = var DSOUND
 0AB4: var2 = var TRAVEL
 if and
@@ -203,12 +203,12 @@ end
 return
 
 :HoverBoostSound
-/*cleo_call @CheckTimeMachine 1 vehicle ret var1
+cleo_call @CheckTimeMachine 1 vehicle ret var1
 if
     var1 == false
 then
     return
-end  */
+end
 0AB4: var1 = var VSOUND
 0AB4: var2 = var TRAVEL
 if and
