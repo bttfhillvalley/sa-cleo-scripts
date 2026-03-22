@@ -1,0 +1,8 @@
+:CheckTimeMachine
+if and
+    3F50:   not is_car vehicle component "bttf1" visible
+    3F50:   not is_car vehicle component "bttf2" visible
+then
+    cleo_return 1 false
+end
+cleo_return 1 true
