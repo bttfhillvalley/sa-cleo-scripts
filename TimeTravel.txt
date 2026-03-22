@@ -111,6 +111,7 @@ jump @TimeStart
 {$INCLUDE Time/Include/Plasma.txt}
 {$INCLUDE Time/Include/SetTime.txt}
 {$INCLUDE Time/Include/SpeedOffset.txt}
+{$INCLUDE Time/Include/TimeMachine.txt}
 {$INCLUDE Time/Include/Wormhole.txt}
 
 :InitTime
