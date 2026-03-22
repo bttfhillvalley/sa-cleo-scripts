@@ -145,7 +145,7 @@ if
 else_jump @TimeEnd
 gosub @TimeResetCamera
 gosub @MemoryHandling   // This controls global/local variables whenever the player switches between time machines, since time circuit control is global.
-gosub @FluxCapacitorAnimation
+cleo_call @FluxCapacitorAnimation 2 vehicle vehicle_flags
 cleo_call @Hook 2 vehicle vehicle_flags ret vehicle_flags   // Controls putting up/down the hook.  I forget the variations though.  It's in the garage thread so I can document it here as well.
 
 // Check to see if the car got reset and shows all components
