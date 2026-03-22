@@ -2,7 +2,6 @@
 {$INCLUDE ../Common/CleoConstants.txt}
 0000:
 int vehicle
-int vehicle_flags
 float x
 float y
 float z
@@ -12,7 +11,6 @@ float angle_rad
 float angle_deg
 float bonnet_speed
 int iangle
-int bit_check
 float strutl_x
 float strutr_x
 float strut_y
@@ -63,7 +61,6 @@ while true
     if
         00DB:   player $PLAYER_ACTOR driving vehicle
     then
-        0AB4: vehicle_flags = var TM_FLAGS // Update this script's variable with the vehicle's flags
         continue
     end
     0407: create_coordinate x y z from_car vehicle offset 0.0 3.25 0.0
@@ -132,10 +129,8 @@ angle_deg = angle_rad
 angle_deg *= RAD_TO_DEG
 3F16: set_car vehicle component "fxbonnet_"  bonnet_angle angle_deg 0 0 // Works with degrees
 
-0B10: bit_check = vehicle_flags AND FC_BIT
-
 if
-    bit_check == 0
+    3F50:   not is_car vehicle component "bonnetanchorlbttf2" visible
 then
     strutl_x = STOCK_BONNET_STRUT_X
     strutr_x = STOCK_BONNET_STRUT_X
@@ -184,7 +179,7 @@ return
 0063: 8@ -= 2@
 
 // deltaAngle.y
-9@ = 6@
+0087: 9@ = 6@
 0063: 9@ -= 3@
 
 // deltaAngle.z
@@ -218,7 +213,7 @@ return
 
 // Get magnitude
 0087: 13@ = 8@
-13@ += 9@
+005B: 13@ += 9@
 005B: 13@ += 10@
 0097: abs 13@
 01FB: 13@ = square_root 13@
