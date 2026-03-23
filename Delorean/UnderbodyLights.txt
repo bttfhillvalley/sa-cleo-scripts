@@ -22,6 +22,7 @@ while true
     then
         3F27: get_car vehicle wheel_status_to wheel_state
         if
+            // TODO: use constant HOVER_WHEELS when opcode 3F27 is updated with individual wheel data
             not wheel_state == 0
         then
             // TODO: 3F52 is not executing

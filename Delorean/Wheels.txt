@@ -143,6 +143,7 @@ end
 cleo_return 2 0@ 1@
 
 // TODO: 3F40 crashes on car spawn
+// TODO: 3F27 has outdated implementation and return does not match use
 //
 //:DamagedWheels
 // 3F27: get_car vehicle wheel_status_to 3@

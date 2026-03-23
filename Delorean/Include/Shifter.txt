@@ -6,6 +6,7 @@ then
     return
 end
 02E3: var1 = car vehicle speed
+// TODO: Update use when opcode 3F27 implementation updates
 3F27: get_car vehicle wheel_status_to var2
 3F10: set_car vehicle component "shiftern" visible 0 //Neutral Gear off
 3F10: set_car vehicle component "shifterr" visible 0 //Reverse Gear off

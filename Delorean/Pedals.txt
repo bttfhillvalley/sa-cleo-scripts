@@ -23,6 +23,7 @@ while true
     end
     02E3: vehicle_speed = car vehicle speed
     3F04: current_gear = get_car vehicle gear
+    // TODO: Update use when opcode 3F27 implementation updates
     3F27: get_car vehicle wheel_status_to hovering
     //01E5: text_1number_highpriority 'SPEED' hovering time 10 1  // Cost: $~1~
 
