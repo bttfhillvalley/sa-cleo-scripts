@@ -362,8 +362,14 @@ jump @DisplayTimeMachine
 :HideTimeMachine
 visibility = 0
 3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
+3F10: set_car vehicle component "fluxemitteron" visible 0
 for 15@ = 1 to 6 step 1
     3F11: set_car vehicle component "flux" index 15@ visible 0
+end
+for 15@ = 1 to 5 step 1
+    3F11: set_car vehicle component "fluxcoilsonlb" index 15@ visible 0
+    3F11: set_car vehicle component "fluxcoilsonrb" index 15@ visible 0
+    3F11: set_car vehicle component "fluxcoilsonf" index 15@ visible 0
 end
 //cleo_call @TimeCircuitsReset 1 vehicle
 
@@ -689,7 +695,6 @@ return
 return
 
 :TimeEffectsModelReset
-3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
 3F10: set_car vehicle component "fluxemitteron" visible 0
 3F10: set_car vehicle component "fluxcoilsonlb1" visible 0
 3F10: set_car vehicle component "fluxcoilsonlb2" visible 0
@@ -705,25 +710,6 @@ return
 3F10: set_car vehicle component "fluxcoilsonf4" visible 0
 
 // TEMP
-3F10: set car vehicle component "roof_fr" visible 0
-3F10: set car vehicle component "door_lf_fr" visible 0
-3F10: set car vehicle component "door_lf_window_fr" visible 0
-3F10: set car vehicle component "door_rf_fr" visible 0
-3F10: set car vehicle component "door_rf_window_fr" visible 0
-3F10: set car vehicle component "wing_lr_fr" visible 0
-3F10: set car vehicle component "wing_rr_fr" visible 0
-3F10: set car vehicle component "wing_lf_fr" visible 0
-3F10: set car vehicle component "wing_rf_fr" visible 0
-3F10: set car vehicle component "chassis_fr" visible 0
-3F10: set car vehicle component "windscreen_fr" visible 0
-3F10: set car vehicle component "vents_fr" visible 0
-3F10: set car vehicle component "bonnet_fr" visible 0
-3F10: set car vehicle component "shifter1" visible 0
-3F10: set car vehicle component "shifter2" visible 0
-3F10: set car vehicle component "shifter3" visible 0
-3F10: set car vehicle component "shifter4" visible 0
-3F10: set car vehicle component "shifter5" visible 0
-3F10: set car vehicle component "shifterR" visible 0
 for 15@ = 1 to 71 step 1
     3F19: set_car vehicle component "wormhole" index 15@ glow 1
     3F11: set_car vehicle component "wormhole" index 15@ visible 0

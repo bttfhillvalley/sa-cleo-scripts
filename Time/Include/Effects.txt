@@ -155,10 +155,26 @@ cleo_return 0
 3F10: set_car vehicle component "brklights" visible 0
 3F10: set_car vehicle component "revlights" visible 0
 3F10: set_car vehicle component "headlightshighon" visible 0
-return
+3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
+cleo_return 0
+
+:FrostOff
+3F10: set car vehicle component "roof_fr" visible 0
+3F10: set car vehicle component "door_lf_fr" visible 0
+3F10: set car vehicle component "door_lf_window_fr" visible 0
+3F10: set car vehicle component "door_rf_fr" visible 0
+3F10: set car vehicle component "door_rf_window_fr" visible 0
+3F10: set car vehicle component "wing_lr_fr" visible 0
+3F10: set car vehicle component "wing_rr_fr" visible 0
+3F10: set car vehicle component "wing_lf_fr" visible 0
+3F10: set car vehicle component "wing_rf_fr" visible 0
+3F10: set car vehicle component "windscreen_fr" visible 0
+3F10: set car vehicle component "chassis_fr" visible 0
+3F10: set car vehicle component "vents_fr" visible 0
+3F10: set car vehicle component "bonnet_fr" visible 0
+cleo_return 0
 
 :TimeEffectsModelReset
-3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
 3F18: set_car vehicle component "fluxcoilson" glow 0
 3F12: set car vehicle component "fluxcoilson" alpha 0
 3F10: set_car vehicle component "fluxcoilson" visible 0

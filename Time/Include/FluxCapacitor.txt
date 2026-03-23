@@ -58,7 +58,10 @@ if/* or*/
     Actor.InCar($PLAYER_ACTOR, vehicle)
     /*3F2A: is_player_in_remote_mode_with_car vehicle*/
 then
-    3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 60 step 15
+    // TODO: 3F52 is not executing
+    // 3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 60 step 15
+    // Workaround:
+    cleo_call @FadeFluxLights 3 vehicle 60 15
 end
 return
 
@@ -74,7 +77,10 @@ if/* or*/
     Actor.InCar($PLAYER_ACTOR, vehicle)
     /*3F2A: is_player_in_remote_mode_with_car vehicle*/
 then
-    3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 0 step 15
+    // TODO: 3F52 is not executing
+    // 3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 0 step 15
+    // Workaround:
+    cleo_call @FadeFluxLights 3 vehicle 0 15
 else
     3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
 end
@@ -92,6 +98,25 @@ if/* or*/
     Actor.InCar($PLAYER_ACTOR, vehicle)
     /*3F2A: is_player_in_remote_mode_with_car vehicle*/
 then
-    3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 255 step 30
+    // TODO: 3F52 is not executing
+    //3F52: fade_car vehicle component "fluxcapacitorlightson" alpha 255 step 30
+    // Workaround:
+    cleo_call @FadeFluxLights 3 vehicle 255 30
 end
 return
+
+:FadeFluxLights
+gosub @FadeLimit
+10@ = Car.Model(0@)
+if or
+    Actor.InCar($PLAYER_ACTOR, 0@)
+    //3F2A:   is_player_in_remote_mode_with_car 0@
+    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
+then
+    3F47: 15@ = get_car 0@ component "fluxcapacitorlightson" alpha
+    gosub @Fade
+    3F12: set car 0@ component "fluxcapacitorlightson" alpha 15@
+else
+    3F10: set_car 0@ component "fluxcapacitorlightson" visibility 1@
+end
+cleo_return 0
