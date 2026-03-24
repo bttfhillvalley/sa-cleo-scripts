@@ -64,6 +64,7 @@ call :Compile TimeCircuits\On .s
 
 :: Time Travel scripts
 call :Compile Time\Cold .s
+call :Compile Time\Cooldown .s
 call :Compile Time\Firetrail .s
 call :Compile Time\FireTrail99 .s
 call :Compile Time\FuelEmpty .s

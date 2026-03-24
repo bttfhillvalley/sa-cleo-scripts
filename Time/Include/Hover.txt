@@ -85,19 +85,24 @@ else if and
     00E1:   key_pressed 0 4
     var1 == 0
 then
-    02E3: vehicle_speed = car vehicle speed
-    vehicle_speed *= -0.16
-    vehicle_speed += 20.0
-    3F25: set_car vehicle forward_force vehicle_speed
+    if or
+        3F40:   is_car vehicle component "bttf1" visible
+        3F40:   is_car vehicle component "bttf2" visible
+    then
+        02E3: vehicle_speed = car vehicle speed
+        vehicle_speed *= -0.16
+        vehicle_speed += 20.0
+        3F25: set_car vehicle forward_force vehicle_speed
 
-    // Booster
-    var3 = 255
-    var4 = 50
+        // Booster
+        var3 = 255
+        var4 = 50
 
-    vehicle_speed = 88.0
-    gosub @HoverAccelerateSound
-    gosub @HoverBoostSound
-    0AB3: var DSOUND = 0
+        vehicle_speed = 88.0
+        gosub @HoverAccelerateSound
+        gosub @HoverBoostSound
+        0AB3: var DSOUND = 0
+    end
 else
 end
 end
@@ -132,6 +137,12 @@ jump @HoverConversionReturn
 return
 
 :VentGlow
+if and
+    3F50:   not is_car vehicle component "bttf1" visible
+    3F50:   not is_car vehicle component "bttf2" visible
+then
+    return
+end
 0AB4: var1 = var CTIME
 0607: var2 = get_current_weather
 if or
@@ -234,11 +245,29 @@ then
     3F12: set_car 0@ component "fxthrusterbttf2lbon" alpha 15@
     3F12: set_car 0@ component "fxthrusterbttf2rfon" alpha 15@
     3F12: set_car 0@ component "fxthrusterbttf2rbon" alpha 15@
+    if
+        3F50: not is_car vehicle component "fxwheelbttf1rb" visible
+    then
+        15@ = 0
+    end
+    3F12: set_car 0@ component "fxwheelbttf2rbon" alpha 15@
+    3F12: set_car 0@ component "fxwheelbttf2rfon" alpha 15@
+    3F12: set_car 0@ component "fxwheelbttf2lbon" alpha 15@
+    3F12: set_car 0@ component "fxwheelbttf2lfon" alpha 15@
 else
     3F10: set_car 0@ component "fxthrusterbttf2lfon" visibility 1@
     3F10: set_car 0@ component "fxthrusterbttf2lbon" visibility 1@
     3F10: set_car 0@ component "fxthrusterbttf2rfon" visibility 1@
     3F10: set_car 0@ component "fxthrusterbttf2rbon" visibility 1@
+    if
+        3F50: not is_car vehicle component "fxwheelbttf1rb" visible
+    then
+        1@ = 0
+    end
+    3F10: set_car 0@ component "fxwheelbttf2rbon" visibility 1@
+    3F10: set_car 0@ component "fxwheelbttf2rfon" visibility 1@
+    3F10: set_car 0@ component "fxwheelbttf2lbon" visibility 1@
+    3F10: set_car 0@ component "fxwheelbttf2lfon" visibility 1@
 end
 cleo_return 0
 

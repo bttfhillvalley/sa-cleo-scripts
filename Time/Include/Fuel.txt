@@ -267,4 +267,4 @@ wait 3000
 terminate_all_custom_scripts_with_this_name 'PLUT'*/
 
 :FuelReturn
-return
+cleo_return 1 vehicle_flags

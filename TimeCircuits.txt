@@ -11,6 +11,7 @@ int past_time
 float tcd_angle
 int tcon_var
 int fried_var
+int hoodbox_var
 int travel_var
 int health
 int rand
@@ -66,6 +67,14 @@ end
 038F: load_texture 'wdot' as 27 //TIME CIRCUIT DOT
 0B10: tcon_var = vehicle_flags AND TC_BIT       // Time Circuits status
 0B10: fried_var = vehicle_flags AND TC_FRIED_BIT // Time Circuits Fried
+0B10: hoodbox_var = vehicle_flags and HOOD_BIT   // Hoodbox
+if
+    hoodbox_var == 1
+then
+    fried_var = 0
+end
+cleo_call @TimeCircuitsReset 1 vehicle
+
 stream_custom_script "TimeCircuits/Keypad.s" vehicle
 jump @TimeCircuitsStart
 
@@ -81,7 +90,7 @@ end
 
 // Store any globals if driving
 if
-    00DB:   player $PLAYER_ACTOR in_car vehicle
+    Actor.InCar($PLAYER_ACTOR, vehicle)
 then
     if
         timerb > 100
@@ -114,8 +123,17 @@ else
     timerb = 0
 end
 
+if and
+    Car.Model(vehicle) == DELOREAN_MODEL
+    3F50:   not is_car vehicle component "tcddisplay" visible
+then
+    3F10: set_car vehicle component "tcdswitchlighton" visible 0
+    3F10: set_car vehicle component "tcdswitchlightoff" visible 0
+    jump @TimeCircuitsStart
+end
+
 //first, hide all components / put them to base configuration
-gosub @TimeCircuitsReset
+cleo_call @TimeCircuitsReset 1 vehicle
 if
     tcon_var == 0
 else_jump @TimeCircuitsShow
@@ -587,55 +605,4 @@ then
 end
 cleo_return 0
 
-:TimeCircuitsReset
-//lights behind the tcd switch
-
-3F10: set_car vehicle component "tcdswitchlighton" visible 0
-3F10: set_car vehicle component "tcdswitchlightoff" visible 1
-3F10: set_car vehicle component "tcdkeypadlightson" visible 0
-//months
-for 15@ = 1 to 12
-	3F11: set_car vehicle component "dtmonth" index 15@ visible 0
-	3F11: set_car vehicle component "ptmonth" index 15@ visible 0
-	3F11: set_car vehicle component "ltdmonth" index 15@ visible 0
-end
-
-//days
-for 15@ = 10 to 29
-	3F11: set_car vehicle component "dtday" index 15@ visible 0
-	3F11: set_car vehicle component "ptday" index 15@ visible 0
-	3F11: set_car vehicle component "ltdday" index 15@ visible 0
-end
-//years
-for 15@ = 10 to 49
-	3F11: set_car vehicle component "dtyear" index 15@ visible 0
-	3F11: set_car vehicle component "ptyear" index 15@ visible 0
-	3F11: set_car vehicle component "ltdyear" index 15@ visible 0
-end
-//hours
-for 15@ = 10 to 29
-	3F11: set_car vehicle component "dthour" index 15@ visible 0
-	3F11: set_car vehicle component "pthour" index 15@ visible 0
-	3F11: set_car vehicle component "ltdhour" index 15@ visible 0
-end
-//minutes
-for 15@ = 10 to 29
-	3F11: set_car vehicle component "dtmin" index 15@ visible 0
-	3F11: set_car vehicle component "ptmin" index 15@ visible 0
-	3F11: set_car vehicle component "ltdmin" index 15@ visible 0
-end
-//am indicators
-3F10: set_car vehicle component "dtam" visible 0
-3F10: set_car vehicle component "ptam" visible 0
-3F10: set_car vehicle component "ltdam" visible 0
-
-//pm indicators
-3F10: set_car vehicle component "dtpm" visible 0
-3F10: set_car vehicle component "ptpm" visible 0
-3F10: set_car vehicle component "ltdpm" visible 0
-
-//colons between hours and minutes
-3F10: set_car vehicle component "dtcolon" visible 0
-3F10: set_car vehicle component "ptcolon" visible 0
-3F10: set_car vehicle component "ltdcolon" visible 0
-return
+{$INCLUDE TimeCircuits/Include/Reset.txt}

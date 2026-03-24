@@ -14,6 +14,7 @@ int dest_date
 int dest_time
 int past_date
 int past_time
+int result
 // SA Only variables
 float rx
 float ry

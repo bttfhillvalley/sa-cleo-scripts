@@ -14,11 +14,8 @@ float piston_pos
 float piston_ext
 float piston_angle
 float damper
-gosub @HideStock
 gosub @ThrusterLightsOff
 gosub @HideFuel
-gosub @LightsOff
-gosub @TimeEffectsModelReset
 //3F01: car vehicle raise_front_suspension 0
 //053F: set_car vehicle tires_vulnerable 1
 3F10: set_car vehicle component "frontsusp" visible 0
@@ -30,69 +27,51 @@ gosub @TimeEffectsModelReset
 0B10: flying = vehicle_flags AND FLYING_BIT
 
 // Wheels
-if
-    flying == 0
+if or
+    flying_circuits == 0
+    bit_check == WHEELS_TRAIN_BIT
 then
-    if or
-        flying_circuits == 0
-        bit_check == WHEELS_TRAIN_BIT
-    then
-        gosub @HideHoverThrusters
-    else
-        gosub @ShowHoverThrusters
-    end
-    if
-        bit_check == WHEELS_50S_BIT
-    then
-        //3F01: car vehicle raise_front_suspension 1
-        gosub @HideDeloreanHoverWheels
-        gosub @Show50sHoverWheels
-        gosub @HideTrainHoverWheels
-    else if
-        bit_check >= WHEELS_TRAIN_BIT
-    then
-        gosub @HideDeloreanHoverWheels
-        gosub @Hide50sHoverWheels
-        gosub @ShowTrainHoverWheels
-        //053F: set_car vehicle tires_vulnerable 0
-        //3F28: set_car vehicle wheel_status 0
-    else
-        gosub @ShowDeloreanHoverWheels
-        gosub @Hide50sHoverWheels
-        gosub @HideTrainHoverWheels
-    end
-    end
+    gosub @HideHoverThrusters
 else
-    // Flying
-    if
-        bit_check == WHEELS_50S_BIT
-    then
-        //3F01: car vehicle raise_front_suspension 1
-        gosub @HideDeloreanHoverWheels
-        gosub @Show50sHoverWheels
-        gosub @HideTrainHoverWheels
-    else if
-        bit_check >= WHEELS_TRAIN_BIT
-    then
-        gosub @HideDeloreanHoverWheels
-        gosub @Hide50sHoverWheels
-        gosub @ShowTrainHoverWheels
-    else
-        gosub @ShowDeloreanHoverWheels
-        gosub @Hide50sHoverWheels
-        gosub @HideTrainHoverWheels
-    end
-    end
-
+    gosub @ShowHoverThrusters
+end
+if
+    bit_check == WHEELS_50S_BIT
+then
+    // TODO: Find way to implement
+    // 3F01: car vehicle raise_front_suspension 1
+    gosub @HideDeloreanHoverWheels
+    gosub @Show50sHoverWheels
+    gosub @HideTrainHoverWheels
+else if
+    bit_check >= WHEELS_TRAIN_BIT
+then
+    // TODO: Find way to implement
+    // 3F01: car vehicle raise_front_suspension 0
+    gosub @HideDeloreanHoverWheels
+    gosub @Hide50sHoverWheels
+    gosub @ShowTrainHoverWheels
+else
+    // TODO: Find way to implement
+    // 3F01: car vehicle raise_front_suspension 0
+    gosub @ShowDeloreanHoverWheels
+    gosub @Hide50sHoverWheels
+    gosub @HideTrainHoverWheels
+end
+end
+if
+    not flying == 0
+then
     if
         hovering == 1
     then
         // Set wheels in correct hover position
         extension = 0.3 // Wheel retracting
         pivot = 90.0 // Wheel rotating back
-        //gosub @HoverAnimateModel
+        // gosub @HoverAnimateModel
     end
-    //3F28: set_car vehicle wheel_status 2
+    // TODO: Uncomment when implementation of 3F28 is changed
+    // 3F28: set_car vehicle wheel_status HOVER_WHEELS
 end
 
 // Rear deck
@@ -107,7 +86,9 @@ then
     gosub @HideMrFusion
     gosub @ShowGrillBracketLand
     gosub @HideGrillBracketHover
-else 
+else if
+    bit_check == REAR_FUSION_BIT
+then
     gosub @HideStock
     gosub @ShowGrillHitch
     gosub @ShowTimeMachine
@@ -115,6 +96,14 @@ else
     gosub @ShowMrFusion
     gosub @HideGrillBracketLand
     gosub @ShowGrillBracketHover
+else
+    gosub @ShowStock
+    gosub @HideGrillHitch
+    gosub @HideTimeMachine
+    gosub @HidePlutoniumChamber
+    gosub @HideMrFusion
+    gosub @HideGrillBracketLand
+    gosub @HideGrillBracketHover
 end
 end
 
@@ -225,6 +214,8 @@ then
 else
     gosub @ShowBoiler
 end
+cleo_call @ShowExhaust 1 vehicle
+cleo_call @SetGoodInSand 1 vehicle
 terminate_this_custom_script
 
 :ThrusterLightsOff
@@ -279,6 +270,38 @@ visibility = 0
 
 3F10: set_car vehicle component "fxwheelbttf1lf" visible visibility
 3F10: set_car vehicle component "fxtirebttf1lf" visible visibility
+
+// TODO: Awaiting wheel status check change
+// 0B10: wheels = vehicle_flags AND WHEEL_STATUS_BIT
+// 0B15: wheels = wheels >> WHEEL_STATUS_SHIFT
+// 
+// 0B10: bit_check = wheels AND 0x3
+// if
+//     not bit_check == 0
+// then
+//     3F10: set_car vehicle component "fxtirebttf1rb" visible 0
+// end
+// 0B15: wheels = wheels >> 2
+// 0B10: bit_check = wheels AND 0x3
+// if
+//     not bit_check == 0
+// then
+//     3F10: set_car vehicle component "fxtirebttf1rf" visible 0
+// end
+// 0B15: wheels = wheels >> 2
+// 0B10: bit_check = wheels AND 0x3
+// if
+//     not bit_check == 0
+// then
+//     3F10: set_car vehicle component "fxtirebttf1lb" visible 0
+// end
+// 0B15: wheels = wheels >> 2
+// 0B10: bit_check = wheels AND 0x3
+// if
+//     not bit_check == 0
+// then
+//     3F10: set_car vehicle component "fxtirebttf1lf" visible 0
+// end
 return
 
 :Show50sHoverWheels
@@ -304,6 +327,38 @@ visibility = 0
 3F10: set_car vehicle component "fxwheelbttf3lf" visible visibility
 3F10: set_car vehicle component "fxtirebttf3lf" visible visibility
 3F10: set_car vehicle component "fxhubcapbttf3lf" visible visibility
+
+// TODO: Awaiting wheel status check change
+//0B10: wheels = vehicle_flags AND WHEEL_STATUS_BIT
+//0B15: wheels = wheels >> WHEEL_STATUS_SHIFT
+//
+//0B10: bit_check = wheels AND 0x3
+//if
+//    not bit_check == 0
+//then
+//    3F10: set_car vehicle component "fxtirebttf3rb" visible 0
+//end
+//0B15: wheels = wheels >> 2
+//0B10: bit_check = wheels AND 0x3
+//if
+//    not bit_check == 0
+//then
+//    3F10: set_car vehicle component "fxtirebttf3rf" visible 0
+//end
+//0B15: wheels = wheels >> 2
+//0B10: bit_check = wheels AND 0x3
+//if
+//    not bit_check == 0
+//then
+//    3F10: set_car vehicle component "fxtirebttf3lb" visible 0
+//end
+//0B15: wheels = wheels >> 2
+//0B10: bit_check = wheels AND 0x3
+//if
+//    not bit_check == 0
+//then
+//    3F10: set_car vehicle component "fxtirebttf3lf" visible 0
+//end
 return
 
 :ShowTrainHoverWheels
@@ -371,14 +426,14 @@ for 15@ = 1 to 5 step 1
     3F11: set_car vehicle component "fluxcoilsonrb" index 15@ visible 0
     3F11: set_car vehicle component "fluxcoilsonf" index 15@ visible 0
 end
-//cleo_call @TimeCircuitsReset 1 vehicle
+cleo_call @TimeCircuitsReset 1 vehicle
 
 :DisplayTimeMachine
 3F10: set_car vehicle component "bttfparts" visible visibility
-3F10: set_car vehicle component "wing_lf_ok_sh" visible visibility
-3F10: set_car vehicle component "wing_rf_ok_sh" visible visibility
-3F10: set_car vehicle component "wing_lr_ok_sh" visible visibility
-3F10: set_car vehicle component "wing_rr_ok_sh" visible visibility
+3F10: set_car vehicle component "wing_lf_sh" visible visibility
+3F10: set_car vehicle component "wing_rf_sh" visible visibility
+3F10: set_car vehicle component "wing_lr_sh" visible visibility
+3F10: set_car vehicle component "wing_rr_sh" visible visibility
 3F10: set_car vehicle component "roof_coils_shadows" visible visibility
 3F10: set_car vehicle component "interiorbttf" visible visibility
 3F10: set_car vehicle component "wiresexterior" visible visibility
@@ -390,6 +445,7 @@ end
 3F10: set_car vehicle component "wcontrollftm" visible visibility
 3F10: set_car vehicle component "wcontrolrftm" visible visibility
 3F10: set_car vehicle component "gloveboxgauges" visible visibility
+3F10: set_car vehicle component "gloveboxgaugesglass" visible visibility
 3F10: set_car vehicle component "gloveboxgaugeslights" visible visibility
 3F10: set_car vehicle component "pchamberemptylight" visible visibility
 3F10: set_car vehicle component "gloveboxopen" visible visibility
@@ -670,52 +726,5 @@ visibility = 0
 return
 
 //{$INCLUDE Include/HoverAnimateModel.txt}
-:LightsOff
-3F10: set_car vehicle component "seatbeltlight" visible 0
-3F10: set_car vehicle component "lambdalight" visible 0
-3F10: set_car vehicle component "oillight" visible 0
-3F10: set_car vehicle component "doorajarlight" visible 0
-3F10: set_car vehicle component "fuellight" visible 0
-3F10: set_car vehicle component "brakelight" visible 0
-3F10: set_car vehicle component "batterylight" visible 0
-3F10: set_car vehicle component "lowbeamslight" visible 0
-3F10: set_car vehicle component "highbeamslight" visible 0
-3F10: set_car vehicle component "turnsignalllight" visible 0
-3F10: set_car vehicle component "turnsignalrlight" visible 0
-3F10: set_car vehicle component "tcdkeypadenterlighton" visible 0
-3F10: set_car vehicle component "lightFL" visible 0
-3F10: set_car vehicle component "lightFR" visible 0
-3F10: set_car vehicle component "turnlightrf" visible 0
-3F10: set_car vehicle component "turnlightlf" visible 0
-3F10: set_car vehicle component "turnlightrb" visible 0
-3F10: set_car vehicle component "turnlightlb" visible 0
-3F10: set_car vehicle component "brklights" visible 0
-3F10: set_car vehicle component "revlights" visible 0
-3F10: set_car vehicle component "headlightshighon" visible 0
-return
-
-:TimeEffectsModelReset
-3F10: set_car vehicle component "fluxemitteron" visible 0
-3F10: set_car vehicle component "fluxcoilsonlb1" visible 0
-3F10: set_car vehicle component "fluxcoilsonlb2" visible 0
-3F10: set_car vehicle component "fluxcoilsonlb3" visible 0
-3F10: set_car vehicle component "fluxcoilsonlb4" visible 0
-3F10: set_car vehicle component "fluxcoilsonrb1" visible 0
-3F10: set_car vehicle component "fluxcoilsonrb3" visible 0
-3F10: set_car vehicle component "fluxcoilsonrb2" visible 0
-3F10: set_car vehicle component "fluxcoilsonrb4" visible 0
-3F10: set_car vehicle component "fluxcoilsonf1" visible 0
-3F10: set_car vehicle component "fluxcoilsonf2" visible 0
-3F10: set_car vehicle component "fluxcoilsonf3" visible 0
-3F10: set_car vehicle component "fluxcoilsonf4" visible 0
-
-// TEMP
-for 15@ = 1 to 71 step 1
-    3F19: set_car vehicle component "wormhole" index 15@ glow 1
-    3F11: set_car vehicle component "wormhole" index 15@ visible 0
-
-    3F19: set_car vehicle component "wormholer" index 15@ glow 1
-    3F11: set_car vehicle component "wormholer" index 15@ visible 0
-end
-return
-
+{$INCLUDE Include/VehicleFlags.txt}
+{$INCLUDE ../TimeCircuits/Include/Reset.txt}

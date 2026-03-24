@@ -100,10 +100,12 @@ jump @TimeStart
 {$INCLUDE Common/FadeComponent.txt}
 {$INCLUDE Time/Include/Camera.txt}
 {$INCLUDE Time/Include/Coils.txt}
+{$INCLUDE Time/Include/Cooldown.txt}
 {$INCLUDE Time/Include/Effects.txt}
 {$INCLUDE Time/Include/Explosion.txt}
 {$INCLUDE Time/Include/FluxCapacitor.txt}
 {$INCLUDE Time/Include/Fuel.txt}
+{$INCLUDE Time/Include/Health.txt}
 {$INCLUDE Time/Include/Hook.txt}
 {$INCLUDE Time/Include/Hover.txt}
 {$INCLUDE Time/Include/Memory.txt}
@@ -111,8 +113,12 @@ jump @TimeStart
 {$INCLUDE Time/Include/Plasma.txt}
 {$INCLUDE Time/Include/SetTime.txt}
 {$INCLUDE Time/Include/SpeedOffset.txt}
+{$INCLUDE Time/Include/TimeCircuits.txt}
 {$INCLUDE Time/Include/TimeMachine.txt}
 {$INCLUDE Time/Include/Wormhole.txt}
+
+{$INCLUDE Delorean/Include/Debug.txt}
+
 
 :InitTime
 stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags 1
@@ -145,48 +151,15 @@ wait 0
 if
    not Car.Wrecked(vehicle)
 else_jump @TimeEnd
-gosub @TimeResetCamera
+
 gosub @MemoryHandling   // This controls global/local variables whenever the player switches between time machines, since time circuit control is global.
-cleo_call @FluxCapacitorAnimation 2 vehicle vehicle_flags
-cleo_call @Hook 2 vehicle vehicle_flags ret vehicle_flags   // Controls putting up/down the hook.  I forget the variations though.  It's in the garage thread so I can document it here as well.
 
-// Check to see if the car got reset and shows all components
-/*3F40: var1 = get_car vehicle component "bttf1" visiblility
-3F40: var2 = get_car vehicle component "bttf2" visiblility
-if and
-    not var1 == 0
-    not var2 == 0
-then
-    //gosub @LightsOff
-    stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
-end*/
+cleo_call @DebugVariation 2 vehicle vehicle_flags ret vehicle_flags
 
-if
-    00DB:   player $PLAYER_ACTOR driving vehicle
-then
-    gosub @DebugVariation
-    //gosub @TimeUnloadSparkSounds
+// Cooldown Check
+cleo_call @Cooldown 2 vehicle vehicle_flags ret vehicle_flags
 
-    // Time circuits flashing based on car variation
-    0AB4: var1 = var FLASH
-    if
-        var1 == 0xFF
-    then
-        0AB3: var FLASH = 0xF
-        stream_custom_script "TimeCircuits/Flash.s" vehicle_flags
-    end
-
-    0AB4: var1 = var TCON
-    if
-        var1 == 0xF0
-    then
-        0AB3: var TCON = 0x10
-        stream_custom_script "TimeCircuits/On.s" vehicle_flags
-    end
-end
-
-// Check Fuel
-gosub @Fuel
+cleo_call @ResetCamera 2 vehicle vehicle_flags
 
 // Check To see if we're going to hover.
 // FIXME: This will be removed from this section in the future since there will be no need for model swaps that require setting everything back up since it'll be the same car instance
@@ -221,6 +194,22 @@ end
 
 // See if we can hover or not
 gosub @HoverConversion
+
+cleo_call @FluxCapacitorAnimation 2 vehicle vehicle_flags
+cleo_call @FlashTimeCircuits 2 vehicle vehicle_flags
+
+// Handle stock delorean
+cleo_call @CheckTimeMachine 1 vehicle ret result
+if
+    result == false
+then
+    jump @TimeStart
+end
+
+// Check Fuel
+cleo_call @Fuel 2 vehicle vehicle_flags ret vehicle_flags
+cleo_call @Hook 2 vehicle vehicle_flags ret vehicle_flags   // Controls putting up/down the hook.  I forget the variations though.  It's in the garage thread so I can document it here as well.
+
 /*
 
 // Lightning check
@@ -675,31 +664,6 @@ jump @TimeStart
 // ==================================================================================
 // Reset stuff related to the camera and sound effects since they can loop (vfx effects do not)
 
-:TimeResetCamera
-0AB4: var1 = var CAMERA_CONTROL
-0AB4: var2 = var LIGHTNING
-if and
-    00DB:   player $PLAYER_ACTOR driving vehicle
-    var1 == 0
-    var2 == 0
-then
-    0B10: var1 = vehicle_flags AND TC_FRIED_BIT
-    0B10: var2 = vehicle_flags AND TC_BIT
-    0AB4: var3 = var COOLDOWN
-    if or
-        vehicle_speed < 47.6
-        not var1 == 0 // Time Circuits are fried
-        var2 == 0 // Time Circuits are Off
-        var3 == 1
-    then
-        0AB3: var CAMERA_CONTROL = 1
-        // I forget if this has to change for RC mode, but this can be figured out later
-        Camera.Restore
-        Camera.SetBehindPlayer
-    end
-end
-return
-
 :TimeUnloadSparkSounds
 0B10: var1 = vehicle_flags AND TC_FRIED_BIT
 0B10: var2 = vehicle_flags AND TC_BIT
@@ -756,57 +720,3 @@ cleo_return 0   */
 :TimeEnd
 Car.RemoveReferences(vehicle)
 terminate_this_custom_script
-
-// ======================================================================================================
-
-:DebugVariation
-// Temporary variation changer
-0B10: var1 = vehicle_flags AND FLYING_BIT   // Is car flying?
-0AB4: var2 = var LANDING
-if and
-    var1 == 0
-    var2 == 0
-    is_key_pressed == KEY_DEBUG // "."
-then
-    0AB4: var1 = var VARIATION
-    if
-        var1 == 0 // BTTF1
-    then
-        vehicle_flags = 0x10001404
-    end
-    if
-        var1 == 1 // BTTF1 w/ Hook
-    then
-        vehicle_flags = 0x10001502
-    end
-    if
-        var1 == 2 // BTTF1 w/ Flying
-    then
-        vehicle_flags = 0x10005501
-    end
-    if
-        var1 == 3 // BTTF2
-    then
-        vehicle_flags = 0x10005908
-    end
-    if
-        var1 == 4 // BTTF3
-    then
-        vehicle_flags = 0x10005998
-    end
-    if
-        var1 == 5 // BTTF3RR
-    then
-        vehicle_flags = 0x10005bb8
-    end
-    var1 += 1
-    if
-        var1 > 5
-    then
-        var1 = 0
-    end
-    0AB3: var VARIATION = var1
-    stream_custom_script "Delorean/Variation.s" vehicle vehicle_flags
-    wait 500
-end
-return
