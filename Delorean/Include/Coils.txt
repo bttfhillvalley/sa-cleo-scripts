@@ -1,5 +1,5 @@
 {$INCLUDE ../../Common/CleoConstants.txt}
-{$INCLUDE Variables.txt}
+{$INCLUDE ../../Time/Include/Variables.txt}
 
 :TimeCoil
 3F18: set_car vehicle component "fluxcoilson" glow 1

@@ -98,26 +98,27 @@ jump @TimeStart
 // Include all the helper threads here
 {$INCLUDE Common/DrawTexture.txt}
 {$INCLUDE Common/FadeComponent.txt}
+
 {$INCLUDE Time/Include/Camera.txt}
-{$INCLUDE Time/Include/Coils.txt}
 {$INCLUDE Time/Include/Cooldown.txt}
-{$INCLUDE Time/Include/Effects.txt}
-{$INCLUDE Time/Include/Explosion.txt}
-{$INCLUDE Time/Include/FluxCapacitor.txt}
-{$INCLUDE Time/Include/Fuel.txt}
 {$INCLUDE Time/Include/Health.txt}
-{$INCLUDE Time/Include/Hook.txt}
-{$INCLUDE Time/Include/Hover.txt}
 {$INCLUDE Time/Include/Memory.txt}
 //{$INCLUDE Time/Include/Past.txt}
-{$INCLUDE Time/Include/Plasma.txt}
 {$INCLUDE Time/Include/SetTime.txt}
 {$INCLUDE Time/Include/SpeedOffset.txt}
 {$INCLUDE Time/Include/TimeCircuits.txt}
-{$INCLUDE Time/Include/TimeMachine.txt}
-{$INCLUDE Time/Include/Wormhole.txt}
 
+{$INCLUDE Delorean/Include/Coils.txt}
 {$INCLUDE Delorean/Include/Debug.txt}
+{$INCLUDE Delorean/Include/Effects.txt}
+{$INCLUDE Delorean/Include/Explosion.txt}
+{$INCLUDE Delorean/Include/FluxCapacitor.txt}
+{$INCLUDE Delorean/Include/Fuel.txt}
+{$INCLUDE Delorean/Include/Hook.txt}
+{$INCLUDE Delorean/Include/Hover.txt}
+{$INCLUDE Delorean/Include/Plasma.txt}
+{$INCLUDE Delorean/Include/TimeMachine.txt}
+{$INCLUDE Delorean/Include/Wormhole.txt}
 
 
 :InitTime
@@ -135,9 +136,9 @@ stream_custom_script "Delorean/Wheels.s" vehicle
 stream_custom_script "Delorean/Wipers.s" vehicle
 stream_custom_script "TimeCircuits.s" vehicle vehicle_flags 2@ 3@ 4@ 5@
 for var1 = 0 to 10 step 1
-    stream_custom_script "Time/SID.s" vehicle var1
+    stream_custom_script "Delorean/SID.s" vehicle var1
 end
-stream_custom_script "Time/PlutoniumGauge.s" vehicle vehicle_flags
+stream_custom_script "Delorean/PlutoniumGauge.s" vehicle vehicle_flags
 cleo_call @GlowInit 1 vehicle
 cleo_call @LightsOff 1 vehicle
 cleo_call @FrostOff 1 vehicle
@@ -653,12 +654,12 @@ then
     var1 += 0.25
     //3F22: set_car vehicle wheelie var1
 else
-    stream_custom_script "Time/ReentryCoils.s" vehicle vehicle_flags
+    stream_custom_script "Delorean/ReentryCoils.s" vehicle vehicle_flags
 end
 0AB3: var LIGHTNING = 0
-stream_custom_script "Time/Cold.s" vehicle vehicle_flags
-stream_custom_script "Time/Steam.s" vehicle vehicle_flags
-stream_custom_script "Time/FuelEmpty.s" vehicle vehicle_flags
+stream_custom_script "Delorean/Cold.s" vehicle vehicle_flags
+stream_custom_script "Delorean/Steam.s" vehicle vehicle_flags
+stream_custom_script "Delorean/FuelEmpty.s" vehicle vehicle_flags
 jump @TimeStart
 
 // ==================================================================================
@@ -692,7 +693,7 @@ if and
 then
     0407: create_coordinate 2@ 3@ 4@ from_car 0@ offset 0.0 0.0 0.0
     0174: 5@ = car 0@ z_angle
-    stream_custom_script "Time/Plate.s" 0@ 2@ 3@ 4@ 5@
+    stream_custom_script "Delorean/Plate.s" 0@ 2@ 3@ 4@ 5@
 end
 cleo_return 0
 
@@ -703,14 +704,14 @@ then
     0407: create_coordinate 2@ 3@ 4@ from_car 0@ offset 1.0 5.0 -1.0
     0174: 5@ = car 0@ z_angle
     6@ = -90.0
-    stream_custom_script "Time/HookDetach.s" 0@ 2@ 3@ 4@ 5@ 6@
+    stream_custom_script "Delorean/HookDetach.s" 0@ 2@ 3@ 4@ 5@ 6@
 else if
     1@ == HOOK_UP_BIT
 then
     0407: create_coordinate 2@ 3@ 4@ from_car 0@ offset 0.0 0.0 0.75
     0174: 5@ = car 0@ z_angle
     6@ = 30.0
-    stream_custom_script "Time/HookDetach.s" 0@ 2@ 3@ 4@ 5@ 6@
+    stream_custom_script "Delorean/HookDetach.s" 0@ 2@ 3@ 4@ 5@ 6@
 end
 end
 cleo_return 0   */

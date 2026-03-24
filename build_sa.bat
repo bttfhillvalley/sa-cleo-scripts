@@ -30,24 +30,31 @@ call :Compile DisplayToggle .cs
 call :Compile HeatHaze .cs
 call :Compile Speed .cs
 call :Compile TimeMod .cs
-call :Compile TimeTravel .s
 call :Compile TimeTravelMode .cs
 
 :: Delorean scripts
+call :Compile Delorean .s
 call :Compile Delorean\Bonnet .s
 call :Compile Delorean\Clock .s
+call :Compile Delorean\Cold .s
 call :Compile Delorean\Dashboard .s
 call :Compile Delorean\Door .s
+call :Compile Delorean\FuelEmpty .s
 call :Compile Delorean\HookAnimate .s
-:: call :Compile Delorean\HookDetach .s :: Opcodes not implemented
+call :Compile Delorean\HookDetach .s
 call :Compile Delorean\HoverAnimate .s
 call :Compile Delorean\HoverStart .s
 call :Compile Delorean\HoverStop .s
 call :Compile Delorean\Interior .s
 call :Compile Delorean\Pedals .s
+call :Compile Delorean\Plate .s
 call :Compile Delorean\PlutoniumGaugeOff .s
+call :Compile Delorean\PlutoniumGauge .s
 call :Compile Delorean\PlutoniumGaugeOn .s
+call :Compile Delorean\ReentryCoils .s
 :: call :Compile Delorean\Rocket .s :: Adds guns to the car
+call :Compile Delorean\SID .s
+call :Compile Delorean\Steam .s
 call :Compile Delorean\TurnSignal .s
 call :Compile Delorean\UnderbodyLights .s
 call :Compile Delorean\Variation .s
@@ -63,20 +70,14 @@ call :Compile TimeCircuits\Keypad .s
 call :Compile TimeCircuits\On .s
 
 :: Time Travel scripts
-call :Compile Time\Cold .s
 call :Compile Time\Cooldown .s
 call :Compile Time\Firetrail .s
 call :Compile Time\FireTrail99 .s
-call :Compile Time\FuelEmpty .s
-call :Compile Time\HookDetach .s
 call :Compile Time\Lightning .s
-call :Compile Time\Plate .s
-call :Compile Time\PlutoniumGauge .s
-call :Compile Time\PlutoniumText .s
-call :Compile Time\ReentryCoils .s
-call :Compile Time\SID .s
 call :Compile Time\Sparks .s
-call :Compile Time\Steam .s
+
+:: Plutonium Pickup scripts
+call :Compile Pickups\PlutoniumText .s
 
 IF "%1"=="nopause" GOTO :EOF
 echo The compiling process is now complete.

@@ -11,10 +11,11 @@ float py
 float pz
 float dist
 float set_time_var
-3F62: hook = car vehicle create_component "hookbttf1"
-01BB: store_object hook position_to x y z
-Object.CollisionDetection(hook) = True
-Object.ToggleInMovingList(hook) = True
+// TODO: Opcode 3F62 not implemented
+//3F62: hook = car vehicle create_component "hookbttf1"
+//01BB: store_object hook position_to x y z
+//Object.CollisionDetection(hook) = True
+//Object.ToggleInMovingList(hook) = True
 
 :HookDetachDestroy
 wait 10
@@ -25,9 +26,10 @@ if or
     set_time_var == 1
     dist > 100.0 // floating-point values
 jf @HookDetachDestroy
-if
-    03CA:   object hook exists
-then
-    Object.Destroy(hook)
-end
+// TODO: Opcode 3F62 not implemented
+//if
+//    03CA:   object hook exists
+//then
+//    Object.Destroy(hook)
+//end
 terminate_this_custom_script

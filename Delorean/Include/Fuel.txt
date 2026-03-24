@@ -112,7 +112,7 @@ wait 200
 3F10: set_car vehicle component "plut" visible 1
 wait 200
 0AB4: var1 = var PLUTONIUM
-stream_custom_script "Time/PlutoniumText.s"
+stream_custom_script "Pickups/PlutoniumText.s"
 
 // Lower plutonium
 for z = 0.2 downto -0.01 step 0.01
@@ -261,7 +261,7 @@ jf @PlutoniumRadar
 :PlutoniumRadar
 03E7: flash_hud 8
 00BC: text_highpriority 'GETMORE' 3000 ms 1  // Get More Plutonium
-stream_custom_script "Time/PlutoniumText.s"
+stream_custom_script "Pickups/PlutoniumText.s"
 wait 3000
 03E7: flash_hud -1
 terminate_all_custom_scripts_with_this_name 'PLUT'*/

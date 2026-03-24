@@ -1,6 +1,6 @@
 {$CLEO .s}
 {$INCLUDE ../Common/CleoConstants.txt}
-{$INCLUDE Include/Variables.txt}
+{$INCLUDE ../Time/Include/Variables.txt}
 0000:
 0B10: var1 = vehicle_flags AND TC_FRIED_BIT
 if
@@ -18,4 +18,4 @@ end
 terminate_this_custom_script
 
 {$INCLUDE Include/Coils.txt}
-{$INCLUDE Include/SpeedOffset.txt}
+{$INCLUDE ../Time/Include/SpeedOffset.txt}
