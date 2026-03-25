@@ -20,10 +20,15 @@ while true
     wait 0
     // Checks to see if player is outside, on foot, and is controllable by player
     077E: get_active_interior_to interior
-    if and
-        interior == 0
-        044B:   actor $PLAYER_ACTOR on_foot
-        03EE:   player $PLAYER_CHAR controllable
+    if or
+        not interior == 0
+        Actor.Driving($PLAYER_ACTOR)
+        not Player.Controllable($PLAYER_CHAR)
+    then
+        continue    
+    end
+
+    if
         0AB0:   is_key_pressed KEY_SPAWN_DELOREAN
     then
         Model.Load(model)
