@@ -39,6 +39,7 @@ call :Compile Delorean\Clock .s
 call :Compile Delorean\Cold .s
 call :Compile Delorean\Dashboard .s
 call :Compile Delorean\Door .s
+call :Compile Delorean\Engine .s
 call :Compile Delorean\FuelEmpty .s
 call :Compile Delorean\HookAnimate .s
 call :Compile Delorean\HookDetach .s

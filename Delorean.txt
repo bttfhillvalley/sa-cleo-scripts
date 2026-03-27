@@ -1,7 +1,6 @@
 {$CLEO .s}
 {$INCLUDE Common/CleoConstants.txt}
 0000:
-//{$INCLUDE TimeEffects.txt}
 // ========================================
 // 0@ is the car itself
 // 1@ controls various time machine functions, as well as model variations
@@ -117,6 +116,7 @@ jump @TimeStart
 {$INCLUDE Delorean/Include/Hook.txt}
 {$INCLUDE Delorean/Include/Hover.txt}
 {$INCLUDE Delorean/Include/Plasma.txt}
+{$INCLUDE Delorean/Include/Sounds.txt}
 {$INCLUDE Delorean/Include/TimeMachine.txt}
 {$INCLUDE Delorean/Include/Wormhole.txt}
 
@@ -127,6 +127,7 @@ stream_custom_script "Delorean/Bonnet.s" vehicle
 stream_custom_script "Delorean/Clock.s" vehicle
 stream_custom_script "Delorean/Dashboard.s" vehicle
 stream_custom_script "Delorean/Door.s" vehicle
+// stream_custom_script "Delorean/Engine.s" vehicle // Engine sounds. Removed until audio files are copied to proper directory
 //stream_custom_script "Delorean/Rocket.s" vehicle // This adds guns and invisible actors to the car
 stream_custom_script "Delorean/Pedals.s" vehicle
 stream_custom_script "Delorean/Interior.s" vehicle
