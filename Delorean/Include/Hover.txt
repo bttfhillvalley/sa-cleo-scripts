@@ -26,7 +26,7 @@ if //and
 then
     cleo_call @FadeWheels 3 vehicle 255 5
 else
-    3F1C: get_car vehicle component "fxwheellf_" rotation var1 var2 var3
+    3F1C: get_car vehicle component "hoverjointrf_" rotation var1 var2 var3
     if
         var2 == 0.0
     then
