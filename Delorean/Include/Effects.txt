@@ -40,6 +40,7 @@ end
 3F18: set_car vehicle component "doorrflights" glow 1
 3F18: set_car vehicle component "overheadconsoleelight" glow 1
 3F18: set_car vehicle component "fluxemitteron" glow 1
+3F12: set_car vehicle component "fluxemitteron" alpha 0
 for var3 = 1 to 4
     3F19: set_car vehicle component "fluxcoilsonlb" index var3 glow 1
     3F19: set_car vehicle component "fluxcoilsonrb" index var3 glow 1
@@ -215,51 +216,13 @@ cleo_return 0
 3F10: set car vehicle component "bonnet_fr" visible 0
 cleo_return 0
 
-:TimeEffectsModelReset
-3F18: set_car vehicle component "fluxcoilson" glow 0
-3F12: set car vehicle component "fluxcoilson" alpha 0
-3F10: set_car vehicle component "fluxcoilson" visible 0
-
-3F18: set_car vehicle component "fluxemitteron" glow 0
-3F12: set car vehicle component "fluxemitteron" alpha 0
-3F10: set_car vehicle component "fluxemitteron" visible 0
-3F18: set_car vehicle component "fluxcoilsonlb1" glow 0
-3F12: set car vehicle component "fluxcoilsonlb1" alpha 0
-3F10: set_car vehicle component "fluxcoilsonlb1" visible 0
-3F18: set_car vehicle component "fluxcoilsonlb2" glow 0
-3F12: set car vehicle component "fluxcoilsonlb2" alpha 0
-3F10: set_car vehicle component "fluxcoilsonlb2" visible 0
-3F18: set_car vehicle component "fluxcoilsonlb3" glow 0
-3F12: set car vehicle component "fluxcoilsonlb3" alpha 0
-3F10: set_car vehicle component "fluxcoilsonlb3" visible 0
-3F18: set_car vehicle component "fluxcoilsonlb4" glow 0
-3F12: set car vehicle component "fluxcoilsonlb4" alpha 0
-3F10: set_car vehicle component "fluxcoilsonlb4" visible 0
-3F18: set_car vehicle component "fluxcoilsonrb1" glow 0
-3F12: set car vehicle component "fluxcoilsonrb1" alpha 0
-3F10: set_car vehicle component "fluxcoilsonrb1" visible 0
-3F18: set_car vehicle component "fluxcoilsonrb2" glow 0
-3F12: set car vehicle component "fluxcoilsonrb2" alpha 0
-3F10: set_car vehicle component "fluxcoilsonrb2" visible 0
-3F18: set_car vehicle component "fluxcoilsonrb3" glow 0
-3F12: set car vehicle component "fluxcoilsonrb3" alpha 0
-3F10: set_car vehicle component "fluxcoilsonrb3" visible 0
-3F18: set_car vehicle component "fluxcoilsonrb4" glow 0
-3F12: set car vehicle component "fluxcoilsonrb4" alpha 0
-3F10: set_car vehicle component "fluxcoilsonrb4" visible 0
-3F18: set_car vehicle component "fluxcoilsonf1" glow 0
-3F12: set car vehicle component "fluxcoilsonf1" alpha 0
-3F10: set_car vehicle component "fluxcoilsonf1" visible 0
-3F18: set_car vehicle component "fluxcoilsonf2" glow 0
-3F12: set car vehicle component "fluxcoilsonf2" alpha 0
-3F10: set_car vehicle component "fluxcoilsonf2" visible 0
-3F18: set_car vehicle component "fluxcoilsonf3" glow 0
-3F12: set car vehicle component "fluxcoilsonf3" alpha 0
-3F10: set_car vehicle component "fluxcoilsonf3" visible 0
-3F18: set_car vehicle component "fluxcoilsonf4" glow 0
-3F12: set car vehicle component "fluxcoilsonf4" alpha 0
-3F10: set_car vehicle component "fluxcoilsonf4" visible 0
-return
+:ResetEffects
+3F10: set_car vehicle component "fluxcapacitorlightson" visible 0
+for var1 = 1 to 71
+    3F11: set_car vehicle component "wormhole" index var1 visible 0
+    3F11: set_car vehicle component "wormholer" index var1 visible 0
+end
+cleo_return 0
 
 //:WheelSparks
 //0407: create_coordinate 1@ 2@ 3@ from_car vehicle offset 0.0 -1.236 0.0
