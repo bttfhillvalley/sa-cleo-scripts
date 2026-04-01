@@ -24,13 +24,13 @@ then
     cleo_return 1 false
 end
 
-gosub @Plasma
-
 if
   vehicle_speed < 43.5 // == 79.8 mph // floating-point values
 then
     cleo_return 1 false
 end
+
+gosub @Plasma
 
 // Coils start glowing around 80 mph
 gosub @Coil
