@@ -1,25 +1,51 @@
-int vehicle
-int vehicle_flags
-int x
-int y
-int z
-int var1
-int var2
-int var3
-int var4
-int vehicle_model
-int vehicle_health
-float vehicle_speed
-int dest_date
-int dest_time
-int past_date
-int past_time
-// SA Only variables
-float rx
-float ry
-float rz
-float rw
-float vx
-float vy
-float vz
-int result
+const
+    // Main thread
+    // 0@ - 1@ is always reserved
+    vehicle = 0@
+    vehicle_flags = 1@
+
+    // Time Circuit stuff.  Reserved in the main thread.
+    dest_date = 2@
+    dest_time = 3@
+    past_date = 4@
+    past_time = 5@
+    result = 6@
+    x = 7@
+    y = 8@
+    z = 9@
+    rx = 10@
+    ry = 11@
+    rz = 12@
+    rw = 13@
+    velocity = 14@
+    vehicle_speed = 14@
+    vehicle_health = 15@
+    vehicle_model = 16@
+    vx = 17@
+    vy = 18@
+    vz = 19@
+    dummy_vehicle = 20@
+
+    // Set Time Variables
+    target_hour = 4@
+    target_minute = 5@
+    target_weather = 6@
+    time_delta = 7@
+    current_time = 8@
+
+    // SID Variables
+    column = 2@
+    target = 3@
+    current = 4@
+    led = 5@
+    led_state = 6@
+
+    // Variables
+    var1 = 2@
+    var2 = 3@
+    var3 = 4@
+    var4 = 5@
+    var5 = 6@
+    var6 = 7@
+    var7 = 8@
+end

@@ -3,7 +3,7 @@
 // 1@: component
 // 2@: alpha
 // 3@: step
-// 4@: alpha override
+// 4@: alpha override // Unused?
 
 // Limit to between 0-255
 if
@@ -27,8 +27,9 @@ then
     // Fade
     //0AD1: show_formatted_text_highpriority "%s" time 10 1@v
 
-    3F47: 15@ = get_car 0@ component "inner_vents" alpha
-    0AD1: show_formatted_text_highpriority "%.30x %.6x %.6x" time 10 1@ 2@ 3@
+    // TODO: Recompile plugin with CLEO 4.4.4.0
+    3F47: 15@ = get_car 0@ component 1@ alpha
+    //0AD1: show_formatted_text_highpriority "%.30x %.6x %.6x" time 10 1@ 2@ 3@
     if
         001D: 15@ > 2@
     then
@@ -50,9 +51,11 @@ then
         end
     end
     end
-    3F12: set_car 0@ component "inner_vents" alpha 15@
+    // TODO: Recompile plugin with CLEO 4.4.4.0
+    3F12: set car 0@ component 1@ alpha 15@
 else
     // Only set visiblity if we're not in control of the car
-    3F10: set_car 0@ component "inner_vents" visibility 2@
+    // TODO: Recompile plugin with CLEO 4.4.4.0
+    3F10: set_car 0@ component 1@ visibility 2@
 end
 cleo_return 0

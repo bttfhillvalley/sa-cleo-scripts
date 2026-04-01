@@ -1,6 +1,6 @@
 {$INCLUDE ../../Common/CleoConstants.txt}
 {$INCLUDE Variables.txt}
-/*:TimePlasma
+/*:Plasma
 0B10: var1 = vehicle_flags AND FLYING_BIT // Are we flying?
 if
    var1 == 0  // Driving
@@ -79,7 +79,7 @@ then
 end
 return    */
 
-:TimePlasma
+:Plasma
 0B10: var1 = vehicle_flags AND FLYING_BIT // Are we flying?
 if
     not var1 == 0  // Flying

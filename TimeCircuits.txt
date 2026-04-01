@@ -8,11 +8,14 @@ int dest_date
 int dest_time
 int past_date
 int past_time
+int curr_date
+int curr_time
 float tcd_angle
 int tcon_var
 int fried_var
 int hoodbox_var
 int travel_var
+int flash_var
 int health
 int rand
 const

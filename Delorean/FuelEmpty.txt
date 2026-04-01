@@ -6,7 +6,6 @@ int vehicle_flags
 int flag
 int times
 0AB3: var EMPTY_FLASH = 1
-0AB3: var COOLDOWN = 1
 
 wait 5000
 // Only play sounds if driving and if its not the train
@@ -33,6 +32,4 @@ end
 
 :FuelEmptyEnd
 0AB3: var EMPTY_FLASH = 0
-wait 1000
-0AB3: var COOLDOWN = 0
 terminate_this_custom_script

@@ -5,14 +5,14 @@ for var1 = 1 to 6 step 1
 end
 for var1 = 1 to 10 step 1
     for var2 = 0 to 20 step 1
-        var3 = var2
+        0085: var3 = var2
         if
             var1 == 10
         then
             var3 *= 10
         end
         var3 *= 10
-        var3 += var1
+        005A: var3 += var1
         3F11: set_car vehicle component "sidledsline" index var3 visible 0
         3F19: set_car vehicle component "sidledsline" index var3 glow 1
     end
@@ -40,7 +40,7 @@ end
 3F18: set_car vehicle component "doorrflights" glow 1
 3F18: set_car vehicle component "overheadconsoleelight" glow 1
 3F18: set_car vehicle component "fluxemitteron" glow 1
-3F12: set_car vehicle component "fluxemitteron" alpha 0
+3F12: set car vehicle component "fluxemitteron" alpha 0
 for var3 = 1 to 4
     3F19: set_car vehicle component "fluxcoilsonlb" index var3 glow 1
     3F19: set_car vehicle component "fluxcoilsonrb" index var3 glow 1
@@ -90,22 +90,22 @@ end
 3F18: set_car vehicle component "inner_ventsglow" glow 1
 3F18: set_car vehicle component "bottomlights" glow 1
 
-3F12: set_car vehicle component "fxthrusterbttf2rbon" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2rbth" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2rfon" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2rfth" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2lbon" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2lbth" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2lfon" alpha 0
-3F12: set_car vehicle component "fxthrusterbttf2lfth" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2rbon" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2rbth" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2rfon" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2rfth" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2lbon" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2lbth" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2lfon" alpha 0
+3F12: set car vehicle component "fxthrusterbttf2lfth" alpha 0
 
-3F12: set_car vehicle component "fxwheelbttf2rbon" alpha 0
-3F12: set_car vehicle component "fxwheelbttf2rfon" alpha 0
-3F12: set_car vehicle component "fxwheelbttf2lbon" alpha 0
-3F12: set_car vehicle component "fxwheelbttf2lfon" alpha 0
+3F12: set car vehicle component "fxwheelbttf2rbon" alpha 0
+3F12: set car vehicle component "fxwheelbttf2rfon" alpha 0
+3F12: set car vehicle component "fxwheelbttf2lbon" alpha 0
+3F12: set car vehicle component "fxwheelbttf2lfon" alpha 0
 
-3F12: set_car vehicle component "inner_vents" alpha 0
-3F12: set_car vehicle component "inner_ventsglow" alpha 0
+3F12: set car vehicle component "inner_vents" alpha 0
+3F12: set car vehicle component "inner_ventsglow" alpha 0
 
 for var3 = 1 to 71
     3F19: set_car vehicle component "wormhole" index var3 glow 1
@@ -214,6 +214,38 @@ cleo_return 0
 3F10: set car vehicle component "chassis_fr" visible 0
 3F10: set car vehicle component "vents_fr" visible 0
 3F10: set car vehicle component "bonnet_fr" visible 0
+cleo_return 0
+
+:ResetComponents
+3F10: set_car vehicle component "shiftern" visible 0
+3F10: set_car vehicle component "shifterr" visible 0
+3F10: set_car vehicle component "shifter1" visible 0
+3F10: set_car vehicle component "shifter2" visible 0
+3F10: set_car vehicle component "shifter3" visible 0
+3F10: set_car vehicle component "shifter4" visible 0
+3F10: set_car vehicle component "shifter5" visible 0
+for var1 = 1 to 10 step 1
+    for var2 = 0 to 20 step 1
+        0085: var3 = var2
+        if
+            var1 == 10
+        then
+            var3 *= 10
+        end
+        var3 *= 10
+        005A: var3 += var1
+        3F11: set_car vehicle component "sidledsline" index var3 visible 0
+    end
+end
+for var1 = 10 to 29
+    3F11: set_car vehicle component "digitalspeedodigit" index var1 visible 0
+end
+for var1 = 10 to 21
+    3F11: set_car vehicle component "consoleclockdigithour" index var1 visible 0
+end
+for var1 = 10 to 25
+	3F11: set_car vehicle component "consoleclockdigitmin" index var1 visible 0
+end
 cleo_return 0
 
 :ResetEffects

@@ -54,7 +54,6 @@ call :Compile Delorean\PlutoniumGauge .s
 call :Compile Delorean\PlutoniumGaugeOn .s
 call :Compile Delorean\ReentryCoils .s
 :: call :Compile Delorean\Rocket .s :: Adds guns to the car
-call :Compile Delorean\SID .s
 call :Compile Delorean\Steam .s
 call :Compile Delorean\TurnSignal .s
 call :Compile Delorean\UnderbodyLights .s
@@ -71,7 +70,6 @@ call :Compile TimeCircuits\Keypad .s
 call :Compile TimeCircuits\On .s
 
 :: Time Travel scripts
-call :Compile Time\Cooldown .s
 call :Compile Time\Firetrail .s
 call :Compile Time\FireTrail99 .s
 call :Compile Time\Lightning .s

@@ -1,0 +1,173 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE ../../Time/Include/Variables.txt}
+
+:SidAnimation
+// 0@ is vehicle
+// 1@ is vehicle_flags
+// 2@ is column 
+for 2@ = 1 to 10
+    cleo_call @SidLine 3 0@ 1@ 2@
+end
+cleo_return 0
+
+:SidLine
+// 0@ is vehicle
+// 1@ is vehicle_flags
+// 2@ is column
+// 3@ is vehicle_speed
+// 4@ is var2
+// 5@ is var3
+// 6@ is var4
+// 7@ is target
+// 8@ is target_float
+// 9@ is current
+// 10@ is led
+
+02E3: 3@ = car 0@ speed
+// Set target
+cleo_call @CheckFried 2 0@ 1@ ret 4@
+0B10: 5@ = 1@ AND TC_BIT
+0B10: 6@ = 1@ AND COOLDOWN_BIT
+if
+    3F50:   not is_car 0@ component "sid" visible
+then
+    7@ = 0
+else if or
+    not 4@ == 0 // Fried time circuits
+    5@ == 0 // Time Circuits Off
+    not 6@ == 0 // Cooldown
+then
+    7@ = 0
+else if
+    3@ >= 46.5 // 85.3
+then
+    7@ = 20
+else if
+    3@ >= 43.5 // 79.8 mph
+then
+    if
+        2@ == 3
+    then
+        7@ = 13
+    else if
+        2@ == 8
+    then
+        7@ = 10
+    else if
+        2@ == 10
+    then
+        7@ = 18
+    else
+        7@ = 20
+    end
+    end
+    end
+else if
+    3@ >= 40.5 // 74.3 mph, subject to change
+then
+    if
+        2@ == 1
+    then
+        7@ = 19
+    else if
+        2@ == 3
+    then
+        7@ = 6
+    else if or
+        2@ == 5
+        2@ == 8
+    then
+        7@ = 0
+    else if
+        2@ == 6
+    then
+        7@ = 12
+    else if
+        2@ == 9
+    then
+        7@ = 20
+    else
+        7@ = 10
+    end
+    end
+    end
+    end
+    end
+else
+    02E3: 8@ = car 0@ speed
+    8@ *= 1.835
+    if
+        2@ == 1
+    then
+        8@ /= 5.0
+    else if
+        2@ == 3
+    then
+        8@ /= 16.0
+    else if or
+        2@ == 5
+        2@ == 8
+    then
+        8@ = 0.0
+    else if
+        2@ == 6
+    then
+        8@ /= 8.0
+    else if
+        2@ == 9
+    then
+        8@ /= 4.0
+    else
+        8@ /= 3.0
+        if
+            8@ > 10.0
+        then
+            8@ = 10.0
+        end
+    end
+    end
+    end
+    end
+    end
+    008C: 7@ = float_to_integer 8@
+end
+end
+end
+end
+end
+
+// Get which LED is currently visible
+for 9@ = 20 downto 1 step 1
+    gosub @GetLed
+    if
+        3F41:   is_car 0@ component "sidledsline" index 10@ visible
+    then
+        break
+    end
+end
+
+// Set target for SID
+if
+    001D: 7@ > 9@
+then
+    9@ += 1
+    gosub @GetLed
+    3F11: set_car 0@ component "sidledsline" index 10@ visible 1
+else if
+    001D: 9@ > 7@
+then
+    3F11: set_car 0@ component "sidledsline" index 10@ visible 0
+end
+end
+cleo_return 0
+
+:GetLed
+0085: 10@ = 9@
+if
+    2@ == 10
+then
+    10@ *= 10
+end
+10@ *= 10
+005A: 10@ += 2@
+return

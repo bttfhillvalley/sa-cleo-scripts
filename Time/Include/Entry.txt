@@ -1,0 +1,138 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE Variables.txt}
+
+:Entry
+// Load various explosion sounds.
+3F91: stop_sound "sparks.wav" index vehicle
+3F91: stop_sound "sparks_bttf3.wav" index vehicle
+
+// Set flag and turn off radar
+if
+    Actor.InCar($PLAYER_ACTOR, vehicle)
+then
+    0AB3: var TRAVEL = 1
+    0581: toggle_radar 0
+end
+
+// Record health
+vehicle_health = Car.Health(vehicle)
+
+0407: create_coordinate x y z from_car vehicle offset 0.0 0.0 0.0
+
+gosub @ExplosionSound
+
+gosub @RemoveComponents
+
+// Check for cutscene mode
+0AB4: var1 = var MODE
+if and
+    00DB:   player $PLAYER_ACTOR driving vehicle
+    var1 == 1 // Instant Time Travel
+then
+    // Instant Time Travel effects
+    0169: set_fade_color 255 255 255
+    043C: set_game_sounds_disable_on_fade 0
+    fade 0 0
+    wait 0
+    0AB3: var CFADE = 1
+else
+    // Plate animation
+    //cleo_call @Plate 2 vehicle var2
+
+    // Hook animation
+    //cleo_call @HookDetach 2 vehicle var3
+
+    // Make care invincible while its supposed to be outatime (that way it doesn't explode while we're in a cutscene)
+    Car.SetImmunities(vehicle, 1, 1, 1, 1, 1)
+
+    //3F31: get_car vehicle rotation_matrix var2 var3 var4
+    vehicle_model = Car.Model(vehicle)
+    
+    vehicle_health = Car.Health(vehicle)
+    07C5: get_car vehicle axis_angle_relation_to rx ry rz rw
+    06A2: get_car vehicle velocity_in_direction_XYZ vx vy vz
+    // For whatever reason, velocity is too high
+    vx /= 50.0
+    vy /= 50.0
+    vz /= 50.0
+    //3F34: vehicle_speed = car vehicle velocity_vector
+    Car.Health(vehicle) = 1000
+
+    // Disable player buttons
+    07CC: set_player $PLAYER_CHAR button_15 0
+    03BF: set_player $PLAYER_CHAR ignored_by_everyone 1
+
+    // Create dummy object to attach car to so it doesn't fall through the earth
+    Object.Create(dummy_vehicle, 18641, x, y, z)
+    07C4: set_object dummy_vehicle axis_angle_relation_to rx ry rz rw
+
+    // Create explosion
+    cleo_call @EntryExplosion 4 vehicle_model x y z
+    3F98: set_sound "delorean/landspeeder_loop_lower_pitch.wav" index vehicle volume 0.0
+
+    // Create Firetrail
+    0AB4: var1 = var LIGHTNING
+    if
+        var1 == 2 // Struck by lightning?
+    then
+        //stream_custom_script "Time/FireTrail99.s" vehicle
+    else
+        stream_custom_script "Time/FireTrail.s" vehicle dummy_vehicle
+    end
+
+    // Wait a bit during cutscene
+    // Need to get rid of this for RC control I think.
+    wait 5000
+
+    // Wait longer if its the clocktower scene
+    0AB4: var1 = var WIRE
+    if and
+        var1 == 1 // Clocktower scene?
+        00DB:   player $PLAYER_ACTOR driving vehicle
+    then
+        wait 10000
+    end
+end
+// Unfuel the car
+0B10: vehicle_flags = vehicle_flags AND FUEL_BITMASK
+
+/*if
+    80DC:   not player $PLAYER_CHAR in_car vehicle
+then
+    // Wait to spawn the delorean on reentry, or have it there waiting
+    cleo_call @TimePast 2 dest_date dest_time var1
+
+
+    Model.Load(vehicle_model)
+    while not Model.Available(vehicle_model)
+        wait 10
+    end
+    vehicle = Car.Create(vehicle_model, x, y, 5000.0)
+    cleo_call @Setup 6 vehicle vehicle_flags dest_date dest_time past_date past_time
+
+    Model.Destroy(vehicle_model)
+
+    // Reenter, or go back to the start
+    if or
+        var1 == NORMAL_REENTRY // Normal operation
+        var1 == INST_REENTRY
+    then
+        if
+            var1 == NORMAL_REENTRY
+        then
+            jump @TimeReentryExplosion
+        else
+            cleo_call @ReentryExplosion 6 vehicle x y z past_date past_time
+            jump @TimeReentrySetVehicleData
+        end
+    else
+        Car.PutAt(vehicle, x, y, z)
+        3F32: set_car vehicle rotation_matrix var2 var3 var4
+        Car.Health(vehicle) = vehicle_health
+        jump @TimeStart
+    end
+end  */
+
+// Fade out only for cutscene
+cleo_call @FadeOut 1 vehicle
+cleo_return 13 vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle

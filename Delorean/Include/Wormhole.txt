@@ -1,6 +1,6 @@
 {$INCLUDE Variables.txt}
 {$INCLUDE ../../Common/CleoConstants.txt}
-:TimeWormhole
+:Wormhole
 // Delorean Wormhole
 0407: create_coordinate x y z from_car vehicle offset 0.0 7.0 0.15
 /*0B10: var2 = vehicle_flags AND HOOD_BIT // Hoodbox variation

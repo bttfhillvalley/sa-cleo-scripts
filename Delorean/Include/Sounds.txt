@@ -76,6 +76,7 @@ if and
     var2 == 0
     vehicle_speed > 30.0
     3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
+    3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
 then
     3F86: attach_sound "delorean/landspeeder_accelerate_2_lower_pitch.wav" to_car vehicle offset 0 0 0 loop 0 size 10.0
     0AB3: var ASOUND = vehicle
@@ -100,6 +101,7 @@ if and
 then
     if and
         vehicle_speed > 30.0
+        3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
         3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
     then
         3F86: attach_sound "delorean/landspeeder_decelerate_2_lower_pitch.wav" to_car vehicle pos 0 0 0 loop 0 size 10.0

@@ -1,6 +1,38 @@
 {$INCLUDE ../../Common/CleoConstants.txt}
-{$INCLUDE Variables.txt}
+{$INCLUDE ../../Time/Include/Variables.txt}
 :HoverConversion
+// Check To see if we're going to hover.
+// FIXME: This will be removed from this section in the future since there will be no need for model swaps that require setting everything back up since it'll be the same car instance
+0B10: var1 = vehicle_flags AND FC_FRIED_BIT // Fried
+0B10: var2 = vehicle_flags AND FLYING_BIT   // Is car flying?
+if
+    00DB:   player $PLAYER_ACTOR driving vehicle
+    //3F2A:   is_player_in_remote_mode_with_car vehicle
+then
+    // Can we convert?
+    0B10: var1 = vehicle_flags AND FC_BIT  // Flying Circuits
+    0AB4: var2 = var CONVERSION
+    if and
+        not var1 == 0  // Flying circuits are installed
+        3F40:   is_car vehicle component "fxthrusterbttf2rf" visible // Thrusters are installed
+        var2 == 0  // Not animating
+        // is_key_pressed KEY_HOVERCONVERSION
+        00E1: key_pressed 0 19
+    then
+        // Can only animated if flying circuits are fried
+        0AB3: var CONVERSION = 1
+        0B10: var1 = vehicle_flags AND FC_FRIED_BIT // Fried
+        0B10: var2 = vehicle_flags AND FLYING_BIT   // Is car flying?
+        if or
+            var1 == 0 // Flying circuits are not fried
+            not var2 == 0 // Flying?
+        then
+            0B12: vehicle_flags = vehicle_flags XOR FLYING_BIT  // Flip flying bit
+            stream_custom_script "Delorean/HoverAnimate.s" vehicle vehicle_flags
+        end
+    end
+end
+
 0B10: var1 = vehicle_flags AND FLYING_BIT   // Is car flying?
 0B10: var2 = vehicle_flags AND FC_FRIED_BIT   // Is car flying?
 0AB4: var3 = var LANDING
@@ -134,7 +166,7 @@ jump @HoverConversionReturn
 0AB3: var VSOUND = 0
 
 :HoverConversionReturn
-return
+cleo_return 1 vehicle_flags
 
 :VentGlow
 if and
@@ -168,69 +200,6 @@ cleo_call @FadeVents 3 vehicle var3 var4
 cleo_call @FadeBoost 3 vehicle var3 50
 return
 
-:HoverAccelerateSound
-cleo_call @CheckTimeMachine 1 vehicle ret var1
-if
-    var1 == false
-then
-    return
-end
-0AB4: var1 = var ASOUND
-0AB4: var2 = var TRAVEL
-if and
-    var1 == 0
-    var2 == 0
-    vehicle_speed > 30.0
-    3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
-    3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
-then
-    3F86: attach_sound "delorean/landspeeder_accelerate_2_lower_pitch.wav" to_car vehicle offset 0 0 0 loop 0 size 10.0
-    0AB3: var ASOUND = vehicle
-end
-return
-
-:HoverDecelerateSound
-cleo_call @CheckTimeMachine 1 vehicle ret var1
-if
-    var1 == false
-then
-    return
-end
-0AB4: var1 = var DSOUND
-0AB4: var2 = var TRAVEL
-if and
-    var1 == 0
-    var2 == 0
-then
-    if and
-        vehicle_speed > 30.0
-        3F93: is_sound_stopped "delorean/landspeeder_accelerate_2_lower_pitch.wav" index vehicle
-        3F93: is_sound_stopped "delorean/landspeeder_decelerate_2_lower_pitch.wav" index vehicle
-    then
-        3F86: attach_sound "delorean/landspeeder_decelerate_2_lower_pitch.wav" to_car vehicle pos 0 0 0 loop 0 size 10.0
-    end
-    0AB3: var DSOUND = vehicle
-end
-return
-
-:HoverBoostSound
-cleo_call @CheckTimeMachine 1 vehicle ret var1
-if
-    var1 == false
-then
-    return
-end
-0AB4: var1 = var VSOUND
-0AB4: var2 = var TRAVEL
-if and
-    var1 == 0 // not loaded
-    var2 == 0
-then
-    3F96: var1 = attach_sound "boost.wav" to_car vehicle offset 0 -2.0 0 loop 0 size 10.0
-    0AB3: var VSOUND = var1
-end
-return
-
 :FadeWheels
 gosub @FadeLimit
 10@ = Car.Model(0@)
@@ -241,19 +210,19 @@ if or
 then
     3F47: 15@ = get_car 0@ component "fxthrusterbttf2lfon" alpha
     gosub @Fade
-    3F12: set_car 0@ component "fxthrusterbttf2lfon" alpha 15@
-    3F12: set_car 0@ component "fxthrusterbttf2lbon" alpha 15@
-    3F12: set_car 0@ component "fxthrusterbttf2rfon" alpha 15@
-    3F12: set_car 0@ component "fxthrusterbttf2rbon" alpha 15@
+    3F12: set car 0@ component "fxthrusterbttf2lfon" alpha 15@
+    3F12: set car 0@ component "fxthrusterbttf2lbon" alpha 15@
+    3F12: set car 0@ component "fxthrusterbttf2rfon" alpha 15@
+    3F12: set car 0@ component "fxthrusterbttf2rbon" alpha 15@
     if
         3F50: not is_car vehicle component "fxwheelbttf1rb" visible
     then
         15@ = 0
     end
-    3F12: set_car 0@ component "fxwheelbttf2rbon" alpha 15@
-    3F12: set_car 0@ component "fxwheelbttf2rfon" alpha 15@
-    3F12: set_car 0@ component "fxwheelbttf2lbon" alpha 15@
-    3F12: set_car 0@ component "fxwheelbttf2lfon" alpha 15@
+    3F12: set car 0@ component "fxwheelbttf2rbon" alpha 15@
+    3F12: set car 0@ component "fxwheelbttf2rfon" alpha 15@
+    3F12: set car 0@ component "fxwheelbttf2lbon" alpha 15@
+    3F12: set car 0@ component "fxwheelbttf2lfon" alpha 15@
 else
     3F10: set_car 0@ component "fxthrusterbttf2lfon" visibility 1@
     3F10: set_car 0@ component "fxthrusterbttf2lbon" visibility 1@
@@ -281,7 +250,7 @@ if or
 then
     3F47: 15@ = get_car 0@ component "inner_vents" alpha
     gosub @Fade
-    3F12: set_car 0@ component "inner_vents" alpha 15@
+    3F12: set car 0@ component "inner_vents" alpha 15@
 else
     3F10: set_car 0@ component "inner_vents" visibility 1@
 end
@@ -297,7 +266,7 @@ if or
 then
     3F47: 15@ = get_car 0@ component "inner_ventsglow" alpha
     gosub @Fade
-    3F12: set_car 0@ component "inner_ventsglow" alpha 15@
+    3F12: set car 0@ component "inner_ventsglow" alpha 15@
 else
     3F10: set_car 0@ component "inner_ventsglow" visibility 1@
 end
