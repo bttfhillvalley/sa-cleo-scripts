@@ -165,7 +165,7 @@ then
     if
         3F92: is_sound_playing "sparks_bttf3.wav" index vehicle
     then
-        3F91: stop_sound "delorean/sparks_bttf3.wav" index vehicle
+        3F91: stop_sound "sparks_bttf3.wav" index vehicle
     end
 end
 return
