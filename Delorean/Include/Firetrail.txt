@@ -1,0 +1,24 @@
+{$INCLUDE ../../Time/Include/Variables.txt}
+:FireTrail
+0AB4: var1 = var LIGHTNING
+if
+    var1 == 2 // Struck by lightning?
+then
+    //stream_custom_script "Time/FireTrail99.s" vehicle
+else
+    stream_custom_script "Time/FireTrail.s" vehicle dummy_vehicle
+end
+return
+
+:StoreVehicleInfo
+0407: create_coordinate x y z from_car vehicle offset 0.0 0.0 0.0
+vehicle_health = Car.Health(vehicle)
+//3F31: get_car vehicle rotation_matrix rx ry rz
+07C5: get_car vehicle axis_angle_relation_to rx ry rz rw
+//3F34: vehicle_speed = car vehicle velocity_vector
+06A2: get_car vehicle velocity_in_direction_XYZ vx vy vz
+// For whatever reason, velocity is too high
+vx /= 50.0
+vy /= 50.0
+vz /= 50.0
+return

@@ -1,0 +1,86 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE Variables.txt}
+
+:Reentry
+if
+    not Actor.InCar($PLAYER_ACTOR, vehicle)
+then
+    return
+end
+
+:ReentryStart
+cleo_call @FadeIn 1 vehicle
+
+:TimeReentryExplosion
+cleo_call @ReentrySonicBoom 6 vehicle_model x y z past_date past_time
+gosub @UpdateComponents
+0B11: vehicle_flags = vehicle_flags OR COOLDOWN_BIT
+timerb = 0
+
+// Have the time vehicle come back
+if
+    00DB:   player $PLAYER_ACTOR driving vehicle
+else_jump @SetVehicleData
+0AB3: var TRAVEL = 0
+0581: toggle_radar 1
+07CC: set_player $PLAYER_CHAR button_15 1
+03BF: set_player $PLAYER_CHAR ignored_by_everyone 0
+
+0AB4: result = var MODE
+if
+    result == 0 // Cutscene mode?
+else_jump @ReentryEnd
+
+Object.RemoveReferences(dummy_vehicle)
+0684: detach_car vehicle x y z collision_detection 0
+
+:SetVehicleData
+0338: set_car vehicle visibility 1
+099A: set_car vehicle collision_detection 1
+0918: enable_car vehicle engine_sound 1
+Car.PutAt(vehicle, x, y, z)
+0AB3: var CUTSCENE = 0
+
+053F: set_car vehicle tires_vulnerable 0
+07C6: set_car vehicle axis_angle_relation_to rx ry rz rw
+Car.Health(vehicle) = vehicle_health
+Car.SetImmunities(vehicle, 0, 0, 0, 1, 1)
+wait 10
+07D5: set_car vehicle velocity_in_direction_XYZ vx vy vz rotation_velocitiesXY 0.0 0.0 unk 0.0
+3F98: set_sound "delorean/landspeeder_loop_lower_pitch.wav" index vehicle volume 0.5
+
+/*if
+    80DC:   not player $PLAYER_CHAR driving vehicle
+then
+    // This is for RC mode to get it to handbrake turn
+    0AB4: var1 = var TIME_MACHINE
+    if
+        Car.Wrecked(var1) // Time Machine
+    then
+        0AB3: var TIME_MACHINE = vehicle
+    end
+    0208: var1 = random_float -0.01 0.01
+    3F30: set_car vehicle rotate_force var1
+    02D4: car vehicle turn_off_engine
+end*/
+
+:ReentryEnd
+043C: set_game_sounds_disable_on_fade 1
+cleo_call @ResetEffects 1 vehicle
+0AB4: var1 = var LIGHTNING
+if and
+    00DB:   actor $PLAYER_ACTOR driving vehicle
+    var1 == 2 // Struck by lightning?
+then
+    02E3: var1 = car vehicle speed
+    var1 *= -0.0051975
+    var1 += 0.25
+    //3F22: set_car vehicle wheelie var1
+else
+    stream_custom_script "Delorean/ReentryCoils.s" vehicle vehicle_flags
+end
+0AB3: var LIGHTNING = 0
+stream_custom_script "Delorean/Cold.s" vehicle vehicle_flags
+stream_custom_script "Delorean/Steam.s" vehicle vehicle_flags
+stream_custom_script "Delorean/FuelEmpty.s" vehicle vehicle_flags
+return

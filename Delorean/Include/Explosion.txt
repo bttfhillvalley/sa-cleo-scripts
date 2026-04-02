@@ -35,7 +35,7 @@ end
 0437: scatter_particle 4@ 5@ at 1@ 2@ 3@ 0 0 0
 cleo_return 0*/
 
-:Reentry
+:ReentrySonicBoom
 // 3 sonic booms, or one if its instant
 cleo_call @ReentryExplosion 4 0@ 1@ 2@ 3@
 0AB4: 6@ = var MODE

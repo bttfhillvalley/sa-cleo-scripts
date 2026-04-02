@@ -87,130 +87,108 @@ then
     02D4: car vehicle turn_off_engine
     0AB3: var TIME_MACHINE = vehicle
     01B4: set_player $PLAYER_CHAR can_move 1
-    jump @TimeReentryEnd
+    jump @ReentryEnd
 
 end */
 vehicle_model = Car.Model(vehicle)
 cleo_call @Setup 6 vehicle vehicle_flags dest_date dest_time past_date past_time
-jump @TimeStart
-
-// Include all the helper threads here
-{$INCLUDE Common/DrawTexture.txt}
-{$INCLUDE Common/FadeComponent.txt}
-
-{$INCLUDE Time/Include/Camera.txt}
-{$INCLUDE Time/Include/Cooldown.txt}
-{$INCLUDE Time/Include/Entry.txt}
-{$INCLUDE Time/Include/Health.txt}
-{$INCLUDE Time/Include/Memory.txt}
-//{$INCLUDE Time/Include/Past.txt}
-{$INCLUDE Time/Include/SetTime.txt}
-{$INCLUDE Time/Include/Speed.txt}
-{$INCLUDE Time/Include/SpeedOffset.txt}
-{$INCLUDE Time/Include/TimeCircuits.txt}
-
-{$INCLUDE TimeCircuits/Include/Reset.txt}
-
-{$INCLUDE Delorean/Include/Coils.txt}
-{$INCLUDE Delorean/Include/Components.txt}
-{$INCLUDE Delorean/Include/Debug.txt}
-{$INCLUDE Delorean/Include/Effects.txt}
-{$INCLUDE Delorean/Include/Explosion.txt}
-{$INCLUDE Delorean/Include/FluxCapacitor.txt}
-{$INCLUDE Delorean/Include/Fuel.txt}
-{$INCLUDE Delorean/Include/Hook.txt}
-{$INCLUDE Delorean/Include/Hover.txt}
-{$INCLUDE Delorean/Include/Plasma.txt}
-{$INCLUDE Delorean/Include/Plate.txt}
-{$INCLUDE Delorean/Include/Setup.txt}
-{$INCLUDE Delorean/Include/SID.txt}
-{$INCLUDE Delorean/Include/Sounds.txt}
-{$INCLUDE Delorean/Include/TimeMachine.txt}
-{$INCLUDE Delorean/Include/Wormhole.txt}
 
 :TimeStart
-wait 0
-if
-   not Car.Wrecked(vehicle)
-else_jump @TimeEnd
 
-gosub @MemoryHandling   // This controls global/local variables whenever the player switches between time machines, since time circuit control is global.
-
-cleo_call @DebugVariation 2 vehicle vehicle_flags ret vehicle_flags
-
-// Cooldown Check
-cleo_call @Cooldown 2 vehicle vehicle_flags ret vehicle_flags
-
-// Reset stuff
-cleo_call @ResetVariation 2 vehicle vehicle_flags
-cleo_call @ResetCamera 2 vehicle vehicle_flags
-
-// See if we can hover or not
-cleo_call @HoverConversion 2 vehicle vehicle_flags ret vehicle_flags
-
-cleo_call @FluxCapacitorAnimation 2 vehicle vehicle_flags
-cleo_call @SidAnimation 2 vehicle vehicle_flags
-cleo_call @FlashTimeCircuits 2 vehicle vehicle_flags
-
-// Handle stock delorean
-cleo_call @CheckTimeMachine 1 vehicle ret result
-if
-    result == false
-then
-    jump @TimeStart
-end
-
-// Check Fuel
-cleo_call @Fuel 2 vehicle vehicle_flags ret vehicle_flags
-cleo_call @Hook 2 vehicle vehicle_flags ret vehicle_flags   // Controls putting up/down the hook.  I forget the variations though.  It's in the garage thread so I can document it here as well.
-
-/*
-
-TODO: This code must be moved to a CLEO call and updated
-
-// Lightning check
-0AB4: var1 = var LIGHTNING
-0B10: var2 = vehicle_flags AND FLYING_BIT   // Is car flying?
-0607: var3 = get_current_weather
-0209: var4 = random_int 0 1000
-if and
-    var1 == 0       // Not Struck by Lightning yet
-    not var2 == 0   // Flying
-    var3 == 2       // Thunderstorm
-    var4 == 500     // integer values
-    00DC:   player $PLAYER_CHAR driving vehicle
-    01F3:   car vehicle airborne
-then
-    0AB3: var LIGHTNING = 1
-    stream_custom_script "Time/Lightning.s" vehicle vehicle_flags
-end
-
-0B10: var1 = vehicle_flags AND TC_FRIED_BIT // Time Circuits Fried
-0B10: var2 = vehicle_flags AND TC_BIT       // Time Circuits status
-
-// Struke by lightning
-0AB4: var3 = var LIGHTNING
-if and
-    00DC:   player $PLAYER_CHAR driving vehicle
-    var3 == 2       // Struck by lightning
-then
-    Car.Health(vehicle) = 300
-
-    // Fry both the flying and time circuits
-    0B11: vehicle_flags = vehicle_flags OR FC_FRIED_BIT
-    0B11: vehicle_flags = vehicle_flags OR TC_FRIED_BIT
-    if and
-        var1 == 0 // Time Circuits not fried
-        not var2 == 0 // Time Circuits on
+while true
+    wait 0
+    if
+        Car.Wrecked(vehicle)
     then
-        jump @Time88TrackCamera
+        Car.RemoveReferences(vehicle)
+        terminate_this_custom_script
     end
-end */
 
-cleo_call @CheckSpeed 2 vehicle vehicle_flags ret result
-if
-    result == true
-else_jump @TimeStart
+    gosub @MemoryHandling   // This controls global/local variables whenever the player switches between time machines, since time circuit control is global.
+
+    cleo_call @DebugVariation 2 vehicle vehicle_flags ret vehicle_flags
+
+    // Cooldown Check
+    cleo_call @Cooldown 2 vehicle vehicle_flags ret vehicle_flags
+
+    // Reset stuff
+    cleo_call @ResetVariation 2 vehicle vehicle_flags
+    cleo_call @ResetCamera 2 vehicle vehicle_flags
+
+    // See if we can hover or not
+    cleo_call @HoverConversion 2 vehicle vehicle_flags ret vehicle_flags
+
+    cleo_call @FluxCapacitorAnimation 2 vehicle vehicle_flags
+    cleo_call @SidAnimation 2 vehicle vehicle_flags
+    cleo_call @FlashTimeCircuits 2 vehicle vehicle_flags
+
+    // Handle stock delorean
+    cleo_call @CheckTimeMachine 1 vehicle ret result
+    if
+        result == false
+    then
+        continue
+    end
+
+    // Check Fuel
+    cleo_call @Fuel 2 vehicle vehicle_flags ret vehicle_flags
+    cleo_call @Hook 2 vehicle vehicle_flags ret vehicle_flags   // Controls putting up/down the hook.  I forget the variations though.  It's in the garage thread so I can document it here as well.
+
+    // Check for any Time Travelling
+    cleo_call @CheckPastTravel 1 vehicle ret result
+
+    /*
+
+    TODO: This code must be moved to a CLEO call and updated
+
+    // Lightning check
+    0AB4: var1 = var LIGHTNING
+    0B10: var2 = vehicle_flags AND FLYING_BIT   // Is car flying?
+    0607: var3 = get_current_weather
+    0209: var4 = random_int 0 1000
+    if and
+        var1 == 0       // Not Struck by Lightning yet
+        not var2 == 0   // Flying
+        var3 == 2       // Thunderstorm
+        var4 == 500     // integer values
+        00DC:   player $PLAYER_CHAR driving vehicle
+        01F3:   car vehicle airborne
+    then
+        0AB3: var LIGHTNING = 1
+        stream_custom_script "Time/Lightning.s" vehicle vehicle_flags
+    end
+
+    0B10: var1 = vehicle_flags AND TC_FRIED_BIT // Time Circuits Fried
+    0B10: var2 = vehicle_flags AND TC_BIT       // Time Circuits status
+
+    // Struke by lightning
+    0AB4: var3 = var LIGHTNING
+    if and
+        00DC:   player $PLAYER_CHAR driving vehicle
+        var3 == 2       // Struck by lightning
+    then
+        Car.Health(vehicle) = 300
+
+        // Fry both the flying and time circuits
+        0B11: vehicle_flags = vehicle_flags OR FC_FRIED_BIT
+        0B11: vehicle_flags = vehicle_flags OR TC_FRIED_BIT
+        if and
+            var1 == 0 // Time Circuits not fried
+            not var2 == 0 // Time Circuits on
+        then
+            jump @Time88TrackCamera
+        end
+    end */
+
+    cleo_call @CheckSpeed 2 vehicle vehicle_flags ret result
+    if
+        result == true
+    then
+        gosub @TimeTravel
+    end
+end
+
+:TimeTravel
 
 :Time88
 // Record coordinates and current time
@@ -233,91 +211,10 @@ cleo_call @SetCameraCoordinates 1 vehicle
 // Record coordinates
 
 cleo_call @Entry 2 vehicle vehicle_flags ret vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle
+cleo_call @SetTime 4 vehicle vehicle_flags dest_date dest_time
 
-// Skip if player isn't time travelling
-if
-    Actor.InCar($PLAYER_ACTOR, vehicle)
-then
-    // Set time
-    cleo_call @SetTime 3 vehicle_health dest_date dest_time
-
-    // Clear stuff
-    gosub @ClearArea
-end
-
-cleo_call @FadeIn 1 vehicle
-
-:TimeReentryExplosion
-cleo_call @Reentry 6 vehicle_model x y z past_date past_time
-
-// Have the time vehicle come back
-if
-00DB:   player $PLAYER_ACTOR driving vehicle
-else_jump @TimeReentrySetVehicleData
-0AB3: var TRAVEL = 0
-0581: toggle_radar 1
-07CC: set_player $PLAYER_CHAR button_15 1
-03BF: set_player $PLAYER_CHAR ignored_by_everyone 0
-
-0AB4: var1 = var MODE
-if
-  var1 == 0 // Cutscene mode?
-else_jump @TimeReentryEnd
-Object.RemoveReferences(dummy_vehicle)
-0684: detach_car vehicle x y z collision_detection 0
-
-:TimeReentrySetVehicleData
-0338: set_car vehicle visibility 1
-099A: set_car vehicle collision_detection 1
-0918: enable_car vehicle engine_sound 1
-Car.PutAt(vehicle, x, y, z)
-0AB3: var CUTSCENE = 0
-
-053F: set_car vehicle tires_vulnerable 0
-07C6: set_car vehicle axis_angle_relation_to rx ry rz rw
-Car.Health(vehicle) = vehicle_health
-Car.SetImmunities(vehicle, 0, 0, 0, 1, 1)
-wait 10
-07D5: set_car vehicle velocity_in_direction_XYZ vx vy vz rotation_velocitiesXY 0.0 0.0 unk 0.0
-3F98: set_sound "delorean/landspeeder_loop_lower_pitch.wav" index vehicle volume 0.5
-
-/*if
-    80DC:   not player $PLAYER_CHAR driving vehicle
-then
-    // This is for RC mode to get it to handbrake turn
-    0AB4: var1 = var TIME_MACHINE
-    if
-        Car.Wrecked(var1) // Time Machine
-    then
-        0AB3: var TIME_MACHINE = vehicle
-    end
-    0208: var1 = random_float -0.01 0.01
-    3F30: set_car vehicle rotate_force var1
-    02D4: car vehicle turn_off_engine
-end*/
-
-:TimeReentryEnd
-043C: set_game_sounds_disable_on_fade 1
-cleo_call @ResetEffects 1 vehicle
-0AB4: var1 = var LIGHTNING
-0B11: vehicle_flags = vehicle_flags OR COOLDOWN_BIT
-timerb = 0
-if and
-    00DB:   actor $PLAYER_ACTOR driving vehicle
-    var1 == 2 // Struck by lightning?
-then
-    02E3: var1 = car vehicle speed
-    var1 *= -0.0051975
-    var1 += 0.25
-    //3F22: set_car vehicle wheelie var1
-else
-    stream_custom_script "Delorean/ReentryCoils.s" vehicle vehicle_flags
-end
-0AB3: var LIGHTNING = 0
-stream_custom_script "Delorean/Cold.s" vehicle vehicle_flags
-stream_custom_script "Delorean/Steam.s" vehicle vehicle_flags
-stream_custom_script "Delorean/FuelEmpty.s" vehicle vehicle_flags
-jump @TimeStart
+gosub @Reentry
+return
 
 // ==================================================================================
 // Reset stuff related to the camera and sound effects since they can loop (vfx effects do not)
@@ -355,6 +252,39 @@ cleo_return 0   */
 
 //================================================================================================
 
-:TimeEnd
-Car.RemoveReferences(vehicle)
-terminate_this_custom_script
+// Include all the helper threads here
+{$INCLUDE Common/DrawTexture.txt}
+{$INCLUDE Common/FadeComponent.txt}
+
+{$INCLUDE Time/Include/Camera.txt}
+{$INCLUDE Time/Include/Cooldown.txt}
+{$INCLUDE Time/Include/Entry.txt}
+{$INCLUDE Time/Include/Health.txt}
+{$INCLUDE Time/Include/Memory.txt}
+//{$INCLUDE Time/Include/Past.txt}
+{$INCLUDE Time/Include/Reentry.txt}
+{$INCLUDE Time/Include/SetTime.txt}
+{$INCLUDE Time/Include/Speed.txt}
+{$INCLUDE Time/Include/SpeedOffset.txt}
+{$INCLUDE Time/Include/TimeCircuits.txt}
+
+{$INCLUDE TimeCircuits/Include/Reset.txt}
+
+{$INCLUDE Delorean/Include/Coils.txt}
+{$INCLUDE Delorean/Include/Components.txt}
+{$INCLUDE Delorean/Include/Debug.txt}
+{$INCLUDE Delorean/Include/Effects.txt}
+{$INCLUDE Delorean/Include/Explosion.txt}
+{$INCLUDE Delorean/Include/Firetrail.txt}
+{$INCLUDE Delorean/Include/FluxCapacitor.txt}
+{$INCLUDE Delorean/Include/Fuel.txt}
+{$INCLUDE Delorean/Include/Hook.txt}
+{$INCLUDE Delorean/Include/Hover.txt}
+{$INCLUDE Delorean/Include/Plasma.txt}
+{$INCLUDE Delorean/Include/Plate.txt}
+{$INCLUDE Delorean/Include/Setup.txt}
+{$INCLUDE Delorean/Include/SID.txt}
+{$INCLUDE Delorean/Include/Sounds.txt}
+{$INCLUDE Delorean/Include/TimeMachine.txt}
+{$INCLUDE Delorean/Include/Wire.txt}
+{$INCLUDE Delorean/Include/Wormhole.txt}
