@@ -53,7 +53,7 @@ call :Compile Delorean\PlutoniumGaugeOff .s
 call :Compile Delorean\PlutoniumGauge .s
 call :Compile Delorean\PlutoniumGaugeOn .s
 call :Compile Delorean\ReentryCoils .s
-:: call :Compile Delorean\Rocket .s :: Adds guns to the car
+:: call :Compile Delorean\Rocket .s ::  Adds guns to the car
 call :Compile Delorean\Steam .s
 call :Compile Delorean\TurnSignal .s
 call :Compile Delorean\UnderbodyLights .s
