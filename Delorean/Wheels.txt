@@ -83,7 +83,7 @@ while true
     3F14: set_car vehicle component "strutarmrf_"    pos 0 0 z
 
     3F1B: get_car vehicle component "wheel_rb_dummy" pos x y z
-    z -= WHEEL_FRONT_OFFSET
+    z -= WHEEL_BACK_OFFSET
     006B: z *= damper
     3F14: set_car vehicle component "strutunitrb_"   pos extension 0 0
     3F14: set_car vehicle component "strutarmrb_"    pos 0 0 z
@@ -91,7 +91,7 @@ while true
     extension *= -1.0
 
     3F1B: get_car vehicle component "wheel_lf_dummy" pos x y z
-    z -= WHEEL_BACK_OFFSET
+    z -= WHEEL_FRONT_OFFSET
     006B: z *= damper
     3F14: set_car vehicle component "strutunitlf_"   pos extension 0 0
     3F14: set_car vehicle component "strutarmlf_"    pos 0 0 z
