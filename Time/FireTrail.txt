@@ -7,9 +7,9 @@ int left_trail
 int right_trail
 int airborne
 int fade_var
-066B: left_trail = attach_particle "FIRETRAIL" to_car vehicle with_offset -0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1
+066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset -0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1 store_to left_trail
 064C: make_particle left_trail visible
-066B: right_trail = attach_particle "FIRETRAIL" to_car vehicle with_offset 0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1
+066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset 0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1 store_to right_trail
 064C: make_particle right_trail visible
 if
     01F3:   car vehicle airborne

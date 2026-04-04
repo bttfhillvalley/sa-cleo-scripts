@@ -2,6 +2,13 @@
 {$INCLUDE Variables.txt}
 
 :Entry
+
+// Make sure the dummy model is loaded
+Model.Load(DUMMY_MODEL)
+while not Model.Available(DUMMY_MODEL)
+    wait 0
+end
+
 // Load various explosion sounds.
 3F91: stop_sound "sparks.wav" index vehicle
 3F91: stop_sound "sparks_bttf3.wav" index vehicle
@@ -48,7 +55,7 @@ then
     03BF: set_player $PLAYER_CHAR ignored_by_everyone 1
 
     // Create dummy object to attach car to so it doesn't fall through the earth
-    Object.Create(dummy_vehicle, 18641, x, y, z)
+    Object.Create(dummy_vehicle, DUMMY_MODEL, x, y, z)
     07C4: set_object dummy_vehicle axis_angle_relation_to rx ry rz rw
 
     // Create explosion
