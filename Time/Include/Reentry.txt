@@ -29,7 +29,12 @@ else_jump @SetVehicleData
 0AB4: result = var MODE
 if
     result == 0 // Cutscene mode?
-else_jump @ReentryEnd
+then
+    // Enable shadows.
+    0A8C: write_memory 0xA9AE54 size 1 value graphic_settings virtual_protect 0
+else
+    jump @ReentryEnd
+end
 
 Object.RemoveReferences(dummy_vehicle)
 0684: detach_car vehicle x y z collision_detection 0

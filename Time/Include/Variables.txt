@@ -25,6 +25,7 @@ const
     vy = 18@
     vz = 19@
     dummy_vehicle = 20@
+    graphic_settings = 21@
 
     // Set Time Variables
     target_hour = 4@

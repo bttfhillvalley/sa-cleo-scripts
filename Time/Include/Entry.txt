@@ -58,6 +58,10 @@ then
     Object.Create(dummy_vehicle, DUMMY_MODEL, x, y, z)
     07C4: set_object dummy_vehicle axis_angle_relation_to rx ry rz rw
 
+    // Disable shadows.  They still show if you're invisible.                                       
+    0A8D: graphic_settings = read_memory 0xA9AE54 size 1 virtual_protect 0
+    0A8C: write_memory 0xA9AE54 size 1 value 0 virtual_protect 0
+
     // Create explosion
     cleo_call @EntryExplosion 4 vehicle_model x y z
     3F98: set_sound "delorean/landspeeder_loop_lower_pitch.wav" index vehicle volume 0.0
@@ -117,4 +121,4 @@ end  */
 
 // Fade out only for cutscene
 cleo_call @FadeOut 1 vehicle
-cleo_return 13 vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle
+cleo_return 14 vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle graphic_settings

@@ -210,7 +210,7 @@ cleo_call @SetCameraCoordinates 1 vehicle
 // Now for the actual temporal displacement
 // Record coordinates
 
-cleo_call @Entry 2 vehicle vehicle_flags ret vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle
+cleo_call @Entry 2 vehicle vehicle_flags ret vehicle_flags x y z rx ry rz rw vx vy vz vehicle_health dummy_vehicle graphic_settings
 cleo_call @SetTime 4 vehicle vehicle_flags dest_date dest_time
 
 gosub @Reentry
