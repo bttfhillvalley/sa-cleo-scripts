@@ -7,10 +7,7 @@ int left_trail
 int right_trail
 int airborne
 int fade_var
-066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset -0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1 store_to left_trail
-064C: make_particle left_trail visible
-066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset 0.98 -1.5 -0.75 rotation 0.0 1.0 0.0 flag 1 store_to right_trail
-064C: make_particle right_trail visible
+
 if
     01F3:   car vehicle airborne
 then
@@ -18,10 +15,15 @@ then
 end
 // Hide Car and make it so no one can hear, see, or run into it
 
-0939: attach_car vehicle to_object dummy with_offset 0.0 0.0 0.1 rotation 0.0 0.0 0.0
+0939: attach_car vehicle to_object dummy with_offset 0.0 0.0 0.0 rotation 0.0 0.0 0.0
 0338: set_car vehicle visibility 0
 099A: set_car vehicle collision_detection 0
 0918: enable_car vehicle engine_sound 0
+
+066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset -0.98 -1.3 -0.6 rotation 0.0 1.0 0.0 flag 1 store_to left_trail
+064C: make_particle left_trail visible
+066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset 0.98 -1.3 -0.6 rotation 0.0 1.0 0.0 flag 1 store_to right_trail
+064C: make_particle right_trail visible
 
 if
     airborne == 1
