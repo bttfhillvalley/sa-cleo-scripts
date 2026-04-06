@@ -290,13 +290,419 @@ end
 return
 
 :SparkTrail
-066B: 29@ = attach_particle "BLUESPARK" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+
+if
+ 26@ == 0
+then
+  066B: 29@ = attach_particle "BLUESPARK0" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 1
+then
+  066B: 29@ = attach_particle "BLUESPARK1" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 2
+then
+  066B: 29@ = attach_particle "BLUESPARK2" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 3
+then
+  066B: 29@ = attach_particle "BLUESPARK3" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 4
+then
+  066B: 29@ = attach_particle "BLUESPARK4" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 5
+then
+  066B: 29@ = attach_particle "BLUESPARK5" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 6
+then
+  066B: 29@ = attach_particle "BLUESPARK6" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 7
+then
+  066B: 29@ = attach_particle "BLUESPARK7" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 8
+then
+  066B: 29@ = attach_particle "BLUESPARK8" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 9
+then
+  066B: 29@ = attach_particle "BLUESPARK9" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 10
+then
+  066B: 29@ = attach_particle "BLUESPARK10" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 11
+then
+  066B: 29@ = attach_particle "BLUESPARK11" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 12
+then
+  066B: 29@ = attach_particle "BLUESPARK12" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 13
+then
+  066B: 29@ = attach_particle "BLUESPARK13" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 14
+then
+  066B: 29@ = attach_particle "BLUESPARK14" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 15
+then
+  066B: 29@ = attach_particle "BLUESPARK15" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 16
+then
+  066B: 29@ = attach_particle "BLUESPARK16" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 17
+then
+  066B: 29@ = attach_particle "BLUESPARK17" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 18
+then
+  066B: 29@ = attach_particle "BLUESPARK18" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 19
+then
+  066B: 29@ = attach_particle "BLUESPARK19" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 20
+then
+  066B: 29@ = attach_particle "BLUESPARK20" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 21
+then
+  066B: 29@ = attach_particle "BLUESPARK21" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 22
+then
+  066B: 29@ = attach_particle "BLUESPARK22" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 23
+then
+  066B: 29@ = attach_particle "BLUESPARK23" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 24
+then
+  066B: 29@ = attach_particle "BLUESPARK24" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 25
+then
+  066B: 29@ = attach_particle "BLUESPARK25" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 26
+then
+  066B: 29@ = attach_particle "BLUESPARK26" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 27
+then
+  066B: 29@ = attach_particle "BLUESPARK27" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 28
+then
+  066B: 29@ = attach_particle "BLUESPARK28" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 29
+then
+  066B: 29@ = attach_particle "BLUESPARK29" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 30
+then
+  066B: 29@ = attach_particle "BLUESPARK30" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 31
+then
+  066B: 29@ = attach_particle "BLUESPARK31" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 32
+then
+  066B: 29@ = attach_particle "BLUESPARK32" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 33
+then
+  066B: 29@ = attach_particle "BLUESPARK33" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 34
+then
+  066B: 29@ = attach_particle "BLUESPARK34" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+ else if
+ 26@ == 35
+then
+  066B: 29@ = attach_particle "BLUESPARK35" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+ else if
+ 26@ == 36
+then
+  066B: 29@ = attach_particle "BLUESPARK36" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 37
+then
+  066B: 29@ = attach_particle "BLUESPARK37" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 38
+then
+  066B: 29@ = attach_particle "BLUESPARK38" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else if
+ 26@ == 39
+then
+  066B: 29@ = attach_particle "BLUESPARK39" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+else
+  066B: 29@ = attach_particle "BLUESPARK" to_car 0@ with_offset 4@ 5@ 6@  flag 1
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+
 064C: make_particle 29@ visible
 064F: remove_references_to_particle 29@
 return
 
 :SparkBounceTrail
-064B: 29@ = create_particle "BLUESPARK" at 21@ 22@ 23@  type 1
+
+if
+ 26@ == 0
+then
+  064B: 29@ = create_particle "BLUESPARK0" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 1
+then
+  064B: 29@ = create_particle "BLUESPARK1" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 2
+then
+  064B: 29@ = create_particle "BLUESPARK2" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 3
+then
+  064B: 29@ = create_particle "BLUESPARK3" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 4
+then
+  064B: 29@ = create_particle "BLUESPARK4" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 5
+then
+  064B: 29@ = create_particle "BLUESPARK5" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 6
+then
+  064B: 29@ = create_particle "BLUESPARK6" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 7
+then
+  064B: 29@ = create_particle "BLUESPARK7" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 8
+then
+  064B: 29@ = create_particle "BLUESPARK8" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 9
+then
+  064B: 29@ = create_particle "BLUESPARK9" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 10
+then
+  064B: 29@ = create_particle "BLUESPARK10" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 11
+then
+  064B: 29@ = create_particle "BLUESPARK11" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 12
+then
+  064B: 29@ = create_particle "BLUESPARK12" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 13
+then
+  064B: 29@ = create_particle "BLUESPARK13" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 14
+then
+  064B: 29@ = create_particle "BLUESPARK14" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 15
+then
+  064B: 29@ = create_particle "BLUESPARK15" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 16
+then
+  064B: 29@ = create_particle "BLUESPARK16" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 17
+then
+  064B: 29@ = create_particle "BLUESPARK17" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 18
+then
+  064B: 29@ = create_particle "BLUESPARK18" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 19
+then
+  064B: 29@ = create_particle "BLUESPARK19" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 20
+then
+  064B: 29@ = create_particle "BLUESPARK20" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 21
+then
+  064B: 29@ = create_particle "BLUESPARK21" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 22
+then
+  064B: 29@ = create_particle "BLUESPARK22" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 23
+then
+  064B: 29@ = create_particle "BLUESPARK23" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 24
+then
+  064B: 29@ = create_particle "BLUESPARK24" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 25
+then
+  064B: 29@ = create_particle "BLUESPARK25" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 26
+then
+  064B: 29@ = create_particle "BLUESPARK26" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 27
+then
+  064B: 29@ = create_particle "BLUESPARK27" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 28
+then
+  064B: 29@ = create_particle "BLUESPARK28" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 29
+then
+  064B: 29@ = create_particle "BLUESPARK29" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 30
+then
+  064B: 29@ = create_particle "BLUESPARK30" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 31
+then
+  064B: 29@ = create_particle "BLUESPARK31" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 32
+then
+  064B: 29@ = create_particle "BLUESPARK32" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 33
+then
+  064B: 29@ = create_particle "BLUESPARK33" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 34
+then
+  064B: 29@ = create_particle "BLUESPARK34" at 21@ 22@ 23@  type 1
+ else if
+ 26@ == 35
+then
+  064B: 29@ = create_particle "BLUESPARK35" at 21@ 22@ 23@  type 1
+ else if
+ 26@ == 36
+then
+  064B: 29@ = create_particle "BLUESPARK36" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 37
+then
+  064B: 29@ = create_particle "BLUESPARK37" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 38
+then
+  064B: 29@ = create_particle "BLUESPARK38" at 21@ 22@ 23@  type 1
+else if
+ 26@ == 39
+then
+  064B: 29@ = create_particle "BLUESPARK39" at 21@ 22@ 23@  type 1
+else
+  064B: 29@ = create_particle "BLUESPARK" at 21@ 22@ 23@  type 1
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+end
+
 064C: make_particle 29@ visible
 064F: remove_references_to_particle 29@
 return
