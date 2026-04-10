@@ -7,6 +7,7 @@ int left_trail
 int right_trail
 int airborne
 int fade_var
+int is_rainy
 
 if
     01F3:   car vehicle airborne
@@ -28,8 +29,11 @@ end
 // Now do we keep the fire lit for a few seconds?
 timera = 0
 
-if
+//  Get rid of it if we're flying or if its raining
+cleo_call @IsWeatherRainy 0 ret is_rainy
+if or
     airborne == 1
+    is_rainy == True
 then
     wait 750
     0650: destroy_particle left_trail
@@ -50,6 +54,18 @@ then
 end
 jump @FireTrailLoop
 
+:IsWeatherRainy
+0A8D: 0@ = read_memory 0xC81320 size 4 virtual_protect 0
+if or
+    0@ == 8 // RAINY_SF
+    0@ == 16 // RAINY_COUNTRYSIDE
+    0@ == 19 // SANDSTORM_DESERT
+    0@ == 20 // UNDERWATER
+then
+    cleo_return 1 True
+end
+
+cleo_return 1 False
 
 /*int vehicle
 float vx
