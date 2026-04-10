@@ -25,6 +25,9 @@ end
 066E: create_particle "FIRETRAIL" attached_to_object dummy with_offset 0.98 -1.3 -0.6 rotation 0.0 1.0 0.0 flag 1 store_to right_trail
 064C: make_particle right_trail visible
 
+// Now do we keep the fire lit for a few seconds?
+timera = 0
+
 if
     airborne == 1
 then
@@ -38,7 +41,7 @@ end
 wait 0
 0AB4: fade_var = var CFADE
 if or
-    timera > 5000
+    timera > 20000
     fade_var == 1
 then
     0650: destroy_particle left_trail
