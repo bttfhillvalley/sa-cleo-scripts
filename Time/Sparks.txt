@@ -303,17 +303,31 @@ cleo_return 0
 :SparkCore
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the vehicle
-066B: 4@ = attach_particle "BLUESPARKCORE" to_car 0@ with_offset 1@ 2@ 3@  flag 1
-064C: make_particle 4@ visible
-064F: remove_references_to_particle 4@
+
+// Uses variables 4, 5, 6 and 7
+0AC8: 4@ = allocate_memory_size 13
+cleo_call @GetSparkName 2 0@ 41 ret 4@
+0AC9: free_allocated_memory 4@
+0AD3: 4@v = string_format "%s" 4@
+
+066B: 8@ = attach_particle 4@v to_car 0@ with_offset 1@ 2@ 3@  flag 1
+064C: make_particle 8@ visible
+064F: remove_references_to_particle 8@
 cleo_return 0
 
 :SparkBounceCore
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the map
-064B: 4@ = create_particle "BLUESPARKCORE" at 1@ 2@ 3@  type 1
-064C: make_particle 4@ visible
-064F: remove_references_to_particle 4@
+
+// Uses variables 4, 5, 6 and 7
+0AC8: 4@ = allocate_memory_size 13
+cleo_call @GetSparkName 2 0@ 41 ret 4@
+0AC9: free_allocated_memory 4@
+0AD3: 4@v = string_format "%s" 4@
+
+064B: 8@ = create_particle 4@v at 1@ 2@ 3@  type 1
+064C: make_particle 8@ visible
+064F: remove_references_to_particle 8@
 cleo_return 0
 
 :SparkTrail
@@ -321,17 +335,15 @@ cleo_return 0
 // 1@ is number of spark in trail. 0 is next to core, 40 and higher is the end of the tail
 // 2@, 3@ and 4@ are X, Y and Z coordinates in respect to the vehicle
 
-6@V = "BLUESPARK"
+// Uses variables 5, 6, 7 and 8
+0AC8: 5@ = allocate_memory_size 13
+cleo_call @GetSparkName 2 0@ 1@ ret 5@
+0AC9: free_allocated_memory 5@
+0AD3: 5@v = string_format "%s" 5@
 
-if
-  1@ < 40
-then
-  0AD3: 6@v = string_format "%s%d" "BLUESPARK" 1@
-end
-
-066B: 5@ = attach_particle 6@v to_car 0@ with_offset 2@ 3@ 4@  flag 1
-064C: make_particle 5@ visible
-064F: remove_references_to_particle 5@
+066B: 9@ = attach_particle 5@v to_car 0@ with_offset 2@ 3@ 4@  flag 1
+064C: make_particle 9@ visible
+064F: remove_references_to_particle 9@
 cleo_return 0
 
 :SparkBounceTrail
@@ -339,15 +351,46 @@ cleo_return 0
 // 1@ is number of spark in trail. 0 is next to core, 40 and higher is the end of the tail
 // 2@, 3@ and 4@ are X, Y and Z coordinates in respect to the map
 
-6@V = "BLUESPARK"
+// Uses variables 5, 6, 7 and 8
+0AC8: 5@ = allocate_memory_size 13
+cleo_call @GetSparkName 2 0@ 1@ ret 5@
+0AC9: free_allocated_memory 5@
+0AD3: 5@v = string_format "%s" 5@
+
+064B: 9@ = create_particle 5@v at 2@ 3@ 4@  type 1
+064C: make_particle 9@ visible
+064F: remove_references_to_particle 9@
+cleo_return 0
+
+:GetSparkName
+// 0@ is the vehicle
+// 1@ is number of spark in trail. 0 is next to core, 40 is the end of the tail, higher than 40 is the core
+
+// Uses variables 2, 3, 4 and 5
+0AC8: 2@ = allocate_memory_size 13
+cleo_call @GetSparkBaseName 1 0@ ret 2@
 
 if
   1@ < 40
+then    
+  0AD3: 2@ = string_format "%s%d" 2@ 1@
+else if
+  1@ > 40
 then
-  0AD3: 6@v = string_format "%s%d" "BLUESPARK" 1@
+  0AD3: 2@ = string_format "%sCORE" 2@
+end
 end
 
-064B: 5@ = create_particle 6@v at 2@ 3@ 4@  type 1
-064C: make_particle 5@ visible
-064F: remove_references_to_particle 5@
-cleo_return 0
+0AC9: free_allocated_memory 2@
+cleo_return 1 2@
+
+:GetSparkBaseName
+// 0@ is the vehicle
+1@v = "BLUE" // Uses variables 1, 2, 3 and 4
+5@v = "RED" // Uses variables 5, 6, 7 and 8
+9@v = "SPARK" // Uses variables 9, 10, 11 and 12
+
+0AC8: 13@ = allocate_memory_size 9
+0AD3: 13@ = string_format "%s%s" 1@v 9@v
+0AC9: free_allocated_memory 13@
+cleo_return 1 13@
