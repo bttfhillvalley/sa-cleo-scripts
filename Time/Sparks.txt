@@ -1,305 +1,406 @@
 {$CLEO .s}
 {$INCLUDE ../Common/CleoConstants.txt}
+0209: 10@ = random_int 0 10
+0AB4: 1@ = var SPARK_REPEAT
+while  003C:   1@ == 10@
+    0209: 10@ = random_int 0 10
+end
 
-//-------------MAIN---------------
-thread 'Sparks'
-31@ = 0.0
-// pick random point
-0209: 30@ = random_int_in_ranges 0 10
-// Wormhole emmiter
-if or
-    1@ == 1
-    30@ == 0
-then
-    1@ = 0.0
-    2@ = -0.75
-    3@ = 0.71
-// Front Coil
-else if
-    30@ == 1
-then
-    0208: 1@ = random_float_in_ranges 0.0 0.9
-    2@ = 2.45
-    3@ = -0.2
-// Top Coil
-else if or
-    30@ == 2
-    30@ == 3
-then
-    0208: 1@ = random_float_in_ranges 0.3 0.6
-    2@ = -0.875
-    3@ = 0.615
-    if
-        30@ == 2
-    then
-        1@ *= -1.0
-    end
-// Coil Door
-else if or
-    30@ == 4
-    30@ == 5
-then
-    0208: 3@ = random_float_in_ranges 0.255 0.575
-    0087: 1@ = 3@
-    1@ *= -1.09375
-    1@ += 1.32891
-    0087: 2@ = 3@
-    2@ *= 0.21875
-    2@ += -1.00578
-    if
-        30@ == 4
-    then
-        1@ *= -1.0
-    end
-// Side Coil
-else if or
-    30@ == 6
-    30@ == 7
-then
-    0208: 2@ = random_float_in_ranges -1.75 -1.05
-    0087: 1@ = 2@
-    1@ *= 0.05
-    1@ += 1.1225
-    3@ = 0.19
-    if
-        30@ == 6
-    then
-        1@ *= -1.0
-    end
-// Rear Coil
-else if or
-    30@ == 8
-    30@ == 9
-then
-    0208: 2@ = random_float_in_ranges -1.8 -1.95
-    0087: 1@ = 2@
-    1@ *= -0.2
-    1@ += 0.67
-    0087: 3@ = 2@
-    3@ += 1.99
-    if
-        30@ == 8
-    then
-        1@ *= -1.0
-    end
-end
-end
-end
-end
-end
-end
-// generate equation
-// Denominator
-29@ = 22.5
-006B: 29@ *= 2@ // (float)
-02F7: 28@ = sine 29@ // (float)
-25@ = 40
-while true
-    wait 10
-    if
-        Car.Wrecked(0@)
-    then
-        0A93: end_custom_thread
-    end
-    //  Checks to see if time travelled yet
-    0AB4: 7@ = var TRAVEL
-    if
-        7@ == 1
-    then
-        0AB4: 7@ = var MODE
-        if
-            7@ == 1
-        then
-            0A93: end_custom_thread
-        end
-    end
-    gosub @SparkEquation
-    if
-        5@ < 4.0
-    jf break
-    if
-        31@ < 50.0
-    then
-        // Create white flash for spark creation and attach it to vehicle
-        cleo_call @WhiteFlash 4 0@ 1@ 2@ 3@
-    end
-
-    // Create blue spark for core and attach it to vehicle
-    cleo_call @SparkCore 4 0@ 4@ 5@ 6@
-
-    0087: 30@ = 31@
-    gosub @SparkEquationCreateTrail
-    0087: 31@ = 30@
-    31@ += 30.0
-end
-// Form bounce back equation
-31@ -= 30.0
-0087: 30@ = 31@
-gosub @SparkEquation
+:SparksDeloreanCheck
 if
-    Car.Wrecked(0@)
+   Car.Model(0@) == DELOREAN_MODEL
+else_jump @SparksTrain
+if
+  10@ == 0
+else_jump @SparksDeloreanFrontCoil
+1@ = 0.0
+2@ = -0.68
+3@ = 0.765
+4@ = 0.0
+5@ = 1.0
+6@ = -0.05
+12@ = 4.0
+15@ = 0.0
+jump @SparksCreate
+
+:SparksDeloreanFrontCoil
+if
+  10@ == 1
+else_jump @SparksDeloreanSideCoilTop
+0208: 1@ = random_float -0.8 0.8
+2@ = 2.35
+3@ = -0.12
+0087: 4@ = 1@
+4@ /= -2.0
+5@ = 1.0
+6@ = 0.2
+12@ = 1.0
+15@ = 0.0
+jump @SparksCreate
+
+:SparksDeloreanSideCoilTop
+if or
+  10@ == 2
+  10@ == 3
+else_jump @SparksDeloreanSideCoilDoor
+0208: 1@ = random_float -0.63 -0.3
+if
+  10@ == 3
+else_jump @SparksDeloreanSideCoilTopA
+1@ *= -1.0
+
+:SparksDeloreanSideCoilTopA
+2@ = -0.8
+3@ = 0.64
+0087: 4@ = 1@
+4@ /= -5.0
+5@ = 1.0
+6@ = -0.05
+12@ = 4.0
+15@ = 0.0
+jump @SparksCreate
+
+:SparksDeloreanSideCoilDoor
+if or
+  10@ == 4
+  10@ == 5
+else_jump @SparksDeloreanSideCoil
+0208: 3@ = random_float 0.3 0.6
+0087: 1@ = 3@
+1@ *= -0.95
+1@ += 1.245
+0087: 2@ = 3@
+2@ *= 0.1
+2@ -= 0.86
+if
+  10@ == 5
+else_jump @SparksDeloreanSideCoilDoorA
+1@ *= -1.0
+
+:SparksDeloreanSideCoilDoorA
+0087: 4@ = 1@
+4@ /= 10.0
+5@ = 1.0
+0087: 6@ = 3@
+6@ /= -4.0
+12@ = 4.0
+0087: 15@ = 1@
+15@ /= -15.0
+jump @SparksCreate
+
+:SparksDeloreanSideCoil
+if or
+  10@ == 6
+  10@ == 7
+else_jump @SparksDeloreanSideCoilRear
+0208: 2@ = random_float -0.975 -1.7
+0087: 1@ = 2@
+1@ *= -0.119
+1@ -= 1.122
+3@ = 0.225
+if
+  10@ == 7
+else_jump @SparksDeloreanSideCoilA
+1@ *= -1.0
+
+:SparksDeloreanSideCoilA
+0087: 4@ = 1@
+4@ /= 4.0
+0087: 5@ = 2@
+5@ *= -0.125
+5@ += 0.775
+6@ = 0.01
+12@ = 5.0
+0087: 15@ = 1@
+15@ /= -15.0
+jump @SparksCreate
+
+:SparksDeloreanSideCoilRear
+0208: 2@ = random_float -1.82 -2.05
+0087: 3@ = 2@
+3@ *= 1.875
+3@ += 3.58325
+0087: 1@ = 3@
+if
+  1@ >= 0.0
+else_jump @SparksDeloreanSideCoilRearA
+1@ *= 0.267
+1@ -= 0.994
+jump @SparksDeloreanSideCoilBottom
+
+:SparksDeloreanSideCoilRearA
+1@ *= -0.289
+1@ -= 0.994
+
+:SparksDeloreanSideCoilBottom
+if
+  10@ == 9
+else_jump @SparksDeloreanSideCoilBottomA
+1@ *= -1.0
+
+:SparksDeloreanSideCoilBottomA
+0087: 4@ = 1@
+4@ /= 4.0
+0087: 5@ = 2@
+5@ = 1.0
+0087: 6@ = 3@
+6@ /= -5.0
+12@ = 5.0
+0087: 15@ = 1@
+15@ /= -15.0
+jump @SparksCreate
+
+:SparksTrain
+if
+   Car.Model(0@) == JVT_MODEL
+else_jump @SparksEnd
+0208: 1@ = random_float -1.0 1.0
+0087: 2@ = 1@
+2@ *= 1.8
+if
+  1@ >= 0.0
+else_jump @SparksTrainA
+2@ *= -1.0
+
+:SparksTrainA
+2@ += 10.9
+3@ = -1.0
+0087: 4@ = 1@
+4@ /= -2.0
+5@ = 0.75
+6@ = 0.35
+12@ = 2.0
+15@ = 0.0
+jump @SparksCreate
+
+:SparksCreate
+0AB3: cleo_shared_var SPARK_REPEAT = 10@
+10@ = 0.0
+11@ = 0.15
+
+// Not needed: SA does not need speed compensation because particles are attached to the vehicle
+/*
+02E3: 8@ = car 0@ speed
+8@ /= 30.0
+005B: 8@ += 2@
+0407: create_coordinate 7@ 8@ 9@ from_car 0@ offset 1@ 8@ 3@
+*/
+// Workaround:
+0087: 7@ = 1@
+0087: 8@ = 2@
+0087: 9@ = 3@
+
+cleo_call @SparkFlash 4 0@ 7@ 8@ 9@
+
+:SparksSpeed
+wait 10
+if
+0025:   12@ > 10@
+else_jump @SparksBounce
+0AB4: 14@ = var TRAVEL
+if and
+   not Car.Wrecked(0@)
+   not 14@ == 1
+else_jump @SparksEnd
+
+// Not needed: SA does not need speed compensation because particles are attached to the vehicle
+/*
+02E3: 14@ = car 0@ speed
+14@ /= 30.0
+*/
+
+11@ = 0.15
+gosub @SparksCheckLength
+11@ = 0.0725
+
+:SparksTrail
+gosub @SparksCheckLength
+if
+   not 11@ > 0.01
+else_jump @SparksTrail
+10@ += 2.312
+jump @SparksSpeed
+
+:SparksBounce
+if
+   not Car.Wrecked(0@)
+else_jump @SparksEnd
+// Not needed: SA does not need speed compensation because particles are attached to the vehicle
+/*
+02E3: 14@ = car 0@ speed
+14@ /= 30.0
+*/
+0087: 7@ = 10@
+0087: 8@ = 10@
+0087: 9@ = 10@
+0069: 7@ *= 4@
+0069: 8@ *= 5@
+0069: 9@ *= 6@
+0087: 13@ = 15@
+0069: 13@ *= 10@
+0069: 13@ *= 10@
+005B: 7@ += 13@
+005B: 7@ += 1@
+005B: 8@ += 2@
+005B: 9@ += 3@
+8@ += 5.0
+0208: 5@ = random_float 0.0 180.0
+02F6: 1@ = cosine 5@ // sinus swapped with cosine
+02F7: 2@ = sinus 5@ // cosine swapped with sinus
+5@ = -0.05
+0208: 4@ = random_float 0.1 0.3
+0069: 4@ *= 2@
+0208: 6@ = random_float 0.1 0.2
+0069: 6@ *= 1@
+4@ *= 0.1
+6@ *= 0.1
+005B: 4@ += 7@
+005B: 5@ += 8@
+005B: 6@ += 9@
+0407: create_coordinate 4@ 5@ 6@ from_car 0@ offset 4@ 5@ 6@
+0407: create_coordinate 7@ 8@ 9@ from_car 0@ offset 7@ 8@ 9@
+0063: 4@ -= 7@
+0063: 5@ -= 8@
+0063: 6@ -= 9@
+
+// Rescale to make particle distance more consistent with the ones attached to the vehicle
+4@ *= 0.6
+5@ *= 0.6
+6@ *= 0.6
+
+10@ = 0.0
+11@ = 0.0 // Set as 0 so it doesn't make a particle
+
+:SparksCheckDistance
+wait 10
+if
+   not 10@ >= 10.0
+else_jump @SparksEnd
+0AB4: 14@ = var TRAVEL
+if and
+   not Car.Wrecked(0@)
+   not 14@ == 1
+else_jump @SparksEnd
+
+:SparksDraw
+gosub @SparksDrawHead
+
+if
+    11@ < 0.01
 then
-    0A93: end_custom_thread
+    // Reset particle size
+    11@ = 0.01
 end
-02E3: 10@ = car 0@ speed
-10@ /= 30.0
-10@ += 4.0
-0407: store_coords_to 8@ 9@ 10@ from_car 0@ with_offset 0.0 10@ 0.0
-0407: store_coords_to 11@ 12@ 13@ from_car 0@ with_offset 0.0 4.0 0.0
-0063: 8@ -= 11@ // (float)
-0063: 9@ -= 12@ // (float)
-0063: 10@ -= 13@ // (float)
-0208: 14@ = random_float_in_ranges -30.0 210.0
-02F6: 16@ = cosine 14@ // (float)
-02F7: 14@ = sine 14@ // (float)
-0208: 15@ = random_float_in_ranges 2.0 3.0
-006B: 14@ *= 15@ // (float)
-006B: 16@ *= 15@ // (float)
-0407: store_coords_to 14@ 15@ 16@ from_car 0@ with_offset 14@ 0.0 16@
-0063: 14@ -= 11@ // (float)
-0063: 15@ -= 12@ // (float)
-0063: 16@ -= 13@ // (float)
-0087: 20@ = 14@ // (float)
-0087: 21@ = 15@ // (float)
-0087: 22@ = 16@ // (float)
-006B: 20@ *= 20@ // (float)
-006B: 21@ *= 21@ // (float)
-006B: 22@ *= 22@ // (float)
-005B: 20@ += 21@ // (float)
-005B: 20@ += 22@ // (float)
-01FB: 20@ = square_root 20@
-0073: 14@ /= 20@ // (float)
-0073: 16@ /= 20@ // (float)
-0073: 15@ /= 20@ // (float)
-14@ /= 20.0
-15@ /= 20.0
-16@ /= 20.0
-17@ = 0.0
 
-// loop until out of range
-while true
-    wait 10
-    //  Checks to see if time travelled yet
-    0AB4: 7@ = var TRAVEL
-    if
-        7@ == 1
-    then
-        0AB4: 7@ = var MODE
-        if
-            7@ == 1
-        then
-            0A93: end_custom_thread
-        end
-    end
-    // draw old trail if it still exists
-    if
-        25@ > 0
-    then
-        if
-            not Car.Wrecked(0@)
-        then
-            gosub @SparkEquationCreateTrail
-        end
-        25@ -= 15
-        0087: 31@ = 30@
-    end
-    005B: 11@ += 8@ // (float)
-    005B: 12@ += 9@ // (float)
-    005B: 13@ += 10@ // (float)
-    gosub @SparkBounceEquation
-    // break out of loop when out of range
-    if
-        17@ < 500.0
-    jf break
+if
+  11@ > 0.075
+else_jump @SparksDraw
+11@ = 0.15
+gosub @SparksDrawHead
+10@ += 2.312
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+gosub @SparksUndoTrail
+11@ = 0.01
+jump @SparksCheckDistance
 
-    // Create spark for core at needed point in map
-    cleo_call @SparkBounceCore 4 0@ 21@ 22@ 23@
+:SparksEnd
+terminate_this_custom_script
 
-    0087: 18@ = 17@
-    gosub @SparkBounceCreateTrail
-    0087: 17@ = 18@
-    17@ += 30.0
-end
-0A93: end_custom_thread
+:SparksDrawHead
+005B: 7@ += 4@
+005B: 8@ += 5@
+005B: 9@ += 6@
+if and
+  10@ >= 0.0
+  11@ > 0.0
+else_jump @SparksDrawHeadReturn
 
-//----------------Functions----------------
+cleo_call @SparkBounceTrail 5 0@ 11@ 7@ 8@ 9@
 
-:SparkEquation
-// Numerator
-29@ = 22.5
-006B: 29@ *= 2@ // (float)
-005B: 29@ += 31@ // (float)
-02F7: 27@ = sine 29@ // (float)
-
-// X
-0087: 4@ = 1@ // (float)
-006B: 4@ *= 27@ // (float)
-0073: 4@ /= 28@ // (float)
-
-// Y
-0087: 5@ = 31@ // (float)
-5@ /= 22.5
-005B: 5@ += 2@ // (float)
-
-// Z
-0087: 6@ = 3@ // (float)
-006B: 6@ *= 27@ // (float)
-0073: 6@ /= 28@ // (float)
+:SparksDrawHeadReturn
+11@ += 0.0015625
+10@ -= 0.032
 return
 
-:SparkBounceEquation
-// X
-0087: 21@ = 14@
-006B: 21@ *= 17@ // (float)
-005B: 21@ += 11@ // (float)
-
-// Y
-0087: 22@ = 15@
-006B: 22@ *= 17@ // (float)
-005B: 22@ += 12@ // (float)
-
-// Z
-0087: 23@ = 16@
-006B: 23@ *= 17@ // (float)
-005B: 23@ += 13@ // (float)
+:SparksUndoTrail
+0063: 7@ -= 4@
+0063: 8@ -= 5@
+0063: 9@ -= 6@
 return
 
-:SparkEquationCreateTrail
-for 26@ = 0 to 25@
-  31@ -= 0.75
-  if
-    31@ > 0.0
-  then
-    gosub @SparkEquation
-    
-    // Create blue spark for trail and attach it to vehicle
-    cleo_call @SparkTrail 5 0@ 26@ 4@ 5@ 6@
-  end
-end
+:SparksCheckLength
+if
+  10@ >= 0.0
+else_jump @SparksResetTrail
+0087: 7@ = 10@
+0087: 8@ = 10@
+0087: 9@ = 10@
+0069: 7@ *= 4@
+0069: 8@ *= 5@
+0069: 9@ *= 6@
+if
+   not 15@ == 0
+else_jump @SparksDrawTrail
+0087: 13@ = 15@
+0069: 13@ *= 10@
+0069: 13@ *= 10@
+005B: 7@ += 13@
+jump @SparksDrawTrail
+
+:SparksResetTrail
+7@ = 0.0
+8@ = 0.0
+9@ = 0.0
+
+:SparksDrawTrail
+005B: 7@ += 1@
+005B: 8@ += 2@
+005B: 9@ += 3@
+
+// Not needed: SA does not need speed compensation because particles are attached to the vehicle
+/*
+02E3: 14@ = car 0@ speed
+14@ /= 30.0
+005B: 8@ += 14@
+0407: create_coordinate 7@ 8@ 9@ from_car 0@ offset 7@ 8@ 9@
+*/
+
+cleo_call @SparkTrail 5 0@ 11@ 7@ 8@ 9@
+
+:SparksDrawTrailReturn
+10@ -= 0.032
+11@ -= 0.0015625
 return
 
-:SparkBounceCreateTrail
-for 26@ = 0 to 40
-  17@ -= 0.5
-  if
-    17@ > 0.0
-  then
-    gosub @SparkBounceEquation
+//----------------Particle creation functions----------------
 
-    // Create blue spark for trail at point in map
-    cleo_call @SparkBounceTrail 5 0@ 26@ 21@ 22@ 23@
-  end
-end
-return
-
-:WhiteFlash
+:SparkFlash
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the vehicle
-066B: 4@ = attach_particle "WHITEFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+
+//if and
+//   Car.Model(0@) == DELOREAN_MODEL
+//   3F50:   not is_car 0@ component "bonnetbttf3" visible
+//then
+//    // Red spark flash
+//else
+  // Blue spark flash
+  066B: 4@ = attach_particle "WHITEFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+//end
+
 064C: make_particle 4@ visible
 064F: remove_references_to_particle 4@
 cleo_return 0
 
+// UNUSED Subroutine
 :SparkCore
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the vehicle
@@ -315,6 +416,7 @@ cleo_call @GetSparkName 2 0@ 41 ret 4@
 064F: remove_references_to_particle 8@
 cleo_return 0
 
+// UNUSED Subroutine
 :SparkBounceCore
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the map
@@ -332,8 +434,11 @@ cleo_return 0
 
 :SparkTrail
 // 0@ is the vehicle
-// 1@ is number of spark in trail. 0 is next to core, 40 and higher is the end of the tail
+// 1@ is the scale of the spark in trail. 0.0725 is next to core, 0.01 is the end of the trail. Higher than 0.0725 is the core
 // 2@, 3@ and 4@ are X, Y and Z coordinates in respect to the vehicle
+
+// Get the proper particle number (0 - 40)
+cleo_call @GetSparkNumber 1 1@ ret 1@
 
 // Uses variables 5, 6, 7 and 8
 0AC8: 5@ = allocate_memory_size 13
@@ -348,8 +453,11 @@ cleo_return 0
 
 :SparkBounceTrail
 // 0@ is the vehicle
-// 1@ is number of spark in trail. 0 is next to core, 40 and higher is the end of the tail
+// 1@ is the scale of the spark in trail. 0.0725 is next to core, 0.01 is the end of the trail. Higher than 0.0725 is the core
 // 2@, 3@ and 4@ are X, Y and Z coordinates in respect to the map
+
+// Get the proper particle number (0 - 40)
+cleo_call @GetSparkNumber 1 1@ ret 1@
 
 // Uses variables 5, 6, 7 and 8
 0AC8: 5@ = allocate_memory_size 13
@@ -391,6 +499,25 @@ cleo_return 1 2@
 9@v = "SPARK" // Uses variables 9, 10, 11 and 12
 
 0AC8: 13@ = allocate_memory_size 9
-0AD3: 13@ = string_format "%s%s" 1@v 9@v
+
+//if and
+//  Car.Model(0@) == DELOREAN_MODEL
+//  3F50:   not is_car 0@ component "bonnetbttf3" visible
+//then
+//  // Red spark
+//  0AD3: 13@ = string_format "%s%s" 5@v 9@v
+//else
+  // Blue spark
+  0AD3: 13@ = string_format "%s%s" 1@v 9@v
+//end
+
 0AC9: free_allocated_memory 13@
 cleo_return 1 13@
+
+:GetSparkNumber
+0@ -= 0.01 // Lowest spark scale
+0@ /= 0.0015625 // Space between sparks
+0092: 0@ = float 0@ to_integer
+0@ -= 40
+0095: abs 0@
+cleo_return 1 0@
