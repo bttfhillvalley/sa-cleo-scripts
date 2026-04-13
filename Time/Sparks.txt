@@ -1,5 +1,7 @@
 {$CLEO .s}
 {$INCLUDE ../Common/CleoConstants.txt}
+
+thread 'Sparks'
 0209: 10@ = random_int 0 10
 0AB4: 1@ = var SPARK_REPEAT
 while  003C:   1@ == 10@
