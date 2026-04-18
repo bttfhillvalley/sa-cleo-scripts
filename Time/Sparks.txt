@@ -220,7 +220,7 @@ gosub @SparksCheckLength
 if
    not 11@ > 0.01
 else_jump @SparksTrail
-10@ += 2.312
+10@ += 1.984
 jump @SparksSpeed
 
 :SparksBounce
@@ -266,9 +266,9 @@ else_jump @SparksEnd
 0063: 6@ -= 9@
 
 // Rescale to make particle distance more consistent with the ones attached to the vehicle
-4@ *= 0.6
-5@ *= 0.6
-6@ *= 0.6
+4@ *= 0.4
+5@ *= 0.4
+6@ *= 0.4
 
 10@ = 0.0
 11@ = 0.0 // Set as 0 so it doesn't make a particle
@@ -299,7 +299,7 @@ if
 else_jump @SparksDraw
 11@ = 0.15
 gosub @SparksDrawHead
-10@ += 2.312
+10@ += 1.984
 gosub @SparksUndoTrail
 gosub @SparksUndoTrail
 gosub @SparksUndoTrail
@@ -329,7 +329,7 @@ cleo_call @SparkBounceTrail 5 0@ 11@ 7@ 8@ 9@
 
 :SparksDrawHeadReturn
 11@ += 0.0015625
-10@ -= 0.032
+10@ -= 0.024
 return
 
 :SparksUndoTrail
@@ -378,7 +378,7 @@ jump @SparksDrawTrail
 cleo_call @SparkTrail 5 0@ 11@ 7@ 8@ 9@
 
 :SparksDrawTrailReturn
-10@ -= 0.032
+10@ -= 0.024
 11@ -= 0.0015625
 return
 
