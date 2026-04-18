@@ -1,18 +1,4 @@
 {$CLEO .s}
-{$INCLUDE ../Common/CleoConstants.txt}
-{$INCLUDE ../Time/Include/Variables.txt}
-0000:
-0B10: var1 = vehicle_flags AND TC_FRIED_BIT
-if
-    var1 == 0  // Time circuits aren't fried
-then
-    while timerb < 1000
-        02E3: vehicle_speed = car vehicle speed
-        gosub @Coil
-        wait 10
-    end
-end
-terminate_this_custom_script
-
+{$INCLUDE ../Time/Include/Coils.txt}
+{$INCLUDE ../Time/Include/Health.txt}
 {$INCLUDE Include/Coils.txt}
-{$INCLUDE ../Time/Include/SpeedOffset.txt}

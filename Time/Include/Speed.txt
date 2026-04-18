@@ -12,7 +12,16 @@ cleo_call @CheckFried 2 vehicle vehicle_flags ret var1
 if or
     not var1 == 0     // Time Circuits are fried
     var2 == 0 // Time Circuits are Off
-    not var3 == 0     // Is in Cooldown phase?
+then
+    cleo_call @CoilOff 2 vehicle vehicle_flags
+    cleo_return 1 false
+end
+
+cleo_call @CoilOn 2 vehicle vehicle_flags
+
+// Check Cooldown
+if
+    not var3 == 0     // Cooldown
 then
     cleo_return 1 false
 end

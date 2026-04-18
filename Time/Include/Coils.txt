@@ -1,0 +1,14 @@
+{$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE Variables.txt}
+0000:
+cleo_call @CheckFried 2 vehicle vehicle_flags ret var1
+if
+    var1 == 0  // Time circuits aren't fried
+then
+    while timerb < 1000
+        02E3: vehicle_speed = car vehicle speed
+        gosub @Coil
+        wait 10
+    end
+end
+terminate_this_custom_script
