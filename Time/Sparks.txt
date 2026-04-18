@@ -388,15 +388,16 @@ return
 // 0@ is the vehicle
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the vehicle
 
-//if and
-//   Car.Model(0@) == DELOREAN_MODEL
-//   3F50:   not is_car 0@ component "bonnetbttf3" visible
-//then
-//    // Red spark flash
-//else
+if and
+  Car.Model(0@) == DELOREAN_MODEL
+  3F50:   not is_car 0@ component "bonnetbttf3" visible
+then
   // Blue spark flash
-  066B: 4@ = attach_particle "WHITEFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
-//end
+  066B: 4@ = attach_particle "BLUEFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+else
+  // Red spark flash
+  066B: 4@ = attach_particle "REDFLASH" to_car 0@ with_offset 1@ 2@ 3@  flag 1
+end
 
 064C: make_particle 4@ visible
 064F: remove_references_to_particle 4@
@@ -502,16 +503,16 @@ cleo_return 1 2@
 
 0AC8: 13@ = allocate_memory_size 9
 
-//if and
-//  Car.Model(0@) == DELOREAN_MODEL
-//  3F50:   not is_car 0@ component "bonnetbttf3" visible
-//then
-//  // Red spark
-//  0AD3: 13@ = string_format "%s%s" 5@v 9@v
-//else
+if and
+  Car.Model(0@) == DELOREAN_MODEL
+  3F50:   not is_car 0@ component "bonnetbttf3" visible
+then
   // Blue spark
   0AD3: 13@ = string_format "%s%s" 1@v 9@v
-//end
+else
+  // Red spark
+  0AD3: 13@ = string_format "%s%s" 5@v 9@v
+end
 
 0AC9: free_allocated_memory 13@
 cleo_return 1 13@
