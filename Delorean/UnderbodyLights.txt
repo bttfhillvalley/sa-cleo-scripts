@@ -25,10 +25,7 @@ while true
             // TODO: use constant HOVER_WHEELS when opcode 3F27 is updated with individual wheel data
             not wheel_state == 0
         then
-            // TODO: 3F52 is not executing
-            // 3F52: fade_car vehicle component "bottomlights" alpha 255 step 15
-            // Workaround:
-            cleo_call @FadeBottomLights 3 vehicle 255 15
+            3F52: fade_car vehicle component "bottomlights" alpha 255 step 15
             if
                 timera >= 1250
             then
@@ -41,54 +38,7 @@ while true
 
             3F11: set_car vehicle component "chaserlights" index chaser visible 1
         else
-            // TODO: 3F52 is not executing
-            // 3F52: fade_car vehicle component "bottomlights" alpha 0 step 15
-            // Workaround:
-            cleo_call @FadeBottomLights 3 vehicle 0 15
+            3F52: fade_car vehicle component "bottomlights" alpha 0 step 15
         end
     end
 end
-
-:FadeBottomLights
-gosub @FadeLimit
-3F47: 15@ = get_car 0@ component "bottomlights" alpha
-gosub @Fade
-3F12: set car 0@ component "bottomlights" alpha 15@
-cleo_return 0
-
-:FadeLimit
-if
-    1@ < 0
-then
-    1@ = 0
-end
-if
-    1@ > 255
-then
-    1@ = 255
-end
-return
-
-:Fade
-if
-    001D: 15@ > 1@
-then
-    0062: 15@ -= 2@
-    if
-        001D: 1@ > 15@
-    then
-        0085: 15@ = 1@
-    end
-else if
-    001D: 1@ > 15@
-then
-
-    005A: 15@ += 2@
-    if
-        001D: 15@ > 1@
-    then
-        0085: 15@ = 1@
-    end
-end
-end
-return
