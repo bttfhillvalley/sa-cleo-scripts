@@ -1,88 +1,164 @@
-{$INCLUDE Variables.txt}
 {$INCLUDE ../../Common/CleoConstants.txt}
+{$INCLUDE ../../Time/Include/Variables.txt}
 :Wormhole
-// Delorean Wormhole
-0407: create_coordinate x y z from_car vehicle offset 0.0 7.0 0.15
-/*0B10: var2 = vehicle_flags AND HOOD_BIT // Hoodbox variation
-if
-   var2 == 0 // No hoodbox
-then
-    // Blue wormhole
-    04D5: create_corona_at x y z radius var1 type 1 flare 0 RGB 64 128 255
-    3F29: create_light type 0 at x y z dir 0.0 0.0 -1.0 range 10.0 rgb var1 var1 var1 fog 0
-else
-    // Red wormhole for hoodbox
-    04D5: create_corona_at x y z radius var1 type 1 flare 0 RGB 255 100 75
-    3F29: create_light type 0 at x y z dir 0.0 0.0 -1.0 range 10.0 rgb var1 var1 var1 fog 0
-end*/
-if
-    vehicle_speed > 46.6
-then
-066C: var1 = attach_particle "BLUEWORMHOLE10" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 46.4
-then
-066C: var1 = attach_particle "BLUEWORMHOLE9" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 46.2
-then
-066C: var1 = attach_particle "BLUEWORMHOLE8" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 46.0
-then
-066C: var1 = attach_particle "BLUEWORMHOLE7" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 45.8
-then
-066C: var1 = attach_particle "BLUEWORMHOLE6" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 45.6
-then
-066C: var1 = attach_particle "BLUEWORMHOLE5" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 45.4
-then
-066C: var1 = attach_particle "BLUEWORMHOLE4" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 45.2
-then
-066C: var1 = attach_particle "BLUEWORMHOLE3" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 45.0
-then
-066C: var1 = attach_particle "BLUEWORMHOLE2" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-else if
-    vehicle_speed > 44.8
-then
-066C: var1 = attach_particle "BLUEWORMHOLE1" to_car vehicle with_offset 0.0 4.0 0.15 rotation 0.0 0.0 0.0 flag 1
-064C: make_particle var1 visible
-064F: remove_references_to_particle var1
-end
-end
-end
-end
-end
-end
-end
-end
-end
-end
 return
+
+:WormholeAnimate
+// Calculate max frame of
+02E3: var1 = car vehicle speed
+0B10: var2 = vehicle_flags AND FUEL_BIT // Are we fueled
+cleo_call @CheckFried 2 vehicle vehicle_flags ret var3
+0B10: var4 = vehicle_flags AND TC_BIT
+0B10: var5 = vehicle_flags AND COOLDOWN_BIT
+var1 -= 44.9 // floating-point values
+if or
+    var1 < 0.0 // Not at right speed
+    var2 == 0 // Not Fueled
+    not var3 == 0 // TC Fried
+    var4 == 0 // TC Off
+    not var5 == 0 // Cooldown
+then
+    var1 = 0.0
+else
+    var1 *= 0.5
+end
+cleo_call @CoilAlpha 1 vehicle ret var2
+0093: var2 = integer_to_float var2
+var2 /= 255.0
+if
+    0025: var1 > var2
+then
+    0087: var1 = var2
+end
+var1 *= 70.0
+0092: var1 = float_to_integer var1
+
+// Get current frame
+if
+    3F50:   not is_car vehicle component "bonnetbttf3" visible
+then
+    // TODO: Opcode 3F64 not implemented
+    //3F64: var2 = get_car vehicle component "wormhole" digit
+    // Workaround:
+    cleo_call @GetWormholeDigit 1 vehicle ret var2
+else
+    // TODO: Opcode 3F64 not implemented
+    //3F64: var2 = get_car vehicle component "wormholer" digit
+    // Workaround:
+    cleo_call @GetWormholeDigitR 1 vehicle ret var2
+end
+
+// Hide wormhole if its supposed to be off and it has shrunk all the way
+if and
+    var1 == 0
+    var2 <= 1
+then
+    3F10: set_car vehicle component "wormhole1" visible 0
+    3F10: set_car vehicle component "wormholer1" visible 0
+    cleo_return 0
+end
+
+// Increment Frame
+if
+    var2 < 1
+then
+    var2 = 0
+end
+var2 += 1
+
+// Loop if needed
+if
+    001D: var2 > var1
+then
+    var2 -= 10
+end
+
+if
+    var2 < 1
+then
+    var2 = 1
+end
+if
+   3F50:   not is_car vehicle component "bonnetbttf3" visible
+then
+
+// TODO: Opcode 3F55 only sets off digits up to 20. Method "getCurrentDigit" must be corrected
+//3F55: set_car vehicle component "wormhole" digit var2 on
+// Workaround:
+cleo_call @SetWormholeDigit 2 vehicle var2
+
+else
+// TODO: Opcode 3F55 only sets off digits up to 20. Method "getCurrentDigit" must be corrected
+3F55: set_car vehicle component "wormholer" digit var2 on
+// Workaround:
+cleo_call @SetWormholeDigitR 2 vehicle var2
+
+end
+// TODO: Implement opcode 3F69
+//3F69: shake_pad 0 duration 50 freq 50
+cleo_return 0
+
+:CheckWormhole
+if
+    3F50:   not is_car vehicle component "bonnetbttf3" visible
+then
+    // TODO: Opcode 3F64 not implemented
+    //3F64: var1 = get_car vehicle component "wormhole" digit
+    // Workaround:
+    cleo_call @GetWormholeDigit 1 vehicle ret var1
+else
+    // TODO: Opcode 3F64 not implemented
+    //3F64: var1 = get_car vehicle component "wormholer" digit
+    // Workaround:
+    cleo_call @GetWormholeDigitR 1 vehicle ret var1
+end
+if
+    var1 < 70
+then
+    cleo_return 1 false
+end
+cleo_return 1 true
+
+//------------ Workaround CLEO subroutines ------------
+
+:GetWormholeDigit
+for 2@ = 0 to 71 step 1
+    if
+        3F41: is_car vehicle component "wormhole" index 2@ visible
+    then
+        cleo_return 1 2@
+    end
+end
+cleo_return 1 -1
+
+:GetWormholeDigitR
+for 2@ = 0 to 71 step 1
+    if
+        3F41: is_car vehicle component "wormholer" index 2@ visible
+    then
+        cleo_return 1 2@
+    end
+end
+cleo_return 1 -1
+
+:SetWormholeDigit
+3F11: set_car vehicle component "wormhole" index 1@ visible 1
+for 2@ = 0 to 71 step 1
+    if
+        not 2@ == 1@
+    then
+        3F11: set_car vehicle component "wormhole" index 2@ visible 0
+    end
+end
+cleo_return 0
+
+:SetWormholeDigitR
+3F11: set_car vehicle component "wormholer" index 1@ visible 1
+for 2@ = 0 to 71 step 1
+    if
+        not 2@ == 1@
+    then
+        3F11: set_car vehicle component "wormholer" index 2@ visible 0
+    end
+end
+cleo_return 0

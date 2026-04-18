@@ -8,6 +8,10 @@ gosub @ResetSounds
 cleo_call @CheckFried 2 vehicle vehicle_flags ret var1
 0B10: var2 = vehicle_flags AND TC_BIT       // Time Circuits status
 0B10: var3 = vehicle_flags AND COOLDOWN_BIT
+0B10: var4 = vehicle_flags AND FUEL_BIT // Are we fueled
+
+// Wormhole Animation
+cleo_call @WormholeAnimate 2 vehicle vehicle_flags
 
 if or
     not var1 == 0     // Time Circuits are fried
@@ -94,7 +98,9 @@ then
 end
 
 // 88 MPH!!!!!!!
-if
+cleo_call @CheckWormhole 1 vehicle ret var1
+if or
+    var1 == false
     vehicle_speed < 48.1 // floating-point values
 then
     cleo_return 1 false
