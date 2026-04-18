@@ -1,7 +1,7 @@
 :ShowExhaust
-if/* or*/
+if or
     Actor.InCar($PLAYER_ACTOR, vehicle)
-    //3F2A: is_player_in_remote_mode_with_car vehicle
+    3F2A: is_player_in_remote_mode_with_car vehicle
 then
     // TODO: Implement 3F5A and 3F5B
     //3F5A: 15@ = car vehicle flags
@@ -16,9 +16,9 @@ end
 cleo_return 0
 
 :SetGoodInSand
-if/* or*/
+if or
     Actor.InCar($PLAYER_ACTOR, vehicle)
-    //3F2A: is_player_in_remote_mode_with_car vehicle
+    3F2A: is_player_in_remote_mode_with_car vehicle
 then
     // TODO: Implement 3F5A and 3F5B
     //3F5A: 15@ = car vehicle flags

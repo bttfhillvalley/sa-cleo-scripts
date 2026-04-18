@@ -21,7 +21,7 @@ end
 10@ = Car.Model(0@)
 if or
     Actor.InCar($PLAYER_ACTOR, 0@)
-    //3F2A:   is_player_in_remote_mode_with_car 0@
+    3F2A:   is_player_in_remote_mode_with_car 0@
     not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
 then
     // Fade

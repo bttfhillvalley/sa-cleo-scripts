@@ -5,9 +5,9 @@
 // FIXME: This will be removed from this section in the future since there will be no need for model swaps that require setting everything back up since it'll be the same car instance
 0B10: var1 = vehicle_flags AND FC_FRIED_BIT // Fried
 0B10: var2 = vehicle_flags AND FLYING_BIT   // Is car flying?
-if
+if or
     00DB:   player $PLAYER_ACTOR driving vehicle
-    //3F2A:   is_player_in_remote_mode_with_car vehicle
+    3F2A:   is_player_in_remote_mode_with_car vehicle
 then
     // Can we convert?
     0B10: var1 = vehicle_flags AND FC_BIT  // Flying Circuits
@@ -77,9 +77,9 @@ vehicle_speed += 1.0
 // Thrust
 var3 = 0
 var4 = 15
-if //or
+if or
     Actor.InCar($PLAYER_ACTOR, vehicle)
-    //3F2A:   is_player_in_remote_mode_with_car vehicle
+    3F2A:   is_player_in_remote_mode_with_car vehicle
 then
     Car.StorePos(vehicle, x, y, z)
     //3F02: var1 = car vehicle engine_state
@@ -205,7 +205,7 @@ gosub @FadeLimit
 10@ = Car.Model(0@)
 if or
     Actor.InCar($PLAYER_ACTOR, 0@)
-    //3F2A:   is_player_in_remote_mode_with_car 0@
+    3F2A:   is_player_in_remote_mode_with_car 0@
     not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
 then
     3F47: 15@ = get_car 0@ component "fxthrusterbttf2lfon" alpha
@@ -245,7 +245,7 @@ gosub @FadeLimit
 10@ = Car.Model(0@)
 if or
     Actor.InCar($PLAYER_ACTOR, 0@)
-    //3F2A:   is_player_in_remote_mode_with_car 0@
+    3F2A:   is_player_in_remote_mode_with_car 0@
     not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
 then
     3F47: 15@ = get_car 0@ component "inner_vents" alpha
@@ -261,7 +261,7 @@ gosub @FadeLimit
 10@ = Car.Model(0@)
 if or
     Actor.InCar($PLAYER_ACTOR, 0@)
-    //3F2A:   is_player_in_remote_mode_with_car 0@
+    3F2A:   is_player_in_remote_mode_with_car 0@
     not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
 then
     3F47: 15@ = get_car 0@ component "inner_ventsglow" alpha
