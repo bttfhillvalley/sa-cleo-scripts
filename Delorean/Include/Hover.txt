@@ -45,9 +45,9 @@ then
     if
         var3 == 0
     then
-        cleo_call @FadeWheels 3 vehicle 0 15
-        cleo_call @FadeVents 3 vehicle 0 15
-        cleo_call @FadeBoost 3 vehicle 0 15
+        cleo_call @WheelGlow 3 vehicle alpha 0 step 15
+        3F52: fade_car vehicle component "inner_vents" alpha 0 step 15        
+        3F52: fade_car vehicle component "inner_ventsglow" alpha 0 step 15
         jump @HoverConversionReturn
     end
 end
@@ -56,13 +56,13 @@ if //and
     var3 == 0
     //not var4 == 0
 then
-    cleo_call @FadeWheels 3 vehicle 255 5
+    cleo_call @WheelGlow 3 vehicle alpha 255 step 5
 else
     3F1C: get_car vehicle component "hoverjointrf_" rotation var1 var2 var3
     if
         var2 == 0.0
     then
-        cleo_call @FadeWheels 3 vehicle 0 15
+        cleo_call @WheelGlow 3 vehicle alpha 0 step 15
     end
 end
 
@@ -190,121 +190,28 @@ else_jump @VentGlowSet
 if
     var2 == 0
 else_jump @VentGlowSet
-cleo_call @FadeVents 3 vehicle 255 15
+3F52: fade_car vehicle component "inner_vents" alpha 255 step 15
 jump @VentThrustGlow
 
 :VentGlowSet
-cleo_call @FadeVents 3 vehicle var3 var4
+3F52: fade_car vehicle component "inner_vents" alpha var3 step var4
 
 :VentThrustGlow
-cleo_call @FadeBoost 3 vehicle var3 50
+3F52: fade_car vehicle component "inner_ventsglow" alpha var3 step 50
 return
 
-:FadeWheels
-gosub @FadeLimit
-10@ = Car.Model(0@)
-if or
-    Actor.InCar($PLAYER_ACTOR, 0@)
-    3F2A:   is_player_in_remote_mode_with_car 0@
-    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
-then
-    3F47: 15@ = get_car 0@ component "fxthrusterbttf2lfon" alpha
-    gosub @Fade
-    3F12: set car 0@ component "fxthrusterbttf2lfon" alpha 15@
-    3F12: set car 0@ component "fxthrusterbttf2lbon" alpha 15@
-    3F12: set car 0@ component "fxthrusterbttf2rfon" alpha 15@
-    3F12: set car 0@ component "fxthrusterbttf2rbon" alpha 15@
-    if
-        3F50: not is_car vehicle component "fxwheelbttf1rb" visible
-    then
-        15@ = 0
-    end
-    3F12: set car 0@ component "fxwheelbttf2rbon" alpha 15@
-    3F12: set car 0@ component "fxwheelbttf2rfon" alpha 15@
-    3F12: set car 0@ component "fxwheelbttf2lbon" alpha 15@
-    3F12: set car 0@ component "fxwheelbttf2lfon" alpha 15@
-else
-    3F10: set_car 0@ component "fxthrusterbttf2lfon" visibility 1@
-    3F10: set_car 0@ component "fxthrusterbttf2lbon" visibility 1@
-    3F10: set_car 0@ component "fxthrusterbttf2rfon" visibility 1@
-    3F10: set_car 0@ component "fxthrusterbttf2rbon" visibility 1@
-    if
-        3F50: not is_car vehicle component "fxwheelbttf1rb" visible
-    then
-        1@ = 0
-    end
-    3F10: set_car 0@ component "fxwheelbttf2rbon" visibility 1@
-    3F10: set_car 0@ component "fxwheelbttf2rfon" visibility 1@
-    3F10: set_car 0@ component "fxwheelbttf2lbon" visibility 1@
-    3F10: set_car 0@ component "fxwheelbttf2lfon" visibility 1@
-end
-cleo_return 0
-
-:FadeVents
-gosub @FadeLimit
-10@ = Car.Model(0@)
-if or
-    Actor.InCar($PLAYER_ACTOR, 0@)
-    3F2A:   is_player_in_remote_mode_with_car 0@
-    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
-then
-    3F47: 15@ = get_car 0@ component "inner_vents" alpha
-    gosub @Fade
-    3F12: set car 0@ component "inner_vents" alpha 15@
-else
-    3F10: set_car 0@ component "inner_vents" visibility 1@
-end
-cleo_return 0
-
-:FadeBoost
-gosub @FadeLimit
-10@ = Car.Model(0@)
-if or
-    Actor.InCar($PLAYER_ACTOR, 0@)
-    3F2A:   is_player_in_remote_mode_with_car 0@
-    not Actor.DrivingVehicleType($PLAYER_ACTOR, 10@)
-then
-    3F47: 15@ = get_car 0@ component "inner_ventsglow" alpha
-    gosub @Fade
-    3F12: set car 0@ component "inner_ventsglow" alpha 15@
-else
-    3F10: set_car 0@ component "inner_ventsglow" visibility 1@
-end
-cleo_return 0
-
-:FadeLimit
+:WheelGlow
+3F52: fade_car vehicle component "fxthrusterbttf2rbon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxthrusterbttf2rfon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxthrusterbttf2lbon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxthrusterbttf2lfon" alpha 1@ step 2@
 if
-    1@ < 0
+    3F50: not is_car vehicle component "fxwheelbttf1rb" visible
 then
     1@ = 0
 end
-if
-    1@ > 255
-then
-    1@ = 255
-end
-return
-
-:Fade
-if
-    001D: 15@ > 1@
-then
-    0062: 15@ -= 2@
-    if
-        001D: 1@ > 15@
-    then
-        0085: 15@ = 1@
-    end
-else if
-    001D: 1@ > 15@
-then
-
-    005A: 15@ += 2@
-    if
-        001D: 15@ > 1@
-    then
-        0085: 15@ = 1@
-    end
-end
-end
-return
+3F52: fade_car vehicle component "fxwheelbttf2rbon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxwheelbttf2rfon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxwheelbttf2lbon" alpha 1@ step 2@
+3F52: fade_car vehicle component "fxwheelbttf2lfon" alpha 1@ step 2@
+cleo_return 0
