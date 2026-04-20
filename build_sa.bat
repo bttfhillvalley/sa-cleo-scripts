@@ -25,6 +25,8 @@ echo Compiling scripts...
 :: Main scripts
 call :Compile BTTFHVInit .cs
 call :Compile CarSpawn .cs
+call :Compile DeloreanCheck .cs
+call :Compile DeloreanCleanup .cs
 call :Compile DisplayToggle .cs
 :: call :Compile Hover .cs :: Not needed. Migrated.
 call :Compile HeatHaze .cs

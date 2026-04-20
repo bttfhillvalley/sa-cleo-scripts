@@ -1,0 +1,143 @@
+{$CLEO .cs}
+{$INCLUDE Common/CleoConstants.txt}
+int vehicle
+int tm_vehicle
+int vehicle_flags
+float x
+float y
+float z
+int v1
+int v2
+int var1
+int var2
+int var3
+int current_date
+int current_time
+0000:
+while true
+    wait 0
+    if and
+        not Player.InRemoteMode($PLAYER_CHAR)
+        00DD:   actor $PLAYER_ACTOR driving_vehicle_type DELOREAN_MODEL
+    then
+        wait 100
+        if
+            not Player.InRemoteMode($PLAYER_CHAR)
+        then
+            0AB4: var vehicle = TIME_MACHINE
+            if
+                not Actor.InCar($PLAYER_ACTOR, vehicle)
+            then
+                vehicle = Actor.CurrentCar($PLAYER_ACTOR)
+                gosub @GetVariation
+                0AB4: current_date = var CDATE
+                0AB4: current_time = var CTIME
+                stream_custom_script "Delorean.s" vehicle vehicle_flags current_date current_time current_date current_time
+            end
+            while Actor.Driving($PLAYER_ACTOR)
+                wait 0
+            end
+            wait 1000
+        end
+    end
+end
+
+:GetVariation
+vehicle_flags = 0
+
+// Wheels
+if or
+    3F40:   is_car vehicle component "wheelbttf3lb" visible
+    3F40:   is_car vehicle component "fxwheelbttf3lb" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR WHEELS_50S_BIT
+else if or
+    3F40:   is_car vehicle component "wheelbttf3rrlb" visible
+    3F40:   is_car vehicle component "fxwheelbttf3rrlb" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR WHEELS_TRAIN_BIT
+end
+end
+
+// Hook
+if and
+    3F40:   is_car vehicle component "holderbttf1" visible
+    3F50:   not is_car vehicle component "hookbttf1" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR HOOK_HOLDER_BIT
+else if and
+    3F40:   is_car vehicle component "holderbttf1" visible
+    3F40:   is_car vehicle component "hookbttf1" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR HOOK_HOLDER_BIT
+else if
+    3F40:   is_car vehicle component "hookandholderbttf1" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR HOOK_UP_BIT
+end
+end
+end
+
+// Plate
+if
+    3F40:   is_car vehicle component "plate" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR PLATE_OUTATIME_BIT
+    3F10: set_car vehicle component "underbodybttf2" visible 0
+else if
+    3F40:   is_car vehicle component "platebttf2" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR PLATE_FUTURE_BIT
+    3F10: set_car vehicle component "underbody" visible 0
+end
+end
+
+// Rear
+if
+    3F40:   is_car vehicle component "bttf1" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR REAR_REACTOR_BIT
+else if
+    3F40:   is_car vehicle component "bttf2" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR REAR_FUSION_BIT
+end
+end
+
+// Hood
+if
+    3F40:   is_car vehicle component "bonnetbttf3" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR HOOD_BIT
+end
+
+// Hitch
+if
+    3F40:   is_car vehicle component "hitch" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR HITCH_BIT
+end
+
+// Clock
+if
+    3F40:   is_car vehicle component "clock" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR CLOCK_BIT
+end
+
+// Boiler
+if
+    3F40:   is_car vehicle component "fireboxgauge" visible
+then
+    0B11: vehicle_flags = vehicle_flags OR BOILER_BIT
+end
+
+// Flying
+3F1C: get_car vehicle component "hoverjointrb_" rotation var1 var2 var3
+0097: abs var2
+if
+    var2 >= 89.0 // Wheels folded out
+then
+    0B11: vehicle_flags = vehicle_flags OR FLYING_BIT
+end
+return
