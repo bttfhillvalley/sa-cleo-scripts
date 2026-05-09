@@ -409,10 +409,7 @@ cleo_return 0
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the vehicle
 
 // Uses variables 4, 5, 6 and 7
-0AC8: 4@ = allocate_memory_size 13
-cleo_call @GetSparkName 2 0@ 41 ret 4@
-0AC9: free_allocated_memory 4@
-0AD3: 4@v = string_format "%s" 4@
+cleo_call @GetSparkName 2 0@ 41 ret 4@ 5@ 6@ 7@
 
 066B: 8@ = attach_particle 4@v to_car 0@ with_offset 1@ 2@ 3@  flag 1
 064C: make_particle 8@ visible
@@ -425,10 +422,7 @@ cleo_return 0
 // 1@, 2@ and 3@ are X, Y and Z coordinates in respect to the map
 
 // Uses variables 4, 5, 6 and 7
-0AC8: 4@ = allocate_memory_size 13
-cleo_call @GetSparkName 2 0@ 41 ret 4@
-0AC9: free_allocated_memory 4@
-0AD3: 4@v = string_format "%s" 4@
+cleo_call @GetSparkName 2 0@ 41 ret 4@ 5@ 6@ 7@
 
 064B: 8@ = create_particle 4@v at 1@ 2@ 3@  type 1
 064C: make_particle 8@ visible
@@ -444,10 +438,7 @@ cleo_return 0
 cleo_call @GetSparkNumber 1 1@ ret 1@
 
 // Uses variables 5, 6, 7 and 8
-0AC8: 5@ = allocate_memory_size 13
-cleo_call @GetSparkName 2 0@ 1@ ret 5@
-0AC9: free_allocated_memory 5@
-0AD3: 5@v = string_format "%s" 5@
+cleo_call @GetSparkName 2 0@ 1@ ret 5@ 6@ 7@ 8@
 
 066B: 9@ = attach_particle 5@v to_car 0@ with_offset 2@ 3@ 4@  flag 1
 064C: make_particle 9@ visible
@@ -463,10 +454,7 @@ cleo_return 0
 cleo_call @GetSparkNumber 1 1@ ret 1@
 
 // Uses variables 5, 6, 7 and 8
-0AC8: 5@ = allocate_memory_size 13
-cleo_call @GetSparkName 2 0@ 1@ ret 5@
-0AC9: free_allocated_memory 5@
-0AD3: 5@v = string_format "%s" 5@
+cleo_call @GetSparkName 2 0@ 1@ ret 5@ 6@ 7@ 8@
 
 064B: 9@ = create_particle 5@v at 2@ 3@ 4@  type 1
 064C: make_particle 9@ visible
@@ -478,22 +466,20 @@ cleo_return 0
 // 1@ is number of spark in trail. 0 is next to core, 40 is the end of the tail, higher than 40 is the core
 
 // Uses variables 2, 3, 4 and 5
-0AC8: 2@ = allocate_memory_size 13
-cleo_call @GetSparkBaseName 1 0@ ret 2@
+cleo_call @GetSparkBaseName 1 0@ ret 2@ 3@ 4@ 5@
 
 if
   1@ < 40
 then    
-  0AD3: 2@ = string_format "%s%d" 2@ 1@
+  0AD3: 2@v = string_format "%s%d" 2@v 1@
 else if
   1@ > 40
 then
-  0AD3: 2@ = string_format "%sCORE" 2@
+  0AD3: 2@v = string_format "%sCORE" 2@v
 end
 end
 
-0AC9: free_allocated_memory 2@
-cleo_return 1 2@
+cleo_return 4 2@ 3@ 4@ 5@
 
 :GetSparkBaseName
 // 0@ is the vehicle
@@ -501,21 +487,18 @@ cleo_return 1 2@
 5@v = "RED" // Uses variables 5, 6, 7 and 8
 9@v = "SPARK" // Uses variables 9, 10, 11 and 12
 
-0AC8: 13@ = allocate_memory_size 9
-
 if and
   Car.Model(0@) == DELOREAN_MODEL
   3F50:   not is_car 0@ component "bonnetbttf3" visible
 then
   // Blue spark
-  0AD3: 13@ = string_format "%s%s" 1@v 9@v
+  0AD3: 13@v = string_format "%s%s" 1@v 9@v
 else
   // Red spark
-  0AD3: 13@ = string_format "%s%s" 5@v 9@v
+  0AD3: 13@v = string_format "%s%s" 5@v 9@v
 end
 
-0AC9: free_allocated_memory 13@
-cleo_return 1 13@
+cleo_return 4 13@ 14@ 15@ 16@
 
 :GetSparkNumber
 0@ -= 0.01 // Lowest spark scale
