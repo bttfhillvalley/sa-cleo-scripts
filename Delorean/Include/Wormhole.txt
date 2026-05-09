@@ -37,15 +37,9 @@ var1 *= 70.0
 if
     3F50:   not is_car vehicle component "bonnetbttf3" visible
 then
-    // TODO: Opcode 3F64 not implemented
-    //3F64: var2 = get_car vehicle component "wormhole" digit
-    // Workaround:
-    cleo_call @GetWormholeDigit 1 vehicle ret var2
+    3F64: var2 = get_car vehicle component "wormhole" digit
 else
-    // TODO: Opcode 3F64 not implemented
-    //3F64: var2 = get_car vehicle component "wormholer" digit
-    // Workaround:
-    cleo_call @GetWormholeDigitR 1 vehicle ret var2
+    3F64: var2 = get_car vehicle component "wormholer" digit
 end
 
 // Hide wormhole if its supposed to be off and it has shrunk all the way
@@ -81,18 +75,9 @@ end
 if
    3F50:   not is_car vehicle component "bonnetbttf3" visible
 then
-
-// TODO: Opcode 3F55 only sets off digits up to 20. Method "getCurrentDigit" must be corrected
-//3F55: set_car vehicle component "wormhole" digit var2 on
-// Workaround:
-cleo_call @SetWormholeDigit 2 vehicle var2
-
+    3F55: set_car vehicle component "wormhole" digit var2 on
 else
-// TODO: Opcode 3F55 only sets off digits up to 20. Method "getCurrentDigit" must be corrected
-3F55: set_car vehicle component "wormholer" digit var2 on
-// Workaround:
-cleo_call @SetWormholeDigitR 2 vehicle var2
-
+    3F55: set_car vehicle component "wormholer" digit var2 on
 end
 // TODO: Implement opcode 3F69
 //3F69: shake_pad 0 duration 50 freq 50
@@ -102,15 +87,9 @@ cleo_return 0
 if
     3F50:   not is_car vehicle component "bonnetbttf3" visible
 then
-    // TODO: Opcode 3F64 not implemented
-    //3F64: var1 = get_car vehicle component "wormhole" digit
-    // Workaround:
-    cleo_call @GetWormholeDigit 1 vehicle ret var1
+    3F64: var1 = get_car vehicle component "wormhole" digit
 else
-    // TODO: Opcode 3F64 not implemented
-    //3F64: var1 = get_car vehicle component "wormholer" digit
-    // Workaround:
-    cleo_call @GetWormholeDigitR 1 vehicle ret var1
+    3F64: var1 = get_car vehicle component "wormholer" digit
 end
 if
     var1 < 70
@@ -118,47 +97,3 @@ then
     cleo_return 1 false
 end
 cleo_return 1 true
-
-//------------ Workaround CLEO subroutines ------------
-
-:GetWormholeDigit
-for 2@ = 0 to 71 step 1
-    if
-        3F41: is_car vehicle component "wormhole" index 2@ visible
-    then
-        cleo_return 1 2@
-    end
-end
-cleo_return 1 -1
-
-:GetWormholeDigitR
-for 2@ = 0 to 71 step 1
-    if
-        3F41: is_car vehicle component "wormholer" index 2@ visible
-    then
-        cleo_return 1 2@
-    end
-end
-cleo_return 1 -1
-
-:SetWormholeDigit
-3F11: set_car vehicle component "wormhole" index 1@ visible 1
-for 2@ = 0 to 71 step 1
-    if
-        not 2@ == 1@
-    then
-        3F11: set_car vehicle component "wormhole" index 2@ visible 0
-    end
-end
-cleo_return 0
-
-:SetWormholeDigitR
-3F11: set_car vehicle component "wormholer" index 1@ visible 1
-for 2@ = 0 to 71 step 1
-    if
-        not 2@ == 1@
-    then
-        3F11: set_car vehicle component "wormholer" index 2@ visible 0
-    end
-end
-cleo_return 0
